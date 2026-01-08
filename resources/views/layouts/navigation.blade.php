@@ -15,6 +15,21 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                @auth
+    @if(auth()->user()->role === 'admin')
+        <x-nav-link :href="route('entidades.index')" :active="request()->routeIs('entidades.*')">
+            {{ __('Entidades') }}
+        </x-nav-link>
+    @endif
+@endauth
+
+<x-nav-link :href="route('programas.index')" :active="request()->routeIs('programas.*')">
+    {{ __('Programas') }}
+</x-nav-link>
+
+<x-nav-link :href="route('proyectos.index')" :active="request()->routeIs('proyectos.*')">
+    {{ __('Proyectos') }}
+</x-nav-link>
                 </div>
             </div>
 

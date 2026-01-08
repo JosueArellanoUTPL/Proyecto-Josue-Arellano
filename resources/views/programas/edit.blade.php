@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Editar Entidad
+            Editar Programa
         </h2>
     </x-slot>
 
@@ -19,27 +19,27 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('entidades.update', $entidad->id) }}">
+                <form method="POST" action="{{ route('programas.update', $programa->id) }}">
                     @csrf
                     @method('PUT')
 
                     <div class="mb-4">
                         <label class="block mb-1 font-semibold">Nombre</label>
                         <input name="nombre"
-                               value="{{ old('nombre', $entidad->nombre) }}"
+                               value="{{ old('nombre', $programa->nombre) }}"
                                class="w-full border rounded px-3 py-2" />
                     </div>
 
                     <div class="mb-4">
                         <label class="block mb-1 font-semibold">Descripción</label>
                         <textarea name="descripcion" rows="3"
-                                  class="w-full border rounded px-3 py-2">{{ old('descripcion', $entidad->descripcion) }}</textarea>
+                                  class="w-full border rounded px-3 py-2">{{ old('descripcion', $programa->descripcion) }}</textarea>
                     </div>
 
                     <div class="mb-4">
                         <label class="inline-flex items-center gap-2">
                             <input type="checkbox" name="activo"
-                                   {{ old('activo', $entidad->activo) ? 'checked' : '' }}>
+                                   {{ old('activo', $programa->activo) ? 'checked' : '' }}>
                             <span>Activo</span>
                         </label>
                     </div>
@@ -50,7 +50,7 @@
                             Actualizar
                         </button>
 
-                        <a href="{{ route('entidades.index') }}"
+                        <a href="{{ route('programas.index') }}"
                            class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-black font-semibold rounded transition">
                             Volver
                         </a>
@@ -61,3 +61,4 @@
         </div>
     </div>
 </x-app-layout>
+

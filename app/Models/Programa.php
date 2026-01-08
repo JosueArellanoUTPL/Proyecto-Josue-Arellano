@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Proyecto;
 
-class Entidad extends Model
+class Programa extends Model
 {
     use HasFactory;
 
-    protected $table = 'entidades';
+    protected $table = 'programas';
 
     protected $fillable = [
         'nombre',
@@ -18,6 +18,7 @@ class Entidad extends Model
         'activo',
     ];
 
+    // Relación: un programa tiene muchos proyectos
     public function proyectos()
     {
         return $this->hasMany(Proyecto::class);

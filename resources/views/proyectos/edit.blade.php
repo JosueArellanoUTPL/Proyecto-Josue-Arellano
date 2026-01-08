@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Editar Entidad
+            Editar Proyecto
         </h2>
     </x-slot>
 
@@ -19,27 +19,51 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('entidades.update', $entidad->id) }}">
+                <form method="POST" action="{{ route('proyectos.update', $proyecto->id) }}">
                     @csrf
                     @method('PUT')
 
                     <div class="mb-4">
                         <label class="block mb-1 font-semibold">Nombre</label>
-                        <input name="nombre"
-                               value="{{ old('nombre', $entidad->nombre) }}"
+                        <input name="nombre" value="{{ old('nombre', $proyecto->nombre) }}"
                                class="w-full border rounded px-3 py-2" />
                     </div>
 
                     <div class="mb-4">
                         <label class="block mb-1 font-semibold">Descripción</label>
-                        <textarea name="descripcion" rows="3"
-                                  class="w-full border rounded px-3 py-2">{{ old('descripcion', $entidad->descripcion) }}</textarea>
+                        <textarea name="descripcion"
+                                  class="w-full border rounded px-3 py-2"
+                                  rows="3">{{ old('descripcion', $proyecto->descripcion) }}</textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-1 font-semibold">Entidad</label>
+                        <select name="entidad_id" class="w-full border rounded px-3 py-2">
+                            @foreach ($entidades as $entidad)
+                                <option value="{{ $entidad->id }}"
+                                    {{ old('entidad_id', $proyecto->entidad_id) == $entidad->id ? 'selected' : '' }}>
+                                    {{ $entidad->nombre }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-1 font-semibold">Programa</label>
+                        <select name="programa_id" class="w-full border rounded px-3 py-2">
+                            @foreach ($programas as $programa)
+                                <option value="{{ $programa->id }}"
+                                    {{ old('programa_id', $proyecto->programa_id) == $programa->id ? 'selected' : '' }}>
+                                    {{ $programa->nombre }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="mb-4">
                         <label class="inline-flex items-center gap-2">
                             <input type="checkbox" name="activo"
-                                   {{ old('activo', $entidad->activo) ? 'checked' : '' }}>
+                                   {{ old('activo', $proyecto->activo) ? 'checked' : '' }}>
                             <span>Activo</span>
                         </label>
                     </div>
@@ -50,7 +74,7 @@
                             Actualizar
                         </button>
 
-                        <a href="{{ route('entidades.index') }}"
+                        <a href="{{ route('proyectos.index') }}"
                            class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-black font-semibold rounded transition">
                             Volver
                         </a>
