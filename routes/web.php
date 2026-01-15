@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EntidadController;
 use App\Http\Controllers\ProgramaController;
 use App\Http\Controllers\ProyectoController;
+use App\Http\Controllers\ObjetivoEstrategicoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('entidades', EntidadController::class);
     Route::resource('programas', ProgramaController::class);
     Route::resource('proyectos', ProyectoController::class);
+    Route::resource('objetivos-estrategicos', ObjetivoEstrategicoController::class);
 });
 
 /*
@@ -57,4 +59,3 @@ Route::get('/tecnico', function () {
 |--------------------------------------------------------------------------
 */
 require __DIR__.'/auth.php';
-

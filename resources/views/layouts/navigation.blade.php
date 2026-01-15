@@ -15,21 +15,30 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                @auth
-    @if(auth()->user()->role === 'admin')
-        <x-nav-link :href="route('entidades.index')" :active="request()->routeIs('entidades.*')">
-            {{ __('Entidades') }}
-        </x-nav-link>
-    @endif
-@endauth
 
-<x-nav-link :href="route('programas.index')" :active="request()->routeIs('programas.*')">
-    {{ __('Programas') }}
-</x-nav-link>
+                    @auth
+                        @if(auth()->user()->role === 'admin')
+                            <x-nav-link :href="route('entidades.index')"
+                                        :active="request()->routeIs('entidades.*')">
+                                {{ __('Entidades') }}
+                            </x-nav-link>
 
-<x-nav-link :href="route('proyectos.index')" :active="request()->routeIs('proyectos.*')">
-    {{ __('Proyectos') }}
-</x-nav-link>
+                            <x-nav-link :href="route('objetivos-estrategicos.index')"
+                                        :active="request()->routeIs('objetivos-estrategicos.*')">
+                                {{ __('Objetivos Estratégicos') }}
+                            </x-nav-link>
+                        @endif
+                    @endauth
+
+                    <x-nav-link :href="route('programas.index')"
+                                :active="request()->routeIs('programas.*')">
+                        {{ __('Programas') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('proyectos.index')"
+                                :active="request()->routeIs('proyectos.*')">
+                        {{ __('Proyectos') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -84,6 +93,34 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+
+            @auth
+                @if(auth()->user()->role === 'admin')
+                    <x-responsive-nav-link
+                        :href="route('entidades.index')"
+                        :active="request()->routeIs('entidades.*')">
+                        {{ __('Entidades') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link
+                        :href="route('objetivos-estrategicos.index')"
+                        :active="request()->routeIs('objetivos-estrategicos.*')">
+                        {{ __('Objetivos Estratégicos') }}
+                    </x-responsive-nav-link>
+                @endif
+            @endauth
+
+            <x-responsive-nav-link
+                :href="route('programas.index')"
+                :active="request()->routeIs('programas.*')">
+                {{ __('Programas') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link
+                :href="route('proyectos.index')"
+                :active="request()->routeIs('proyectos.*')">
+                {{ __('Proyectos') }}
             </x-responsive-nav-link>
         </div>
 
