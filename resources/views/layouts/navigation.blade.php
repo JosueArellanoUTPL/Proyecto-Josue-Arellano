@@ -18,25 +18,46 @@
 
                     @auth
                         @if(auth()->user()->role === 'admin')
-                            <x-nav-link :href="route('entidades.index')"
-                                        :active="request()->routeIs('entidades.*')">
+                            <x-nav-link :href="route('entidades.index')" :active="request()->routeIs('entidades.*')">
                                 {{ __('Entidades') }}
                             </x-nav-link>
 
-                            <x-nav-link :href="route('objetivos-estrategicos.index')"
-                                        :active="request()->routeIs('objetivos-estrategicos.*')">
+                            <x-nav-link :href="route('objetivos-estrategicos.index')" :active="request()->routeIs('objetivos-estrategicos.*')">
                                 {{ __('Objetivos Estratégicos') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('ods.index')" :active="request()->routeIs('ods.*')">
+                                {{ __('ODS') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('pdn.index')" :active="request()->routeIs('pdn.*')">
+                                {{ __('PND/PDN') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('plans.index')" :active="request()->routeIs('plans.*')">
+                                {{ __('Planes') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('usuarios.index')" :active="request()->routeIs('usuarios.*')">
+                                {{ __('Usuarios') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('metas.index')" :active="request()->routeIs('metas.*')">
+                                {{ __('Metas') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('indicadores.index')" :active="request()->routeIs('indicadores.*')">
+                                {{ __('Indicadores') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('alineaciones.index')" :active="request()->routeIs('alineaciones.*')">
+                              {{ __('Alineaciones') }}
                             </x-nav-link>
                         @endif
                     @endauth
 
-                    <x-nav-link :href="route('programas.index')"
-                                :active="request()->routeIs('programas.*')">
+                    <x-nav-link :href="route('programas.index')" :active="request()->routeIs('programas.*')">
                         {{ __('Programas') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('proyectos.index')"
-                                :active="request()->routeIs('proyectos.*')">
+                    <x-nav-link :href="route('proyectos.index')" :active="request()->routeIs('proyectos.*')">
                         {{ __('Proyectos') }}
                     </x-nav-link>
                 </div>
@@ -97,29 +118,46 @@
 
             @auth
                 @if(auth()->user()->role === 'admin')
-                    <x-responsive-nav-link
-                        :href="route('entidades.index')"
-                        :active="request()->routeIs('entidades.*')">
+                    <x-responsive-nav-link :href="route('entidades.index')" :active="request()->routeIs('entidades.*')">
                         {{ __('Entidades') }}
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link
-                        :href="route('objetivos-estrategicos.index')"
-                        :active="request()->routeIs('objetivos-estrategicos.*')">
+                    <x-responsive-nav-link :href="route('objetivos-estrategicos.index')" :active="request()->routeIs('objetivos-estrategicos.*')">
                         {{ __('Objetivos Estratégicos') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('ods.index')" :active="request()->routeIs('ods.*')">
+                        {{ __('ODS') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('pdn.index')" :active="request()->routeIs('pdn.*')">
+                        {{ __('PND/PDN') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('plans.index')" :active="request()->routeIs('plans.*')">
+                        {{ __('Planes') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link :href="route('usuarios.index')" :active="request()->routeIs('usuarios.*')">
+                        {{ __('Usuarios') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('metas.index')" :active="request()->routeIs('metas.*')">
+                        {{ __('Metas') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('indicadores.index')" :active="request()->routeIs('indicadores.*')">
+                        {{ __('Indicadores') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('alineaciones.index')" :active="request()->routeIs('alineaciones.*')">
+                     {{ __('Alineaciones') }}
                     </x-responsive-nav-link>
                 @endif
             @endauth
 
-            <x-responsive-nav-link
-                :href="route('programas.index')"
-                :active="request()->routeIs('programas.*')">
+            <x-responsive-nav-link :href="route('programas.index')" :active="request()->routeIs('programas.*')">
                 {{ __('Programas') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link
-                :href="route('proyectos.index')"
-                :active="request()->routeIs('proyectos.*')">
+            <x-responsive-nav-link :href="route('proyectos.index')" :active="request()->routeIs('proyectos.*')">
                 {{ __('Proyectos') }}
             </x-responsive-nav-link>
         </div>

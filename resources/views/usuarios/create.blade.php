@@ -1,0 +1,73 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Crear Usuario
+        </h2>
+    </x-slot>
+
+    <div class="py-6">
+        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white shadow rounded p-6">
+
+                @if ($errors->any())
+                    <div class="mb-4 p-3 bg-red-100 border border-red-300 rounded">
+                        <ul class="list-disc ml-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('usuarios.store') }}">
+                    @csrf
+
+                    <div class="mb-4">
+                        <label class="block mb-1">Nombre</label>
+                        <input name="name" value="{{ old('name') }}"
+                               class="w-full border rounded px-3 py-2">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-1">Email</label>
+                        <input name="email" type="email" value="{{ old('email') }}"
+                               class="w-full border rounded px-3 py-2">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-1">Rol</label>
+                        <select name="role" class="w-full border rounded px-3 py-2">
+                            <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>admin</option>
+                            <option value="tecnico" {{ old('role') === 'tecnico' ? 'selected' : '' }}>tecnico</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-1">Contraseña</label>
+                        <input name="password" type="password"
+                               class="w-full border rounded px-3 py-2">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block mb-1">Confirmar contraseña</label>
+                        <input name="password_confirmation" type="password"
+                               class="w-full border rounded px-3 py-2">
+                    </div>
+
+                    <div class="flex gap-3 mt-6">
+                        <button type="submit"
+                                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-black font-semibold rounded transition">
+                            Guardar
+                        </button>
+
+                        <a href="{{ route('usuarios.index') }}"
+                           class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded transition">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</x-app-layout>
