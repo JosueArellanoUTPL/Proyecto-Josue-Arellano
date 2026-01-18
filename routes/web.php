@@ -1,19 +1,30 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DashboardController;
+
 use App\Http\Controllers\EntidadController;
 use App\Http\Controllers\ProgramaController;
 use App\Http\Controllers\ProyectoController;
+
 use App\Http\Controllers\ObjetivoEstrategicoController;
 use App\Http\Controllers\OdsController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\PdnController;
+
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\MetaController;
 use App\Http\Controllers\IndicadorController;
 use App\Http\Controllers\AlineacionController;
-use App\Http\Controllers\DashboardController;
+
+use App\Http\Controllers\UserController;
+
+use App\Http\Controllers\SeguimientoController;
+use App\Http\Controllers\AvanceIndicadorController;
+
+use App\Http\Controllers\OrganizacionController;
+
 /*
 |--------------------------------------------------------------------------
 | Rutas públicas
@@ -30,42 +41,58 @@ Route::get('/', function () {
 */
 Route::middleware(['auth'])->group(function () {
 
-    // Dashboard
+    // Dashboard (para cualquier usuario autenticado)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-
-    // Perfil de usuario (Laravel Breeze)
+    // Perfil (Laravel Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     /*
     |--------------------------------------------------------------------------
-    | Módulos del sistema (acceso general)
+    | SEGUIMIENTO (Admin y Técnico)
     |--------------------------------------------------------------------------
     */
-    Route::resource('entidades', EntidadController::class);
-    Route::resource('programas', ProgramaController::class);
-    Route::resource('proyectos', ProyectoController::class);
-    Route::resource('objetivos-estrategicos', ObjetivoEstrategicoController::class);
-    Route::resource('ods', OdsController::class);
-    Route::resource('pdn', PdnController::class);
-    
+    Route::get('/seguimiento/metas', [SeguimientoController::class, 'index'])->name('seguimiento.metas');
+    Route::get('/seguimiento/metas/{meta}', [SeguimientoController::class, 'show'])->name('seguimiento.meta.show');
 
+    Route::get('/seguimiento/indicadores/{indicador}/avance', [AvanceIndicadorController::class, 'create'])
+        ->name('indicadores.avance.create');
+
+    Route::post('/seguimiento/indicadores/{indicador}/avance', [AvanceIndicadorController::class, 'store'])
+        ->name('indicadores.avance.store');
+    
+    Route::get('/seguimiento/organizacion', [OrganizacionController::class, 'index'])
+    ->name('seguimiento.organizacion');
+
+    Route::get('/seguimiento/organizacion/entidad/{entidad}', [OrganizacionController::class, 'show'])
+    ->name('seguimiento.organizacion.entidad');    
     /*
     |--------------------------------------------------------------------------
-    | Módulos solo para ADMIN
+    | ADMINISTRACIÓN (solo ADMIN)
     |--------------------------------------------------------------------------
     */
     Route::middleware(['role:admin'])->group(function () {
+
+        // Catálogos / Configuración
+        Route::resource('entidades', EntidadController::class);
+        Route::resource('programas', ProgramaController::class);
+        Route::resource('proyectos', ProyectoController::class);
+
+        Route::resource('objetivos-estrategicos', ObjetivoEstrategicoController::class);
+        Route::resource('ods', OdsController::class);
+        Route::resource('pdn', PdnController::class);
+
+        // Planificación y Medición
+        Route::resource('plans', PlanController::class);
+        Route::resource('metas', MetaController::class);
+        Route::resource('indicadores', IndicadorController::class);
+        Route::resource('alineaciones', AlineacionController::class);
+
+        // Seguridad
         Route::resource('usuarios', UserController::class)->except(['show']);
     });
-    Route::middleware(['role:admin'])->group(function () {
-    Route::resource('plans', PlanController::class);
-    });
-    Route::resource('metas', MetaController::class);
-    Route::resource('indicadores', IndicadorController::class);
-    Route::resource('alineaciones', AlineacionController::class);
 });
 
 /*

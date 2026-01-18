@@ -4,20 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\Plan;
 use App\Models\Pdn;
+use App\Models\Entidad;
 use Illuminate\Http\Request;
 
 class PlanController extends Controller
 {
     public function index()
     {
-        $plans = Plan::with('pdn')->orderBy('id', 'desc')->get();
+        $plans = Plan::with(['pdn', 'entidad'])
+            ->orderBy('id', 'desc')
+            ->get();
+
         return view('plans.index', compact('plans'));
     }
 
     public function create()
     {
-        $pdns = Pdn::where('activo', true)->get();
-        return view('plans.create', compact('pdns'));
+        $pdns = Pdn::where('activo', true)->orderBy('id', 'desc')->get();
+        $entidades = Entidad::where('activo', true)->orderBy('id', 'desc')->get();
+
+        return view('plans.create', compact('pdns', 'entidades'));
     }
 
     public function store(Request $request)
@@ -29,6 +35,7 @@ class PlanController extends Controller
             'anio_inicio' => 'required|integer',
             'anio_fin' => 'required|integer|gte:anio_inicio',
             'pdn_id' => 'required|exists:pdns,id',
+            'entidad_id' => 'required|exists:entidades,id',
             'activo' => 'required|boolean',
         ]);
 
@@ -40,8 +47,10 @@ class PlanController extends Controller
 
     public function edit(Plan $plan)
     {
-        $pdns = Pdn::where('activo', true)->get();
-        return view('plans.edit', compact('plan', 'pdns'));
+        $pdns = Pdn::where('activo', true)->orderBy('id', 'desc')->get();
+        $entidades = Entidad::where('activo', true)->orderBy('id', 'desc')->get();
+
+        return view('plans.edit', compact('plan', 'pdns', 'entidades'));
     }
 
     public function update(Request $request, Plan $plan)
@@ -53,6 +62,7 @@ class PlanController extends Controller
             'anio_inicio' => 'required|integer',
             'anio_fin' => 'required|integer|gte:anio_inicio',
             'pdn_id' => 'required|exists:pdns,id',
+            'entidad_id' => 'required|exists:entidades,id',
             'activo' => 'required|boolean',
         ]);
 

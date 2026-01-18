@@ -28,6 +28,7 @@
                             <th class="py-2">ID</th>
                             <th class="py-2">Código</th>
                             <th class="py-2">Nombre</th>
+                            <th class="py-2">Entidad</th>
                             <th class="py-2">PND/PDN</th>
                             <th class="py-2">Periodo</th>
                             <th class="py-2">Activo</th>
@@ -41,6 +42,7 @@
                                 <td class="py-2">{{ $plan->id }}</td>
                                 <td class="py-2">{{ $plan->codigo }}</td>
                                 <td class="py-2">{{ $plan->nombre }}</td>
+                                <td class="py-2">{{ $plan->entidad->nombre ?? '-' }}</td>
                                 <td class="py-2">{{ $plan->pdn->nombre ?? '-' }}</td>
                                 <td class="py-2">{{ $plan->anio_inicio }} - {{ $plan->anio_fin }}</td>
                                 <td class="py-2">{{ $plan->activo ? 'Sí' : 'No' }}</td>
@@ -67,7 +69,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="py-4 text-center text-gray-500">
+                                <td colspan="8" class="py-4 text-center text-gray-500">
                                     No hay planes registrados.
                                 </td>
                             </tr>
@@ -79,3 +81,4 @@
         </div>
     </div>
 </x-app-layout>
+

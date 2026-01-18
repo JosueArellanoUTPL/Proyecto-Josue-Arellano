@@ -58,6 +58,20 @@
                         </div>
                     </div>
 
+                    {{-- NUEVO: Entidad --}}
+                    <div class="mb-4">
+                        <label class="block mb-1">Entidad</label>
+                        <select name="entidad_id" class="w-full border rounded px-3 py-2">
+                            <option value="">Seleccione</option>
+                            @foreach ($entidades as $entidad)
+                                <option value="{{ $entidad->id }}"
+                                    {{ old('entidad_id') == $entidad->id ? 'selected' : '' }}>
+                                    {{ $entidad->nombre }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="mb-4">
                         <label class="block mb-1">PND / PDN</label>
                         <select name="pdn_id" class="w-full border rounded px-3 py-2">
@@ -95,4 +109,3 @@
         </div>
     </div>
 </x-app-layout>
-

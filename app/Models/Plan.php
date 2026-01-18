@@ -16,6 +16,7 @@ class Plan extends Model
         'anio_inicio',
         'anio_fin',
         'pdn_id',
+        'entidad_id',
         'activo'
     ];
 
@@ -23,8 +24,15 @@ class Plan extends Model
     {
         return $this->belongsTo(Pdn::class);
     }
+
+    public function entidad()
+    {
+        return $this->belongsTo(Entidad::class);
+    }
+
     public function metas()
-{
-    return $this->hasMany(Meta::class);
+    {
+        return $this->hasMany(Meta::class);
+    }
 }
-}
+
