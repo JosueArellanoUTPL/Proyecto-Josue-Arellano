@@ -8,7 +8,7 @@
     <div class="py-6">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
 
-            <div class="bg-white shadow rounded p-6">
+            <div class="bg-white shadow rounded p-6" style="background:#ffffff; border:1px solid #d9dee6;">
                 @if ($errors->any())
                     <div class="mb-4 p-3 bg-red-100 border border-red-300 rounded">
                         <ul class="list-disc ml-5 text-red-700">
@@ -23,17 +23,37 @@
                     @csrf
                     @method('PUT')
 
+                    {{-- ENTIDAD --}}
+                    <div class="mb-4">
+                        <label class="block mb-1 font-semibold">Entidad</label>
+                        <select name="entidad_id" class="w-full border rounded px-3 py-2"
+                                style="border-color:#cfd5dd; background:#fff;">
+                            <option value="">-- Seleccionar --</option>
+                            @foreach($entidades as $entidad)
+                                <option value="{{ $entidad->id }}"
+                                    {{ old('entidad_id', $programa->entidad_id) == $entidad->id ? 'selected' : '' }}>
+                                    {{ $entidad->codigo ?? '' }}{{ isset($entidad->codigo) ? ' - ' : '' }}{{ $entidad->nombre }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('entidad_id')
+                            <div class="mt-2 text-sm text-red-700">{{ $message }}</div>
+                        @enderror
+                    </div>
+
                     <div class="mb-4">
                         <label class="block mb-1 font-semibold">Nombre</label>
                         <input name="nombre"
                                value="{{ old('nombre', $programa->nombre) }}"
-                               class="w-full border rounded px-3 py-2" />
+                               class="w-full border rounded px-3 py-2"
+                               style="border-color:#cfd5dd;" />
                     </div>
 
                     <div class="mb-4">
                         <label class="block mb-1 font-semibold">Descripción</label>
                         <textarea name="descripcion" rows="3"
-                                  class="w-full border rounded px-3 py-2">{{ old('descripcion', $programa->descripcion) }}</textarea>
+                                  class="w-full border rounded px-3 py-2"
+                                  style="border-color:#cfd5dd;">{{ old('descripcion', $programa->descripcion) }}</textarea>
                     </div>
 
                     <div class="mb-4">
@@ -61,4 +81,3 @@
         </div>
     </div>
 </x-app-layout>
-

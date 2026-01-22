@@ -26,6 +26,7 @@
                     <thead>
                         <tr class="text-left border-b">
                             <th class="py-2">ID</th>
+                            <th class="py-2">Entidad</th>
                             <th class="py-2">Nombre</th>
                             <th class="py-2">Activo</th>
                             <th class="py-2 text-center w-56">Acciones</th>
@@ -36,6 +37,9 @@
                         @forelse ($programas as $programa)
                             <tr class="border-b">
                                 <td class="py-2">{{ $programa->id }}</td>
+                                <td class="py-2">
+                                    {{ $programa->entidad->nombre ?? '—' }}
+                                </td>
                                 <td class="py-2">{{ $programa->nombre }}</td>
                                 <td class="py-2">{{ $programa->activo ? 'Sí' : 'No' }}</td>
 
@@ -61,7 +65,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="py-4 text-center text-gray-500" colspan="4">
+                                <td class="py-4 text-center text-gray-500" colspan="5">
                                     No hay programas registrados.
                                 </td>
                             </tr>
@@ -77,4 +81,3 @@
         </div>
     </div>
 </x-app-layout>
-

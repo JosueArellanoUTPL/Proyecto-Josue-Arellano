@@ -46,6 +46,19 @@
         .badge{ font-size:12px; font-weight:700; padding:6px 10px; border-radius:12px; border:1px solid var(--border); }
         .badge.green{ background:#eef7f5; }
         .badge.orange{ background:#fff6ee; }
+
+        .click-card{
+            padding:10px;
+            border-radius:14px;
+            border:1px solid var(--border-soft);
+            background:#fafafa;
+            transition: all .15s ease-in-out;
+        }
+        .click-card:hover{
+            transform: translateY(-1px);
+            background:#f6f8fb;
+            border-color: var(--border);
+        }
     </style>
 
     <div class="py-10">
@@ -92,10 +105,19 @@
 
                         <div class="list">
                             @forelse($entidad->programas as $prog)
-                                <div class="row">
-                                    <span><strong>{{ $prog->nombre }}</strong></span>
-                                    <span class="muted">Activo: {{ $prog->activo ? 'Sí' : 'No' }}</span>
-                                </div>
+                                <a href="{{ route('seguimiento.programa.show', $prog->id) }}" style="text-decoration:none;">
+                                    <div class="row click-card">
+                                        <div>
+                                            <strong style="color:var(--text)">{{ $prog->nombre }}</strong>
+                                            <div class="muted" style="margin-top:4px;">
+                                                {{ $prog->descripcion ? \Illuminate\Support\Str::limit($prog->descripcion, 80) : 'Sin descripción.' }}
+                                            </div>
+                                        </div>
+                                        <span class="badge {{ $prog->activo ? 'green' : 'orange' }}">
+                                            {{ $prog->activo ? 'Activo' : 'Inactivo' }}
+                                        </span>
+                                    </div>
+                                </a>
                             @empty
                                 <div class="muted">No hay programas.</div>
                             @endforelse
@@ -108,15 +130,19 @@
 
                         <div class="list">
                             @forelse($entidad->proyectos as $pry)
-                                <div class="row">
-                                    <div>
-                                        <strong>{{ $pry->nombre }}</strong>
-                                        <div class="muted">
-                                            Programa: {{ $pry->programa->nombre ?? '-' }}
+                                <a href="{{ route('seguimiento.proyecto.show', $pry->id) }}" style="text-decoration:none;">
+                                    <div class="row click-card">
+                                        <div>
+                                            <strong style="color:var(--text)">{{ $pry->nombre }}</strong>
+                                            <div class="muted" style="margin-top:4px;">
+                                                Programa: {{ $pry->programa->nombre ?? '-' }}
+                                            </div>
                                         </div>
+                                        <span class="badge {{ $pry->activo ? 'green' : 'orange' }}">
+                                            {{ $pry->activo ? 'Activo' : 'Inactivo' }}
+                                        </span>
                                     </div>
-                                    <span class="muted">{{ $pry->activo ? 'Activo' : 'Inactivo' }}</span>
-                                </div>
+                                </a>
                             @empty
                                 <div class="muted">No hay proyectos.</div>
                             @endforelse

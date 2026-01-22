@@ -24,6 +24,11 @@ use App\Http\Controllers\SeguimientoController;
 use App\Http\Controllers\AvanceIndicadorController;
 
 use App\Http\Controllers\OrganizacionController;
+use App\Http\Controllers\ProyectoAvanceController;
+
+// ✅ NUEVOS CONTROLLERS (seguimiento de Programa y Proyecto)
+use App\Http\Controllers\SeguimientoProgramaController;
+use App\Http\Controllers\SeguimientoProyectoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,12 +67,28 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/seguimiento/indicadores/{indicador}/avance', [AvanceIndicadorController::class, 'store'])
         ->name('indicadores.avance.store');
-    
+
     Route::get('/seguimiento/organizacion', [OrganizacionController::class, 'index'])
-    ->name('seguimiento.organizacion');
+        ->name('seguimiento.organizacion');
 
     Route::get('/seguimiento/organizacion/entidad/{entidad}', [OrganizacionController::class, 'show'])
-    ->name('seguimiento.organizacion.entidad');    
+        ->name('seguimiento.organizacion.entidad');
+
+    // ✅ NUEVAS RUTAS: Seguimiento de Programas y Proyectos (para links clickeables)
+    Route::get('/seguimiento/programas/{programa}', [SeguimientoProgramaController::class, 'show'])
+        ->name('seguimiento.programa.show');
+
+    Route::get('/seguimiento/proyectos/{proyecto}', [SeguimientoProyectoController::class, 'show'])
+        ->name('seguimiento.proyecto.show');
+        
+    Route::get('/seguimiento/proyectos/{proyecto}/avances/create',
+    [ProyectoAvanceController::class, 'create']
+)->name('proyectos.avance.create');
+
+Route::post('/seguimiento/proyectos/{proyecto}/avances',
+    [ProyectoAvanceController::class, 'store']
+)->name('proyectos.avance.store');
+
     /*
     |--------------------------------------------------------------------------
     | ADMINISTRACIÓN (solo ADMIN)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Programa;
+use App\Models\Entidad;
 use Illuminate\Http\Request;
 
 class ProgramaController extends Controller
@@ -15,15 +16,20 @@ class ProgramaController extends Controller
 
     public function create()
     {
-        return view('programas.create');
+        $entidades = Entidad::where('activo', 1)
+            ->orderBy('nombre')
+            ->get();
+
+        return view('programas.create', compact('entidades'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nombre' => ['required', 'string', 'max:150'],
+            'entidad_id'  => ['required', 'exists:entidades,id'],
+            'nombre'      => ['required', 'string', 'max:150'],
             'descripcion' => ['nullable', 'string'],
-            'activo' => ['nullable'],
+            'activo'      => ['nullable'],
         ]);
 
         $validated['activo'] = $request->has('activo');
@@ -36,15 +42,20 @@ class ProgramaController extends Controller
 
     public function edit(Programa $programa)
     {
-        return view('programas.edit', compact('programa'));
+        $entidades = Entidad::where('activo', 1)
+            ->orderBy('nombre')
+            ->get();
+
+        return view('programas.edit', compact('programa', 'entidades'));
     }
 
     public function update(Request $request, Programa $programa)
     {
         $validated = $request->validate([
-            'nombre' => ['required', 'string', 'max:150'],
+            'entidad_id'  => ['required', 'exists:entidades,id'],
+            'nombre'      => ['required', 'string', 'max:150'],
             'descripcion' => ['nullable', 'string'],
-            'activo' => ['nullable'],
+            'activo'      => ['nullable'],
         ]);
 
         $validated['activo'] = $request->has('activo');
