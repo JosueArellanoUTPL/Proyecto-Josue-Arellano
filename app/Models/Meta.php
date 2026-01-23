@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Plan;
+use App\Models\Indicador;
+use App\Models\Alineacion;
+
 class Meta extends Model
 {
     use HasFactory;
@@ -33,11 +37,19 @@ class Meta extends Model
         return $this->hasMany(Indicador::class);
     }
 
+    /**
+     * Relación: una meta puede tener varias alineaciones.
+     * Esto permite consultar trazabilidad desde la meta.
+     */
+    public function alineaciones()
+    {
+        return $this->hasMany(Alineacion::class);
+    }
+
     /* =========================
      | Lógica de negocio
      ========================= */
 
-    // % de avance de la meta (promedio de indicadores)
     public function getProgresoAttribute(): float
     {
         if ($this->indicadores->count() === 0) {
@@ -50,7 +62,6 @@ class Meta extends Model
         );
     }
 
-    // Meta completada si TODOS los indicadores están completos
     public function getCompletadaAttribute(): bool
     {
         if ($this->indicadores->count() === 0) {
@@ -60,4 +71,3 @@ class Meta extends Model
         return $this->indicadores->every(fn ($indicador) => $indicador->completado);
     }
 }
-

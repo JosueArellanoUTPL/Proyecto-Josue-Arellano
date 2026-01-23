@@ -5,6 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+// Modelos relacionados
+use App\Models\Meta;
+use App\Models\Indicador;
+use App\Models\Ods;
+use App\Models\Pdn;
+use App\Models\ObjetivoEstrategico;
+
 class Alineacion extends Model
 {
     use HasFactory;
@@ -20,11 +27,17 @@ class Alineacion extends Model
         'activo'
     ];
 
+    /**
+     * Relación principal: la alineación siempre pertenece a una meta.
+     */
     public function meta()
     {
         return $this->belongsTo(Meta::class);
     }
 
+    /**
+     * Relación opcional: la alineación puede ser más específica a nivel indicador.
+     */
     public function indicador()
     {
         return $this->belongsTo(Indicador::class);
@@ -43,5 +56,19 @@ class Alineacion extends Model
     public function objetivoEstrategico()
     {
         return $this->belongsTo(ObjetivoEstrategico::class, 'objetivo_estrategico_id');
+    }
+
+    /**
+     * Resumen textual para mostrar en listados sin armar lógica en la vista.
+     */
+    public function getResumenInstrumentosAttribute(): string
+    {
+        $parts = [];
+
+        if ($this->ods) $parts[] = 'ODS';
+        if ($this->pdn) $parts[] = 'PDN';
+        if ($this->objetivoEstrategico) $parts[] = 'OE';
+
+        return $parts ? implode(' + ', $parts) : 'Sin instrumentos';
     }
 }

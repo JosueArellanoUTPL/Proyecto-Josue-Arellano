@@ -15,8 +15,13 @@
         .card{ background:var(--card); border-radius:18px; padding:18px; border:1px solid var(--border); }
         .title{ font-weight:700; font-size:18px; color:var(--text); }
         .muted{ color:var(--muted); font-size:13px; }
-        .btn{ display:inline-flex; align-items:center; justify-content:center; height:34px; padding:0 14px; border-radius:10px;
-              border:1px solid var(--border); font-weight:700; font-size:13px; text-decoration:none; background:#f0f4fb; color:#365a99; }
+        .btn{
+            display:inline-flex; align-items:center; justify-content:center;
+            height:34px; padding:0 14px; border-radius:10px;
+            border:1px solid var(--border);
+            font-weight:700; font-size:13px; text-decoration:none;
+            background:#f0f4fb; color:#365a99;
+        }
         .btn:hover{ background:#e6eefc; }
         .input{ width:100%; border:1px solid var(--border); border-radius:12px; padding:10px 12px; background:#fff; }
         .label{ font-size:13px; font-weight:700; color:var(--text); margin-bottom:6px; display:block; }
@@ -41,7 +46,7 @@
 
                 @if ($errors->any())
                     <div class="card" style="margin-top:16px; border-color:#f3b4b4; background:#fff5f5;">
-                        <div class="title">Revisa los campos</div>
+                        <div class="title">Revisar campos</div>
                         <ul class="muted" style="margin-top:8px; list-style:disc; padding-left:18px;">
                             @foreach($errors->all() as $e)
                                 <li>{{ $e }}</li>
@@ -58,28 +63,38 @@
                     <div style="display:grid; gap:12px;">
                         <div>
                             <label class="label">Fecha</label>
-                            <input type="date" name="fecha" class="input" value="{{ old('fecha', now()->toDateString()) }}">
+                            <input type="date" name="fecha" class="input"
+                                   value="{{ old('fecha', now()->toDateString()) }}">
                             @error('fecha') <div class="err">{{ $message }}</div> @enderror
                         </div>
 
                         <div>
                             <label class="label">Porcentaje de avance (0 a 100)</label>
-                            <input type="number" step="0.01" min="0" max="100" name="porcentaje_avance"
-                                   class="input" value="{{ old('porcentaje_avance') }}">
+                            <input type="number" step="0.01" min="0" max="100"
+                                   name="porcentaje_avance"
+                                   class="input"
+                                   value="{{ old('porcentaje_avance') }}">
                             @error('porcentaje_avance') <div class="err">{{ $message }}</div> @enderror
                         </div>
 
                         <div>
-                            <label class="label">Comentario (opcional)</label>
+                            <label class="label">Comentario</label>
                             <textarea name="comentario" rows="3" class="input"
-                                      placeholder="Describe qué se logró en este avance...">{{ old('comentario') }}</textarea>
+                                      placeholder="Descripción breve del avance...">{{ old('comentario') }}</textarea>
                             @error('comentario') <div class="err">{{ $message }}</div> @enderror
                         </div>
 
                         <div>
-                            <label class="label">Evidencias (puedes subir varias)</label>
-                            <input type="file" name="evidencias[]" class="input" multiple>
-                            <div class="muted" style="margin-top:6px;">Imágenes, PDF, documentos. Máx 5MB por archivo.</div>
+                            <label class="label">Evidencia (opcional)</label>
+
+                            {{-- En creación se permite subir 1 evidencia.
+                                 Si luego se desea agregar más, se hace desde el historial del avance. --}}
+                            <input type="file" name="evidencias[]" class="input">
+                            <div class="muted" style="margin-top:6px;">
+                                Se puede agregar más evidencias después desde el avance.
+                                Máx 5MB.
+                            </div>
+
                             @error('evidencias') <div class="err">{{ $message }}</div> @enderror
                             @error('evidencias.*') <div class="err">{{ $message }}</div> @enderror
                         </div>

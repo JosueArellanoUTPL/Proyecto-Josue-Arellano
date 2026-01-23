@@ -36,6 +36,7 @@
         @media(max-width:640px){ .evid-grid{ grid-template-columns:repeat(2, 1fr);} }
 
         .thumb{
+            position:relative;
             border:1px solid var(--border-soft);
             border-radius:14px;
             background:#fafafa;
@@ -44,34 +45,24 @@
             display:flex;
             align-items:center;
             justify-content:center;
-            text-align:center;
             padding:8px;
-            transition: all .15s ease;
         }
-        .thumb:hover{ transform: translateY(-1px); border-color: var(--border); background:#f6f8fb; }
-        .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
-        .filebox{
-            display:flex; flex-direction:column; gap:6px; align-items:center; justify-content:center;
-        }
-        .fileicon{
-            width:34px; height:34px; border-radius:12px; border:1px solid var(--border);
-            display:flex; align-items:center; justify-content:center;
+        .thumb img{ width:100%; height:100%; object-fit:cover; }
+        .remove{
+            position:absolute;
+            top:6px; right:6px;
             background:#fff;
-            font-weight:900;
+            border:1px solid var(--border);
+            border-radius:999px;
+            font-size:11px;
+            padding:2px 6px;
+            cursor:pointer;
         }
-        .fname{ font-size:11px; color:var(--muted); line-height:1.2; word-break:break-word; }
     </style>
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
-
-                @if(session('success'))
-                    <div class="card" style="border-color:#bfe3da; background:#f3fbf9; margin-bottom:14px;">
-                        <div class="title">Listo</div>
-                        <div class="muted" style="margin-top:6px;">{{ session('success') }}</div>
-                    </div>
-                @endif
 
                 <div class="row">
                     <div>
@@ -87,7 +78,7 @@
 
                     <div class="flex gap-2">
                         <a class="btn" href="{{ route('seguimiento.programa.show', $proyecto->programa_id) }}">← Volver</a>
-                        <a class="btn" href="{{ route('proyectos.avance.create', $proyecto->id) }}" style="background:#eef7f5; color:#225c52;">
+                        <a class="btn" href="{{ route('proyectos.avance.create', $proyecto->id) }}" style="background:#eef7f5;">
                             + Registrar avance
                         </a>
                     </div>
@@ -97,15 +88,9 @@
 
                 <div class="card" style="margin-top:16px;">
                     <div class="row" style="align-items:center;">
-                        <div>
-                            <div class="title">Avance actual</div>
-                            <div class="muted" style="margin-top:6px;">
-                                Basado en el último avance registrado.
-                            </div>
-                        </div>
+                        <div class="title">Avance actual</div>
                         <span class="badge {{ $p >= 100 ? 'green' : 'orange' }}">{{ $p }}%</span>
                     </div>
-
                     <div class="progress">
                         <div style="width:{{ $p }}%; background:{{ $p >= 100 ? 'var(--green)' : 'var(--orange)' }}"></div>
                     </div>
@@ -113,60 +98,50 @@
 
                 <div class="card" style="margin-top:14px;">
                     <div class="title">Historial de avances</div>
-                    <div class="muted" style="margin-top:6px;">Cada avance puede tener varias evidencias en miniatura.</div>
 
                     <div class="grid">
-                        @forelse($proyecto->avances as $a)
-                            @php
-                                $ap = max(0, min(100, (int)round($a->porcentaje_avance)));
-                            @endphp
-
-                            <div class="card" style="border-color:var(--border-soft); background:#fafafa;">
-                                <div class="row" style="align-items:center;">
+                        @foreach($proyecto->avances as $a)
+                            <div class="card" style="background:#fafafa;">
+                                <div class="row">
                                     <div>
-                                        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                                            <span class="badge {{ $ap >= 100 ? 'green' : 'orange' }}">{{ $ap }}%</span>
-                                            <span class="muted">
-                                                {{ $a->fecha?->format('d/m/Y') ?? '' }}
-                                                · {{ $a->user->name ?? 'Usuario' }}
-                                            </span>
-                                        </div>
-                                        @if($a->comentario)
-                                            <div class="muted" style="margin-top:8px;">{{ $a->comentario }}</div>
-                                        @endif
+                                        <strong>{{ $a->porcentaje_avance }}%</strong>
+                                        <span class="muted">· {{ $a->fecha->format('d/m/Y') }}</span>
                                     </div>
+
+                                    @if(auth()->user()->role === 'admin' || auth()->id() === $a->user_id)
+                                        <div style="display:flex; gap:10px;">
+                                            <a class="btn" href="{{ route('proyectos.avance.edit', $a->id) }}">Editar</a>
+                                            <form method="POST" action="{{ route('proyectos.avance.destroy', $a->id) }}">
+                                                @csrf @method('DELETE')
+                                                <button class="btn" onclick="return confirm('¿Eliminar avance?')">Eliminar</button>
+                                            </form>
+                                        </div>
+                                    @endif
                                 </div>
 
-                                @if($a->evidencias->count())
-                                    <div class="evid-grid">
-                                        @foreach($a->evidencias as $ev)
-                                            @php
-                                                $url = asset('storage/' . $ev->path);
-                                                $isImg = $ev->mime_type && str_starts_with($ev->mime_type, 'image/');
-                                                $label = $ev->original_name ?? 'Archivo';
-                                            @endphp
+                                {{-- Evidencias --}}
+                                <div class="evid-grid">
+                                    @foreach($a->evidencias as $ev)
+                                        <div class="thumb">
+                                            <img src="{{ asset('storage/'.$ev->path) }}">
+                                            <form method="POST" action="{{ route('proyectos.avance.evidencia.delete', $ev->id) }}">
+                                                @csrf @method('DELETE')
+                                                <button class="remove">✕</button>
+                                            </form>
+                                        </div>
+                                    @endforeach
+                                </div>
 
-                                            <a href="{{ $url }}" target="_blank" style="text-decoration:none;">
-                                                <div class="thumb">
-                                                    @if($isImg)
-                                                        <img src="{{ $url }}" alt="{{ $label }}">
-                                                    @else
-                                                        <div class="filebox">
-                                                            <div class="fileicon">📄</div>
-                                                            <div class="fname">{{ \Illuminate\Support\Str::limit($label, 22) }}</div>
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </a>
-                                        @endforeach
-                                    </div>
-                                @else
-                                    <div class="muted" style="margin-top:10px;">Sin evidencias en este avance.</div>
-                                @endif
+                                {{-- Agregar evidencia --}}
+                                <form method="POST" enctype="multipart/form-data"
+                                      action="{{ route('proyectos.avance.evidencia.add', $a->id) }}"
+                                      style="margin-top:10px;">
+                                    @csrf
+                                    <input type="file" name="evidencia" required>
+                                    <button class="btn" style="margin-left:8px;">+ Evidencia</button>
+                                </form>
                             </div>
-                        @empty
-                            <div class="muted" style="margin-top:10px;">Aún no hay avances registrados.</div>
-                        @endforelse
+                        @endforeach
                     </div>
                 </div>
 
@@ -174,4 +149,3 @@
         </div>
     </div>
 </x-app-layout>
-

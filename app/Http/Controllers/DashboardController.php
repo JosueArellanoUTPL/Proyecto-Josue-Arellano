@@ -8,40 +8,57 @@ use App\Models\Indicador;
 use App\Models\Alineacion;
 use App\Models\Programa;
 use App\Models\Proyecto;
+use App\Models\ProyectoAvance;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // KPI Cards
+        /* ===========================
+         * KPIs PRINCIPALES
+         * =========================== */
         $kpis = [
-            'planes_activos' => Plan::where('activo', true)->count(),
-            'metas' => Meta::count(),
-            'indicadores' => Indicador::count(),
-            'alineaciones' => Alineacion::count(),
-            'programas' => Programa::count(),
-            'proyectos' => Proyecto::count(),
+            'planes_activos' => Plan::where('activo', 1)->count(),
+            'metas'          => Meta::count(),
+            'indicadores'    => Indicador::count(),
+            'alineaciones'   => Alineacion::count(),
+            'programas'      => Programa::count(),
+            'proyectos'      => Proyecto::count(),
         ];
 
-        // Donut: Metas alineadas vs no alineadas
-        $metasAlineadas = Alineacion::distinct('meta_id')->count('meta_id');
-        $metasTotales = Meta::count();
-        $metasNoAlineadas = max(0, $metasTotales - $metasAlineadas);
+        /* ===========================
+         * PROGRESO INSTITUCIONAL
+         * (progreso es accessor en Meta, no columna DB)
+         * =========================== */
+        $metas = Meta::with(['indicadores.ultimoAvance'])->get();
 
-        // Bar: Indicadores por Plan (contando indicadores a través de Metas)
-        $indicadoresPorPlan = Plan::withCount([
-            'metas as indicadores_count' => function ($q) {
-                $q->join('indicadores', 'indicadores.meta_id', '=', 'metas.id');
-            }
-        ])
-            ->orderBy('id', 'desc')
-            ->get(['id', 'codigo', 'nombre']);
+        $progresoInstitucional = $metas->count()
+            ? (int) round($metas->avg(fn ($m) => (float) $m->progreso))
+            : 0;
+
+        $progresoInstitucional = max(0, min(100, $progresoInstitucional));
+
+        /* ===========================
+         * ESTADO DE ALINEACIÓN
+         * =========================== */
+        $metasAlineadas = Meta::whereHas('alineaciones')->count();
+        $metasNoAlineadas = max(0, Meta::count() - $metasAlineadas);
+
+        /* ===========================
+         * ACTIVIDAD RECIENTE
+         * (se devuelve como MODELOS, no arrays)
+         * =========================== */
+        $actividadReciente = ProyectoAvance::with(['proyecto'])
+            ->orderBy('created_at', 'desc')
+            ->take(6)
+            ->get();
 
         return view('dashboard', compact(
             'kpis',
+            'progresoInstitucional',
             'metasAlineadas',
             'metasNoAlineadas',
-            'indicadoresPorPlan'
+            'actividadReciente'
         ));
     }
 }

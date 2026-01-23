@@ -16,7 +16,7 @@
 
                     @auth
                         <!-- Seguimiento (Admin y Técnico) -->
-                        <x-dropdown align="left" width="48">
+                        <x-dropdown align="left" width="56">
                             <x-slot name="trigger">
                                 <button type="button"
                                     class="inline-flex items-center gap-1 px-3 py-2 rounded-md
@@ -34,8 +34,14 @@
                                 <x-dropdown-link :href="route('seguimiento.metas')">
                                     Seguimiento de Metas
                                 </x-dropdown-link>
+
                                 <x-dropdown-link :href="route('seguimiento.organizacion')">
                                     Organización (Entidades)
+                                </x-dropdown-link>
+
+                                <!-- ✅ NUEVO: Matriz de Trazabilidad -->
+                                <x-dropdown-link :href="route('seguimiento.trazabilidad')">
+                                    Matriz de Trazabilidad
                                 </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
@@ -57,7 +63,6 @@
                                 </x-slot>
 
                                 <x-slot name="content">
-                                    <!-- Bloque: Catálogos estratégicos -->
                                     <div class="px-4 py-2 text-xs text-gray-500">Planificación</div>
                                     <x-dropdown-link :href="route('pdn.index')">PND / PDN</x-dropdown-link>
                                     <x-dropdown-link :href="route('ods.index')">ODS</x-dropdown-link>
@@ -65,7 +70,6 @@
 
                                     <div class="border-t my-2"></div>
 
-                                    <!-- Bloque: Planificación institucional -->
                                     <div class="px-4 py-2 text-xs text-gray-500">Plan y Seguimiento</div>
                                     <x-dropdown-link :href="route('plans.index')">Planes</x-dropdown-link>
                                     <x-dropdown-link :href="route('metas.index')">Metas</x-dropdown-link>
@@ -74,7 +78,6 @@
 
                                     <div class="border-t my-2"></div>
 
-                                    <!-- Bloque: Ejecución -->
                                     <div class="px-4 py-2 text-xs text-gray-500">Ejecución</div>
                                     <x-dropdown-link :href="route('programas.index')">Programas</x-dropdown-link>
                                     <x-dropdown-link :href="route('proyectos.index')">Proyectos</x-dropdown-link>
@@ -82,7 +85,6 @@
 
                                     <div class="border-t my-2"></div>
 
-                                    <!-- Bloque: Seguridad -->
                                     <div class="px-4 py-2 text-xs text-gray-500">Seguridad</div>
                                     <x-dropdown-link :href="route('usuarios.index')">Usuarios</x-dropdown-link>
                                 </x-slot>
