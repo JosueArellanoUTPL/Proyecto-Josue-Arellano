@@ -30,6 +30,7 @@ use App\Http\Controllers\ProyectoAvanceController;
 
 use App\Http\Controllers\TrazabilidadController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\ReporteController;
 use App\Http\Middleware\AuditMiddleware;
 use App\Models\User;
 
@@ -90,6 +91,22 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
 
         Route::get('/seguimiento/trazabilidad', [TrazabilidadController::class, 'index'])
             ->name('seguimiento.trazabilidad');
+
+        // Reportes consultivos.
+        Route::get('/reportes', [ReporteController::class, 'index'])
+            ->name('reportes.index');
+
+        Route::get('/reportes/institucional', [ReporteController::class, 'institucional'])
+            ->name('reportes.institucional');
+
+        Route::get('/reportes/metas', [ReporteController::class, 'metas'])
+            ->name('reportes.metas');
+
+        Route::get('/reportes/proyectos', [ReporteController::class, 'proyectos'])
+            ->name('reportes.proyectos');
+
+        Route::get('/reportes/trazabilidad', [ReporteController::class, 'trazabilidad'])
+            ->name('reportes.trazabilidad');
     });
 
     /*

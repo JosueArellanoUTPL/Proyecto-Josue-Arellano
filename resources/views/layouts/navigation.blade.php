@@ -38,6 +38,10 @@
                                 <x-dropdown-link :href="route('seguimiento.trazabilidad')">
                                     Matriz de Trazabilidad
                                 </x-dropdown-link>
+
+                                <x-dropdown-link :href="route('reportes.index')">
+                                    Reportes
+                                </x-dropdown-link>
                             </x-slot>
                         </x-dropdown>
 
