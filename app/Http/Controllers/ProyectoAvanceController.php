@@ -92,7 +92,7 @@ class ProyectoAvanceController extends Controller
      */
     public function edit(ProyectoAvance $avance)
     {
-        if ($avance->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+        if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
@@ -111,7 +111,7 @@ class ProyectoAvanceController extends Controller
      */
     public function update(Request $request, ProyectoAvance $avance)
     {
-        if ($avance->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+        if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
@@ -138,7 +138,7 @@ class ProyectoAvanceController extends Controller
      */
     public function addEvidencia(Request $request, ProyectoAvance $avance)
     {
-        if ($avance->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+        if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
@@ -170,7 +170,7 @@ class ProyectoAvanceController extends Controller
     {
         $avance = $evidencia->avance;
 
-        if ($avance->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+        if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
@@ -188,7 +188,7 @@ class ProyectoAvanceController extends Controller
      */
     public function destroy(ProyectoAvance $avance)
     {
-        if ($avance->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+        if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
@@ -205,4 +205,3 @@ class ProyectoAvanceController extends Controller
             ->with('success', 'Avance eliminado correctamente.');
     }
 }
-

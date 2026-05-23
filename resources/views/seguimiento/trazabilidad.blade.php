@@ -4,62 +4,7 @@
             Matriz de Trazabilidad Institucional
         </h2>
     </x-slot>
-
-    <style>
-        :root{
-            --beige:#f5f1ea; --card:#ffffff;
-            --border:#cfd5dd; --border-soft:#d9dee6;
-            --blue:#8faadc; --green:#9fd3c7; --orange:#f4c095;
-            --text:#1f2937; --muted:#6b7280;
-        }
-        .wrap{ background:var(--beige); border-radius:20px; padding:28px; border:1px solid var(--border-soft); }
-        .card{ background:var(--card); border-radius:18px; padding:18px; border:1px solid var(--border); }
-        .title{ font-weight:800; font-size:18px; color:var(--text); }
-        .muted{ color:var(--muted); font-size:13px; }
-
-        .grid2{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
-        @media(min-width:1024px){ .grid2{ grid-template-columns: 1fr 1fr; } }
-
-        .kpis{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:12px; }
-        @media(max-width:900px){ .kpis{ grid-template-columns:1fr 1fr; } }
-        .kpi{ border-radius:14px; padding:12px; background:#fafafa; border:1px solid var(--border-soft); }
-        .kpi .label{ font-size:12px; color:var(--muted); }
-        .kpi .value{ font-size:18px; font-weight:900; color:var(--text); }
-
-        .input{ width:100%; border:1px solid var(--border); border-radius:12px; padding:10px 12px; background:#fff; }
-        .label{ font-weight:800; font-size:13px; color:var(--text); margin-bottom:6px; display:block; }
-        .btn{
-            display:inline-flex; align-items:center; justify-content:center;
-            height:34px; padding:0 14px; border-radius:10px;
-            border:1px solid var(--border); font-weight:800; font-size:13px;
-            background:#f0f4fb; color:#365a99; text-decoration:none;
-        }
-        .btn:hover{ background:#e6eefc; }
-
-        .chip{
-            display:inline-flex; align-items:center; gap:8px;
-            font-size:12px; font-weight:900;
-            padding:6px 10px; border-radius:999px;
-            border:1px solid var(--border);
-            background:#fff;
-            color:var(--text);
-        }
-        .dot{ width:10px; height:10px; border-radius:999px; border:1px solid rgba(0,0,0,.08); }
-        .dot.blue{ background:var(--blue); }
-        .dot.green{ background:var(--green); }
-        .dot.orange{ background:var(--orange); }
-
-        .list{ margin-top:14px; display:grid; gap:12px; }
-        .item{
-            border:1px solid var(--border-soft);
-            background:#fafafa;
-            border-radius:16px;
-            padding:14px;
-        }
-        .row{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; flex-wrap:wrap; }
-        .strong{ font-weight:900; color:var(--text); }
-        .small{ font-size:12px; color:var(--muted); }
-    </style>
+    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -186,9 +131,9 @@
                         </div>
 
                         <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                            <span class="chip"><span class="dot.blue dot"></span>ODS</span>
-                            <span class="chip"><span class="dot.green dot"></span>PDN</span>
-                            <span class="chip"><span class="dot.orange dot"></span>OE</span>
+                            <span class="chip"><span class="dot blue"></span>ODS</span>
+                            <span class="chip"><span class="dot green"></span>PDN</span>
+                            <span class="chip"><span class="dot orange"></span>OE</span>
                         </div>
 
                         <div class="muted" style="margin-top:12px;">

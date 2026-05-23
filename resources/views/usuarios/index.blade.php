@@ -39,7 +39,7 @@
                             <td class="py-2">{{ $user->id }}</td>
                             <td class="py-2">{{ $user->name }}</td>
                             <td class="py-2">{{ $user->email }}</td>
-                            <td class="py-2">{{ $user->role }}</td>
+                            <td class="py-2">{{ $user->roleLabel() }}</td>
 
                             <td class="py-2">
                                 <div class="flex justify-center gap-2">

@@ -37,8 +37,11 @@
                     <div class="mb-4">
                         <label class="block mb-1">Rol</label>
                         <select name="role" class="w-full border rounded px-3 py-2">
-                            <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>admin</option>
-                            <option value="tecnico" {{ old('role') === 'tecnico' ? 'selected' : '' }}>tecnico</option>
+                            @foreach(\App\Models\User::ROLE_LABELS as $role => $label)
+                                <option value="{{ $role }}" {{ old('role') === $role ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 

@@ -4,62 +4,7 @@
             Detalle de Entidad
         </h2>
     </x-slot>
-
-    <style>
-        :root{
-            --beige:#f5f1ea;
-            --card:#ffffff;
-            --border:#cfd5dd;
-            --border-soft:#d9dee6;
-
-            --blue:#8faadc;
-            --green:#9fd3c7;
-            --orange:#f4c095;
-
-            --text:#1f2937;
-            --muted:#6b7280;
-        }
-
-        .wrap{ background:var(--beige); border-radius:20px; padding:28px; border:1px solid var(--border-soft); }
-        .card{ background:var(--card); border-radius:18px; padding:18px; border:1px solid var(--border); }
-        .title{ font-weight:700; font-size:18px; color:var(--text); }
-        .muted{ color:var(--muted); font-size:13px; }
-
-        .progress{ width:100%; height:8px; background:#e5e7eb; border-radius:999px; overflow:hidden; margin-top:8px; }
-        .progress div{ height:100%; }
-
-        .grid2{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
-        @media(min-width:1024px){ .grid2{ grid-template-columns: 1fr 1fr; } }
-
-        .list{ margin-top:10px; display:grid; gap:10px; }
-        .row{ display:flex; justify-content:space-between; gap:10px; align-items:center; }
-
-        .btn{
-            display:inline-flex; align-items:center; justify-content:center;
-            height:34px; padding:0 14px; border-radius:10px;
-            border:1px solid var(--border);
-            font-weight:700; font-size:13px; text-decoration:none;
-            background:#f0f4fb; color:#365a99;
-        }
-        .btn:hover{ background:#e6eefc; }
-
-        .badge{ font-size:12px; font-weight:700; padding:6px 10px; border-radius:12px; border:1px solid var(--border); }
-        .badge.green{ background:#eef7f5; }
-        .badge.orange{ background:#fff6ee; }
-
-        .click-card{
-            padding:10px;
-            border-radius:14px;
-            border:1px solid var(--border-soft);
-            background:#fafafa;
-            transition: all .15s ease-in-out;
-        }
-        .click-card:hover{
-            transform: translateY(-1px);
-            background:#f6f8fb;
-            border-color: var(--border);
-        }
-    </style>
+    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

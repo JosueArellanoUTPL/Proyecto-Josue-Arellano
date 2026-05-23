@@ -57,7 +57,7 @@ class AvanceIndicadorController extends Controller
 
     public function edit(IndicadorAvance $avance)
     {
-        if ($avance->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+        if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
@@ -68,7 +68,7 @@ class AvanceIndicadorController extends Controller
 
     public function update(Request $request, IndicadorAvance $avance)
     {
-        if ($avance->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+        if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
@@ -99,7 +99,7 @@ class AvanceIndicadorController extends Controller
 
     public function destroy(IndicadorAvance $avance)
     {
-        if ($avance->user_id !== Auth::id() && Auth::user()->role !== 'admin') {
+        if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 

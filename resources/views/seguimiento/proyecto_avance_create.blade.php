@@ -4,29 +4,7 @@
             Registrar avance de Proyecto
         </h2>
     </x-slot>
-
-    <style>
-        :root{
-            --beige:#f5f1ea; --card:#ffffff; --border:#cfd5dd; --border-soft:#d9dee6;
-            --blue:#8faadc; --green:#9fd3c7; --orange:#f4c095;
-            --text:#1f2937; --muted:#6b7280;
-        }
-        .wrap{ background:var(--beige); border-radius:20px; padding:28px; border:1px solid var(--border-soft); }
-        .card{ background:var(--card); border-radius:18px; padding:18px; border:1px solid var(--border); }
-        .title{ font-weight:700; font-size:18px; color:var(--text); }
-        .muted{ color:var(--muted); font-size:13px; }
-        .btn{
-            display:inline-flex; align-items:center; justify-content:center;
-            height:34px; padding:0 14px; border-radius:10px;
-            border:1px solid var(--border);
-            font-weight:700; font-size:13px; text-decoration:none;
-            background:#f0f4fb; color:#365a99;
-        }
-        .btn:hover{ background:#e6eefc; }
-        .input{ width:100%; border:1px solid var(--border); border-radius:12px; padding:10px 12px; background:#fff; }
-        .label{ font-size:13px; font-weight:700; color:var(--text); margin-bottom:6px; display:block; }
-        .err{ margin-top:8px; font-size:13px; color:#b91c1c; }
-    </style>
+    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">

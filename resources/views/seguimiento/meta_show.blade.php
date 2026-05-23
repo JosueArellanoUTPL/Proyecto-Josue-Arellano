@@ -4,43 +4,7 @@
             Detalle de Meta
         </h2>
     </x-slot>
-
-    <style>
-        :root{
-            --beige:#f5f1ea;
-            --card:#ffffff;
-            --border:#cfd5dd;
-            --border-soft:#d9dee6;
-            --blue:#8faadc;
-            --green:#9fd3c7;
-            --orange:#f4c095;
-            --text:#1f2937;
-            --muted:#6b7280;
-        }
-
-        .wrap{ background:var(--beige); border-radius:20px; padding:28px; border:1px solid var(--border-soft); }
-        .card{ background:var(--card); border-radius:18px; padding:18px; border:1px solid var(--border); }
-        .title{ font-weight:700; font-size:18px; color:var(--text); }
-        .muted{ color:var(--muted); font-size:13px; }
-
-        .progress{ width:100%; height:8px; background:#e5e7eb; border-radius:999px; overflow:hidden; margin-top:8px; }
-        .progress div{ height:100%; }
-
-        .btn{
-            display:inline-flex; align-items:center; justify-content:center;
-            height:34px; padding:0 14px; border-radius:10px;
-            border:1px solid var(--border);
-            font-weight:700; font-size:13px;
-            background:#f0f4fb; color:#365a99;
-            text-decoration:none;
-        }
-
-        .link{ color:#6b86c9; font-weight:700; text-decoration:none; }
-        .link:hover{ color:#5a76be; }
-
-        .grid-ind{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:18px; }
-        @media(min-width:768px){ .grid-ind{ grid-template-columns:1fr 1fr; } }
-    </style>
+    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -138,7 +102,7 @@
                                     @endif
 
                                     {{-- Edición y eliminación --}}
-                                    @if(auth()->id() === $last->user_id || auth()->user()->role === 'admin')
+                                    @if(auth()->id() === $last->user_id || auth()->user()->isAdmin())
                                         <a class="link" href="{{ route('indicadores.avance.edit', $last->id) }}">
                                             Editar
                                         </a>
@@ -156,11 +120,13 @@
                                 <div class="muted">Sin avances registrados</div>
                             @endif
 
-                            <div class="mt-4">
-                                <a class="btn" href="{{ route('indicadores.avance.create', $ind->id) }}">
-                                    Registrar avance
-                                </a>
-                            </div>
+                            @if(auth()->user()->canRegisterSeguimiento())
+                                <div class="mt-4">
+                                    <a class="btn" href="{{ route('indicadores.avance.create', $ind->id) }}">
+                                        Registrar avance
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                     @empty
                         <div class="card">

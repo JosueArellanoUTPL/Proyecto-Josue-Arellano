@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-// ✅ Importamos los modelos relacionados para que el IDE y Laravel resuelvan bien las clases
+// Importamos los modelos relacionados para que el IDE y Laravel resuelvan bien las clases
 use App\Models\Plan;
 use App\Models\Programa;
 use App\Models\Proyecto;

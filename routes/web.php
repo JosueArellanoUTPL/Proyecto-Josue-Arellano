@@ -29,6 +29,9 @@ use App\Http\Controllers\SeguimientoProyectoController;
 use App\Http\Controllers\ProyectoAvanceController;
 
 use App\Http\Controllers\TrazabilidadController;
+use App\Http\Controllers\AuditLogController;
+use App\Http\Middleware\AuditMiddleware;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,13 +47,13 @@ Route::get('/', function () {
 | Rutas protegidas (login requerido)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', AuditMiddleware::class])->group(function () {
 
-    // Dashboard
+    // Dashboard: los 4 roles pueden consultar.
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    // Perfil
+    // Perfil propio del usuario autenticado.
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
@@ -62,98 +65,87 @@ Route::middleware(['auth'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | SEGUIMIENTO (Admin y Técnico)
+    | Seguimiento y consulta (los 4 roles)
     |--------------------------------------------------------------------------
     */
+    Route::middleware(['role:' . implode(',', User::roleKeys())])->group(function () {
 
-    // Seguimiento de metas
-    Route::get('/seguimiento/metas', [SeguimientoController::class, 'index'])
-        ->name('seguimiento.metas');
+        Route::get('/seguimiento/metas', [SeguimientoController::class, 'index'])
+            ->name('seguimiento.metas');
 
-    Route::get('/seguimiento/metas/{meta}', [SeguimientoController::class, 'show'])
-        ->name('seguimiento.meta.show');
+        Route::get('/seguimiento/metas/{meta}', [SeguimientoController::class, 'show'])
+            ->name('seguimiento.meta.show');
 
-    // Avances de indicadores (crear / guardar)
-    Route::get('/seguimiento/indicadores/{indicador}/avance', [AvanceIndicadorController::class, 'create'])
-        ->name('indicadores.avance.create');
+        Route::get('/seguimiento/organizacion', [OrganizacionController::class, 'index'])
+            ->name('seguimiento.organizacion');
 
-    Route::post('/seguimiento/indicadores/{indicador}/avance', [AvanceIndicadorController::class, 'store'])
-        ->name('indicadores.avance.store');
+        Route::get('/seguimiento/organizacion/entidad/{entidad}', [OrganizacionController::class, 'show'])
+            ->name('seguimiento.organizacion.entidad');
 
-    // ✅ Avances de indicadores (editar / actualizar / eliminar)
-    Route::get('/seguimiento/indicadores/avances/{avance}/edit', [AvanceIndicadorController::class, 'edit'])
-        ->name('indicadores.avance.edit');
+        Route::get('/seguimiento/programas/{programa}', [SeguimientoProgramaController::class, 'show'])
+            ->name('seguimiento.programa.show');
 
-    Route::put('/seguimiento/indicadores/avances/{avance}', [AvanceIndicadorController::class, 'update'])
-        ->name('indicadores.avance.update');
+        Route::get('/seguimiento/proyectos/{proyecto}', [SeguimientoProyectoController::class, 'show'])
+            ->name('seguimiento.proyecto.show');
 
-    Route::delete('/seguimiento/indicadores/avances/{avance}', [AvanceIndicadorController::class, 'destroy'])
-        ->name('indicadores.avance.destroy');
-
-    // Organización
-    Route::get('/seguimiento/organizacion', [OrganizacionController::class, 'index'])
-        ->name('seguimiento.organizacion');
-
-    Route::get('/seguimiento/organizacion/entidad/{entidad}', [OrganizacionController::class, 'show'])
-        ->name('seguimiento.organizacion.entidad');
-
-    // Seguimiento por programa y proyecto
-    Route::get('/seguimiento/programas/{programa}', [SeguimientoProgramaController::class, 'show'])
-        ->name('seguimiento.programa.show');
-
-    Route::get('/seguimiento/proyectos/{proyecto}', [SeguimientoProyectoController::class, 'show'])
-        ->name('seguimiento.proyecto.show');
-
-    // Matriz de trazabilidad institucional
-    Route::get('/seguimiento/trazabilidad', [TrazabilidadController::class, 'index'])
-        ->name('seguimiento.trazabilidad');
+        Route::get('/seguimiento/trazabilidad', [TrazabilidadController::class, 'index'])
+            ->name('seguimiento.trazabilidad');
+    });
 
     /*
     |--------------------------------------------------------------------------
-    | Avances de PROYECTOS
+    | Registro de avances y evidencias (Admin y Técnico de Seguimiento)
     |--------------------------------------------------------------------------
     */
+    Route::middleware(['role:admin,tecnico'])->group(function () {
 
-    // Crear avance
-    Route::get('/seguimiento/proyectos/{proyecto}/avances/create', [ProyectoAvanceController::class, 'create'])
-        ->name('proyectos.avance.create');
+        // Avances de indicadores.
+        Route::get('/seguimiento/indicadores/{indicador}/avance', [AvanceIndicadorController::class, 'create'])
+            ->name('indicadores.avance.create');
 
-    Route::post('/seguimiento/proyectos/{proyecto}/avances', [ProyectoAvanceController::class, 'store'])
-        ->name('proyectos.avance.store');
+        Route::post('/seguimiento/indicadores/{indicador}/avance', [AvanceIndicadorController::class, 'store'])
+            ->name('indicadores.avance.store');
 
-    // Editar / actualizar avance
-    Route::get('/seguimiento/proyectos/avances/{avance}/edit', [ProyectoAvanceController::class, 'edit'])
-        ->name('proyectos.avance.edit');
+        Route::get('/seguimiento/indicadores/avances/{avance}/edit', [AvanceIndicadorController::class, 'edit'])
+            ->name('indicadores.avance.edit');
 
-    Route::put('/seguimiento/proyectos/avances/{avance}', [ProyectoAvanceController::class, 'update'])
-        ->name('proyectos.avance.update');
+        Route::put('/seguimiento/indicadores/avances/{avance}', [AvanceIndicadorController::class, 'update'])
+            ->name('indicadores.avance.update');
 
-    // Eliminar avance
-    Route::delete('/seguimiento/proyectos/avances/{avance}', [ProyectoAvanceController::class, 'destroy'])
-        ->name('proyectos.avance.destroy');
+        Route::delete('/seguimiento/indicadores/avances/{avance}', [AvanceIndicadorController::class, 'destroy'])
+            ->name('indicadores.avance.destroy');
+
+        // Avances de proyectos.
+        Route::get('/seguimiento/proyectos/{proyecto}/avances/create', [ProyectoAvanceController::class, 'create'])
+            ->name('proyectos.avance.create');
+
+        Route::post('/seguimiento/proyectos/{proyecto}/avances', [ProyectoAvanceController::class, 'store'])
+            ->name('proyectos.avance.store');
+
+        Route::get('/seguimiento/proyectos/avances/{avance}/edit', [ProyectoAvanceController::class, 'edit'])
+            ->name('proyectos.avance.edit');
+
+        Route::put('/seguimiento/proyectos/avances/{avance}', [ProyectoAvanceController::class, 'update'])
+            ->name('proyectos.avance.update');
+
+        Route::delete('/seguimiento/proyectos/avances/{avance}', [ProyectoAvanceController::class, 'destroy'])
+            ->name('proyectos.avance.destroy');
+
+        // Evidencias de avances de proyecto.
+        Route::post('/seguimiento/proyectos/avances/{avance}/evidencias', [ProyectoAvanceController::class, 'addEvidencia'])
+            ->name('proyectos.avance.evidencia.add');
+
+        Route::delete('/seguimiento/proyectos/evidencias/{evidencia}', [ProyectoAvanceController::class, 'deleteEvidencia'])
+            ->name('proyectos.avance.evidencia.delete');
+    });
 
     /*
     |--------------------------------------------------------------------------
-    | Evidencias de avances de PROYECTO (una por una)
+    | Planificación (Admin y Responsable de Planificación)
     |--------------------------------------------------------------------------
     */
+    Route::middleware(['role:admin,planificacion'])->group(function () {
 
-    // Agregar evidencia a un avance existente
-    Route::post('/seguimiento/proyectos/avances/{avance}/evidencias', [ProyectoAvanceController::class, 'addEvidencia'])
-        ->name('proyectos.avance.evidencia.add');
-
-    // Eliminar evidencia individual
-    Route::delete('/seguimiento/proyectos/evidencias/{evidencia}', [ProyectoAvanceController::class, 'deleteEvidencia'])
-        ->name('proyectos.avance.evidencia.delete');
-
-    /*
-    |--------------------------------------------------------------------------
-    | ADMINISTRACIÓN (solo ADMIN)
-    |--------------------------------------------------------------------------
-    */
-    Route::middleware(['role:admin'])->group(function () {
-
-        // Catálogos
         Route::resource('entidades', EntidadController::class);
         Route::resource('programas', ProgramaController::class);
         Route::resource('proyectos', ProyectoController::class);
@@ -162,23 +154,31 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('ods', OdsController::class);
         Route::resource('pdn', PdnController::class);
 
-        // Planificación
         Route::resource('plans', PlanController::class);
         Route::resource('metas', MetaController::class);
         Route::resource('indicadores', IndicadorController::class);
 
-        // Alineaciones (se fuerza el nombre del parámetro para evitar "alineacione")
         Route::resource('alineaciones', AlineacionController::class)
             ->parameters(['alineaciones' => 'alineacion']);
+    });
 
-        // Seguridad
+    /*
+    |--------------------------------------------------------------------------
+    | Administración y seguridad (solo Admin)
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['role:admin'])->group(function () {
+
         Route::resource('usuarios', UserController::class)->except(['show']);
+
+        Route::get('/auditoria', [AuditLogController::class, 'index'])
+            ->name('auditoria.index');
     });
 });
 
 /*
 |--------------------------------------------------------------------------
-| Rutas por rol (pruebas)
+| Rutas por rol (pruebas simples)
 |--------------------------------------------------------------------------
 */
 Route::get('/admin', fn () => 'Panel Admin OK')
@@ -186,6 +186,12 @@ Route::get('/admin', fn () => 'Panel Admin OK')
 
 Route::get('/tecnico', fn () => 'Panel Técnico OK')
     ->middleware(['auth', 'role:tecnico']);
+
+Route::get('/consulta', fn () => 'Panel Consulta OK')
+    ->middleware(['auth', 'role:consulta']);
+
+Route::get('/planificacion', fn () => 'Panel Planificación OK')
+    ->middleware(['auth', 'role:planificacion']);
 
 /*
 |--------------------------------------------------------------------------

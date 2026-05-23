@@ -23,6 +23,18 @@ class User extends Authenticatable
      */
     use HasFactory, Notifiable;
 
+    public const ROLE_ADMIN = 'admin';
+    public const ROLE_PLANIFICACION = 'planificacion';
+    public const ROLE_TECNICO = 'tecnico';
+    public const ROLE_CONSULTA = 'consulta';
+
+    public const ROLE_LABELS = [
+        self::ROLE_ADMIN => 'Administrador del Sistema',
+        self::ROLE_PLANIFICACION => 'Responsable de Planificación',
+        self::ROLE_TECNICO => 'Técnico de Seguimiento',
+        self::ROLE_CONSULTA => 'Autoridad / Consulta',
+    ];
+
     /**
      * Atributos que se pueden asignar masivamente (mass assignment).
      * Aquí definimos los campos permitidos en create() / update().
@@ -59,6 +71,42 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public static function roleKeys(): array
+    {
+        return array_keys(self::ROLE_LABELS);
+    }
+
+    public function roleLabel(): string
+    {
+        return self::ROLE_LABELS[$this->role] ?? $this->role;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function isTecnicoSeguimiento(): bool
+    {
+        return $this->role === self::ROLE_TECNICO;
+    }
+
+    public function canManagePlanning(): bool
+    {
+        return in_array($this->role, [
+            self::ROLE_ADMIN,
+            self::ROLE_PLANIFICACION,
+        ], true);
+    }
+
+    public function canRegisterSeguimiento(): bool
+    {
+        return in_array($this->role, [
+            self::ROLE_ADMIN,
+            self::ROLE_TECNICO,
+        ], true);
     }
 
     /*
