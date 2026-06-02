@@ -5,13 +5,25 @@
         </h2>
     </x-slot>
 
-    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
 
-                {{-- KPIs superiores (compactos) --}}
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="dashboard-hero">
+                    <div>
+                        <div class="title">Panel Ejecutivo</div>
+                        <div class="muted" style="margin-top:6px;">
+                            Vista resumida del avance institucional, trazabilidad y seguimiento de proyectos.
+                        </div>
+                    </div>
+
+                    <div class="dashboard-hero-actions">
+                        <a class="btn" href="{{ route('reportes.index') }}">Reportes</a>
+                        <a class="btn" href="{{ route('seguimiento.trazabilidad') }}">Trazabilidad</a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style="margin-top:18px;">
                     <div class="kpi" style="background:#eef7f5">
                         <div class="label">Planes activos</div>
                         <div class="value">{{ $kpis['planes_activos'] ?? 0 }}</div>
@@ -28,100 +40,149 @@
                     </div>
 
                     <div class="kpi" style="background:#f4f1fb">
-                        <div class="label">Alineaciones</div>
-                        <div class="value">{{ $kpis['alineaciones'] ?? 0 }}</div>
+                        <div class="label">Proyectos</div>
+                        <div class="value">{{ $kpis['proyectos'] ?? 0 }}</div>
                     </div>
                 </div>
 
-                {{-- Bloque central (3 columnas) --}}
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
-
-                    {{-- Progreso institucional --}}
-                    <div class="card">
-                        <div class="title">Progreso institucional</div>
-                        <div class="muted" style="margin-top:6px;">
-                            Promedio del avance de metas (calculado por indicadores).
-                        </div>
-
-                        @php
-                            $p = max(0, min(100, (int)$progresoInstitucional));
-                            $done = $p >= 100;
-                        @endphp
-
-                        <div style="margin-top:14px;">
-                            <div class="flex justify-between text-sm">
-                                <span class="muted">Avance</span>
-                                <strong>{{ $p }}%</strong>
-                            </div>
-                            <div class="progress">
-                                <div style="width:{{ $p }}%; background:{{ $done ? 'var(--green)' : 'var(--blue)' }}"></div>
+                <div class="dashboard-grid">
+                    <div class="card dashboard-score">
+                        <div>
+                            <div class="title">Avance institucional</div>
+                            <div class="muted" style="margin-top:6px;">
+                                Promedio calculado desde metas e indicadores.
                             </div>
                         </div>
 
-                        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                            <span class="pill"><span class="dot blue"></span>Indicadores</span>
-                            <span class="pill"><span class="dot green"></span>Metas</span>
+                        <div class="donut" style="--value: {{ $progresoInstitucional }};">
+                            <div>
+                                <strong>{{ $progresoInstitucional }}%</strong>
+                                <span>metas</span>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-mini-grid">
+                            <div class="mini-stat">
+                                <span>Completadas</span>
+                                <strong>{{ $metasCompletadas }}</strong>
+                            </div>
+                            <div class="mini-stat">
+                                <span>En progreso</span>
+                                <strong>{{ $metasEnProgreso }}</strong>
+                            </div>
                         </div>
                     </div>
 
-                    {{-- Estado de alineación --}}
+                    <div class="card dashboard-score">
+                        <div>
+                            <div class="title">Proyectos</div>
+                            <div class="muted" style="margin-top:6px;">
+                                Avance promedio del último seguimiento registrado.
+                            </div>
+                        </div>
+
+                        <div class="donut donut-blue" style="--value: {{ $progresoProyectos }};">
+                            <div>
+                                <strong>{{ $progresoProyectos }}%</strong>
+                                <span>avance</span>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-mini-grid">
+                            <div class="mini-stat">
+                                <span>Completados</span>
+                                <strong>{{ $proyectosCompletados }}</strong>
+                            </div>
+                            <div class="mini-stat">
+                                <span>En proceso</span>
+                                <strong>{{ $proyectosEnProgreso }}</strong>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card">
                         <div class="title">Alineación estratégica</div>
                         <div class="muted" style="margin-top:6px;">
-                            Control de trazabilidad (metas alineadas vs no alineadas).
+                            Porcentaje de metas vinculadas a instrumentos estratégicos.
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4 mt-4">
-                            <div class="kpi" style="background:#eef7f5">
-                                <div class="label">Alineadas</div>
-                                <div class="value">{{ $metasAlineadas ?? 0 }}</div>
-                            </div>
-
-                            <div class="kpi" style="background:#fff6ee">
-                                <div class="label">No alineadas</div>
-                                <div class="value">{{ $metasNoAlineadas ?? 0 }}</div>
-                            </div>
+                        <div class="big-number">{{ $porcentajeAlineacion }}%</div>
+                        <div class="progress">
+                            <div style="width:{{ $porcentajeAlineacion }}%; background:var(--green)"></div>
                         </div>
 
-                        <div class="muted" style="margin-top:10px;">
-                            Las alineaciones alimentan la matriz de trazabilidad institucional.
+                        <div class="dashboard-mini-grid" style="margin-top:14px;">
+                            <div class="mini-stat">
+                                <span>Alineadas</span>
+                                <strong>{{ $metasAlineadas }}</strong>
+                            </div>
+                            <div class="mini-stat">
+                                <span>No alineadas</span>
+                                <strong>{{ $metasNoAlineadas }}</strong>
+                            </div>
                         </div>
                     </div>
-
-                    {{-- Accesos rápidos (con color más fuerte) --}}
-                    <div class="card" style="background:#eef2ff; border-color:#d5d9ff;">
-                        <div class="title">Accesos rápidos</div>
-                        <div class="muted" style="margin-top:6px;">
-                            Vistas principales para seguimiento y control.
-                        </div>
-
-                        <div class="flex flex-col gap-3 mt-4">
-                            <a class="btn" href="{{ route('seguimiento.metas') }}">
-                                Seguimiento de Metas →
-                            </a>
-
-                            <a class="btn" href="{{ route('seguimiento.organizacion') }}">
-                                Organización →
-                            </a>
-
-                            <a class="btn" href="{{ route('seguimiento.trazabilidad') }}">
-                                Matriz de Trazabilidad →
-                            </a>
-                        </div>
-
-                        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                            <span class="pill"><span class="dot purple"></span>Control estratégico</span>
-                            <span class="pill"><span class="dot orange"></span>Ejecución</span>
-                        </div>
-                    </div>
-
                 </div>
 
-                {{-- Actividad reciente (compacta, sin errores de arrays) --}}
+                <div class="dashboard-grid-2">
+                    <div class="card">
+                        <div class="title">Avance por entidad</div>
+                        <div class="muted" style="margin-top:6px;">
+                            Ranking de entidades según el progreso promedio de sus metas.
+                        </div>
+
+                        <div class="bar-list">
+                            @forelse($avancePorEntidad as $entidad)
+                                <div class="bar-row">
+                                    <div class="bar-row-head">
+                                        <span>{{ $entidad['nombre'] }}</span>
+                                        <strong>{{ $entidad['progreso'] }}%</strong>
+                                    </div>
+                                    <div class="progress">
+                                        <div style="width:{{ $entidad['progreso'] }}%; background:var(--blue)"></div>
+                                    </div>
+                                    <div class="muted" style="margin-top:4px;">
+                                        Metas asociadas: {{ $entidad['total_metas'] }}
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="muted">No hay entidades con metas registradas.</div>
+                            @endforelse
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="title">Actividad mensual</div>
+                        <div class="muted" style="margin-top:6px;">
+                            Avances de proyectos registrados en los últimos 6 meses.
+                        </div>
+
+                        <div class="month-chart">
+                            @foreach($actividadMensual as $mes)
+                                @php
+                                    $height = $maxActividadMensual > 0
+                                        ? max(8, round(($mes['total'] / $maxActividadMensual) * 120))
+                                        : 8;
+                                @endphp
+                                <div class="month-bar">
+                                    <span>{{ $mes['total'] }}</span>
+                                    <div style="height:{{ $height }}px"></div>
+                                    <small>{{ $mes['label'] }}</small>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card mt-6">
-                    <div class="title">Actividad reciente</div>
-                    <div class="muted" style="margin-top:6px;">
-                        Últimos avances registrados en proyectos.
+                    <div class="row">
+                        <div>
+                            <div class="title">Actividad reciente</div>
+                            <div class="muted" style="margin-top:6px;">
+                                Últimos avances registrados en proyectos.
+                            </div>
+                        </div>
+                        <a class="btn" href="{{ route('reportes.proyectos') }}">Ver reporte</a>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
@@ -146,10 +207,6 @@
                         @empty
                             <div class="muted">No hay actividad reciente.</div>
                         @endforelse
-                    </div>
-
-                    <div class="muted" style="margin-top:12px;">
-                        La actividad reciente se alimenta desde los avances de proyectos con evidencias.
                     </div>
                 </div>
 
