@@ -9,6 +9,7 @@ class Ods extends Model
 {
     use HasFactory;
 
+    // Campos guardados desde el CRUD de ODS.
     protected $fillable = [
         'codigo',
         'nombre',

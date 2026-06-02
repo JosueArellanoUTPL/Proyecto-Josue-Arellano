@@ -5,32 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-// Modelo relacionado
 use App\Models\ProyectoAvance;
 
-/**
- * Modelo ProyectoAvanceEvidencia
- *
- * Representa un archivo (evidencia) asociado a un avance de proyecto.
- * Se guarda:
- * - path (ruta en storage/app/public/...)
- * - nombre original del archivo
- * - tipo MIME (para identificar imágenes)
- * - tamaño del archivo
- */
 class ProyectoAvanceEvidencia extends Model
 {
     use HasFactory;
 
-    /**
-     * Nombre real de la tabla (por claridad).
-     * Si la migración ya creó esta tabla con ese nombre, queda consistente.
-     */
+    // Tabla donde se guardan los archivos de evidencias de proyectos.
     protected $table = 'proyecto_avance_evidencias';
 
-    /**
-     * Campos permitidos para create() / update().
-     */
+    // Datos guardados por cada archivo subido.
     protected $fillable = [
         'proyecto_avance_id',
         'path',
@@ -39,19 +23,15 @@ class ProyectoAvanceEvidencia extends Model
         'size'
     ];
 
-    /**
-     * Relación: la evidencia pertenece a un avance.
-     */
     public function avance()
     {
+        // La evidencia pertenece a un avance de proyecto.
         return $this->belongsTo(ProyectoAvance::class, 'proyecto_avance_id');
     }
 
-    /**
-     * Identifica si el archivo es una imagen para mostrar miniatura.
-     */
     public function isImage(): bool
     {
+        // Sirve para saber si puedo mostrar miniatura de la evidencia.
         return (bool) ($this->mime_type && str_starts_with($this->mime_type, 'image/'));
     }
 }

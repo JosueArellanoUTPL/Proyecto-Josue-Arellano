@@ -13,6 +13,7 @@
                     'subtitle' => 'Consulta de avance de metas por entidad, plan e indicadores.'
                 ])
 
+                {{-- Filtros del reporte de metas. No se imprimen por la clase no-print. --}}
                 <form method="GET" action="{{ route('reportes.metas') }}" class="card no-print" style="margin-top:16px;">
                     <div class="grid2">
                         <div>
@@ -43,6 +44,7 @@
                     </div>
                 </form>
 
+                {{-- Tabla final con las metas encontradas. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="title">Metas encontradas: {{ $metas->count() }}</div>
 
@@ -50,7 +52,7 @@
                         <table class="report-table">
                             <thead>
                                 <tr>
-                                    <th>Código</th>
+                                    <th>Codigo</th>
                                     <th>Meta</th>
                                     <th>Entidad</th>
                                     <th>Plan</th>

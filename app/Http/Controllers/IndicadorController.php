@@ -10,18 +10,21 @@ class IndicadorController extends Controller
 {
     public function index()
     {
+        // Lista indicadores con su meta para mostrar contexto en la tabla.
         $indicadores = Indicador::with('meta')->orderBy('id', 'desc')->get();
         return view('indicadores.index', compact('indicadores'));
     }
 
     public function create()
     {
+        // Solo uso metas activas para crear un indicador nuevo.
         $metas = Meta::where('activo', true)->orderBy('id', 'desc')->get();
         return view('indicadores.create', compact('metas'));
     }
 
     public function store(Request $request)
     {
+        // Valida el formulario antes de guardar el indicador.
         $data = $request->validate([
             'codigo' => 'required|string|max:30',
             'nombre' => 'required|string|max:200',
@@ -33,6 +36,7 @@ class IndicadorController extends Controller
             'activo' => 'required|boolean',
         ]);
 
+        // Crea el indicador asociado a una meta.
         Indicador::create($data);
 
         return redirect()->route('indicadores.index')
@@ -41,18 +45,20 @@ class IndicadorController extends Controller
 
     public function edit(Indicador $indicadore)
     {
-        // Nota: Laravel puede generar el nombre de variable raro por el resource binding.
-        // Lo normal es renombrarlo a $indicador; lo hacemos aquí:
+        // Laravel usa $indicadore por el resource; aqui lo renombro para entenderlo mejor.
         $indicador = $indicadore;
 
+        // Metas disponibles para cambiar la asociacion del indicador.
         $metas = Meta::where('activo', true)->orderBy('id', 'desc')->get();
         return view('indicadores.edit', compact('indicador', 'metas'));
     }
 
     public function update(Request $request, Indicador $indicadore)
     {
+        // Misma idea: renombro la variable para que el codigo sea mas claro.
         $indicador = $indicadore;
 
+        // Valida los datos antes de actualizar.
         $data = $request->validate([
             'codigo' => 'required|string|max:30',
             'nombre' => 'required|string|max:200',
@@ -64,6 +70,7 @@ class IndicadorController extends Controller
             'activo' => 'required|boolean',
         ]);
 
+        // Actualiza el indicador seleccionado.
         $indicador->update($data);
 
         return redirect()->route('indicadores.index')
@@ -72,6 +79,7 @@ class IndicadorController extends Controller
 
     public function destroy(Indicador $indicadore)
     {
+        // Renombro y elimino el indicador seleccionado.
         $indicador = $indicadore;
         $indicador->delete();
 

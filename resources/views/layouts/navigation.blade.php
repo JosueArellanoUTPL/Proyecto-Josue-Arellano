@@ -6,12 +6,14 @@
                     <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                 </a>
 
+                {{-- Menu principal de escritorio. --}}
                 <div class="hidden sm:flex sm:items-center sm:ms-10 sm:gap-2">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         Dashboard
                     </x-nav-link>
 
                     @auth
+                        {{-- Este menu lo ven los 4 roles porque es de consulta/seguimiento. --}}
                         <x-dropdown align="left" width="56">
                             <x-slot name="trigger">
                                 <button type="button"
@@ -32,7 +34,7 @@
                                 </x-dropdown-link>
 
                                 <x-dropdown-link :href="route('seguimiento.organizacion')">
-                                    Organización (Entidades)
+                                    Organizacion (Entidades)
                                 </x-dropdown-link>
 
                                 <x-dropdown-link :href="route('seguimiento.trazabilidad')">
@@ -45,6 +47,7 @@
                             </x-slot>
                         </x-dropdown>
 
+                        {{-- Administracion aparece solo para admin o planificacion. --}}
                         @if(auth()->user()->canManagePlanning() || auth()->user()->isAdmin())
                             <x-dropdown align="left" width="56">
                                 <x-slot name="trigger">
@@ -53,7 +56,7 @@
                                                text-sm font-medium text-gray-700
                                                hover:bg-gray-100 hover:text-gray-900
                                                transition">
-                                        Administración
+                                        Administracion
                                         <svg class="h-4 w-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M5.293 7.293L10 12l4.707-4.707" />
                                         </svg>
@@ -61,11 +64,12 @@
                                 </x-slot>
 
                                 <x-slot name="content">
+                                    {{-- Responsable de planificacion y admin ven estos CRUD. --}}
                                     @if(auth()->user()->canManagePlanning())
-                                        <div class="px-4 py-2 text-xs text-gray-500">Planificación</div>
+                                        <div class="px-4 py-2 text-xs text-gray-500">Planificacion</div>
                                         <x-dropdown-link :href="route('pdn.index')">PND / PDN</x-dropdown-link>
                                         <x-dropdown-link :href="route('ods.index')">ODS</x-dropdown-link>
-                                        <x-dropdown-link :href="route('objetivos-estrategicos.index')">Objetivos Estratégicos</x-dropdown-link>
+                                        <x-dropdown-link :href="route('objetivos-estrategicos.index')">Objetivos Estrategicos</x-dropdown-link>
 
                                         <div class="border-t my-2"></div>
 
@@ -77,18 +81,19 @@
 
                                         <div class="border-t my-2"></div>
 
-                                        <div class="px-4 py-2 text-xs text-gray-500">Ejecución</div>
+                                        <div class="px-4 py-2 text-xs text-gray-500">Ejecucion</div>
                                         <x-dropdown-link :href="route('programas.index')">Programas</x-dropdown-link>
                                         <x-dropdown-link :href="route('proyectos.index')">Proyectos</x-dropdown-link>
                                         <x-dropdown-link :href="route('entidades.index')">Entidades</x-dropdown-link>
                                     @endif
 
+                                    {{-- Solo admin ve usuarios y auditoria. --}}
                                     @if(auth()->user()->isAdmin())
                                         <div class="border-t my-2"></div>
 
                                         <div class="px-4 py-2 text-xs text-gray-500">Seguridad</div>
                                         <x-dropdown-link :href="route('usuarios.index')">Usuarios</x-dropdown-link>
-                                        <x-dropdown-link :href="route('auditoria.index')">Auditoría</x-dropdown-link>
+                                        <x-dropdown-link :href="route('auditoria.index')">Auditoria</x-dropdown-link>
                                     @endif
                                 </x-slot>
                             </x-dropdown>
@@ -97,6 +102,7 @@
                 </div>
             </div>
 
+            {{-- Menu de usuario: perfil y cerrar sesion. --}}
             <div class="hidden sm:flex sm:items-center">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
@@ -119,7 +125,7 @@
                             @csrf
                             <x-dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault(); this.closest('form').submit();">
-                                Cerrar sesión
+                                Cerrar sesion
                             </x-dropdown-link>
                         </form>
                     </x-slot>

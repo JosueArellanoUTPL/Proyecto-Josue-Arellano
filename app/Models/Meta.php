@@ -13,6 +13,7 @@ class Meta extends Model
 {
     use HasFactory;
 
+    // Campos que se guardan cuando creo o edito una meta.
     protected $fillable = [
         'codigo',
         'nombre',
@@ -29,29 +30,29 @@ class Meta extends Model
 
     public function plan()
     {
+        // Una meta pertenece a un plan.
         return $this->belongsTo(Plan::class);
     }
 
     public function indicadores()
     {
+        // Una meta puede tener varios indicadores.
         return $this->hasMany(Indicador::class);
     }
 
-    /**
-     * Relación: una meta puede tener varias alineaciones.
-     * Esto permite consultar trazabilidad desde la meta.
-     */
     public function alineaciones()
     {
+        // Una meta puede estar conectada con ODS, PDN y objetivos estrategicos.
         return $this->hasMany(Alineacion::class);
     }
 
     /* =========================
-     | Lógica de negocio
+     | Calculos para seguimiento
      ========================= */
 
     public function getProgresoAttribute(): float
     {
+        // El progreso de la meta sale del promedio de sus indicadores.
         if ($this->indicadores->count() === 0) {
             return 0;
         }
@@ -64,6 +65,7 @@ class Meta extends Model
 
     public function getCompletadaAttribute(): bool
     {
+        // La meta se marca completa si todos sus indicadores llegaron al 100%.
         if ($this->indicadores->count() === 0) {
             return false;
         }

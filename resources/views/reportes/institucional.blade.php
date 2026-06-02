@@ -13,6 +13,7 @@
                     'subtitle' => 'Resumen general del estado institucional registrado en el sistema.'
                 ])
 
+                {{-- KPI generales del reporte institucional. --}}
                 <div class="kpis">
                     <div class="kpi"><div class="label">Entidades</div><div class="value">{{ $kpis['entidades'] }}</div></div>
                     <div class="kpi"><div class="label">Programas</div><div class="value">{{ $kpis['programas'] }}</div></div>
@@ -25,6 +26,7 @@
                     <div class="kpi" style="background:#f0f4fb"><div class="label">Avance proyectos</div><div class="value">{{ $kpis['progreso_proyectos'] }}%</div></div>
                 </div>
 
+                {{-- Resumen por entidad con promedios calculados en la vista. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="title">Resumen por entidad</div>
 
@@ -44,6 +46,7 @@
                             <tbody>
                                 @forelse($entidades as $entidad)
                                     @php
+                                        // Agrupo datos de la entidad para calcular avances de esta fila.
                                         $metas = $entidad->plans->flatMap->metas;
                                         $proyectos = $entidad->proyectos;
                                         $avanceMetas = $metas->count() ? round($metas->avg(fn($meta) => $meta->progreso), 2) : 0;

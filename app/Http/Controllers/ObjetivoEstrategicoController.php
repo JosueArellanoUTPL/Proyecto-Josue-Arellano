@@ -7,78 +7,68 @@ use Illuminate\Http\Request;
 
 class ObjetivoEstrategicoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
+        // Lista objetivos estrategicos registrados.
         $items = ObjetivoEstrategico::orderBy('id', 'desc')->get();
         return view('objetivos_estrategicos.index', compact('items'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
+        // Formulario para crear objetivo estrategico.
         return view('objetivos_estrategicos.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        // Valida nombre, descripcion y estado.
         $data = $request->validate([
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'activo' => 'required|boolean',
         ]);
 
+        // Guarda el objetivo estrategico.
         ObjetivoEstrategico::create($data);
 
         return redirect()
             ->route('objetivos-estrategicos.index')
-            ->with('success', 'Objetivo estratégico creado correctamente.');
+            ->with('success', 'Objetivo estrategico creado correctamente.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(ObjetivoEstrategico $objetivos_estrategico)
     {
+        // En la vista lo manejo como item para reutilizar nombres.
         return view('objetivos_estrategicos.edit', [
             'item' => $objetivos_estrategico
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, ObjetivoEstrategico $objetivos_estrategico)
     {
+        // Valida antes de actualizar.
         $data = $request->validate([
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'activo' => 'required|boolean',
         ]);
 
+        // Actualiza el objetivo estrategico.
         $objetivos_estrategico->update($data);
 
         return redirect()
             ->route('objetivos-estrategicos.index')
-            ->with('success', 'Objetivo estratégico actualizado correctamente.');
+            ->with('success', 'Objetivo estrategico actualizado correctamente.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(ObjetivoEstrategico $objetivos_estrategico)
     {
+        // Elimina el objetivo estrategico.
         $objetivos_estrategico->delete();
 
         return redirect()
             ->route('objetivos-estrategicos.index')
-            ->with('success', 'Objetivo estratégico eliminado correctamente.');
+            ->with('success', 'Objetivo estrategico eliminado correctamente.');
     }
 }

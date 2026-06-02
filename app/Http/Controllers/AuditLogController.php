@@ -8,16 +8,12 @@ use Illuminate\Http\Request;
 
 class AuditLogController extends Controller
 {
-    /**
-     * Pantalla de consulta de auditoría.
-     *
-     * Permite filtrar por usuario, módulo, acción y fechas.
-     * No modifica datos: solo muestra el historial registrado.
-     */
     public function index(Request $request)
     {
+        // Consulta principal de auditoria: trae los registros mas recientes.
         $query = AuditLog::with('user')->latest();
 
+        // Filtros de la pantalla de auditoria.
         if ($request->filled('user_id')) {
             $query->where('user_id', $request->user_id);
         }
@@ -38,8 +34,10 @@ class AuditLogController extends Controller
             $query->whereDate('created_at', '<=', $request->to);
         }
 
+        // Paginacion de 15 para que la tabla no crezca demasiado.
         $logs = $query->paginate(15)->withQueryString();
 
+        // Datos para llenar los select de filtros.
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $modules = AuditLog::select('module')
             ->whereNotNull('module')

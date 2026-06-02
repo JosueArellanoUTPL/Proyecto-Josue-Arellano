@@ -9,51 +9,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * Controlador de Avances de Proyecto
- *
- * Aquí se gestiona el seguimiento real de los proyectos:
- * - Registro de avances (porcentaje + comentario)
- * - Edición y eliminación de avances
- * - Gestión de evidencias como archivos independientes
- *
- * Importante:
- * Cada evidencia se guarda como un registro separado, lo que permite
- * agregar nuevas evidencias con el tiempo sin sobrescribir las anteriores.
- */
 class ProyectoAvanceController extends Controller
 {
-    /**
-     * Muestra el formulario para registrar un nuevo avance del proyecto.
-     * Se carga la entidad y el programa solo para mostrar contexto en la vista.
-     */
     public function create(Proyecto $proyecto)
     {
+        // Muestra datos del proyecto para registrar un avance con contexto.
         $proyecto->load(['entidad', 'programa']);
 
         return view('seguimiento.proyecto_avance_create', compact('proyecto'));
     }
 
-    /**
-     * Guarda un nuevo avance del proyecto.
-     *
-     * - Registra fecha, porcentaje y comentario
-     * - El porcentaje representa el estado del proyecto en ese momento
-     * - Las evidencias iniciales (si se envían) se almacenan una por una
-     */
     public function store(Request $request, Proyecto $proyecto)
     {
+        // Valida porcentaje, fecha, comentario y evidencias opcionales.
         $data = $request->validate([
             'fecha' => ['required', 'date'],
             'porcentaje_avance' => ['required', 'numeric', 'min:0', 'max:100'],
             'comentario' => ['nullable', 'string', 'max:1000'],
-
-            // Evidencias opcionales: cada archivo se guarda como registro independiente
             'evidencias' => ['nullable', 'array'],
-            'evidencias.*' => ['file', 'max:5120'], // 5 MB por archivo
+            'evidencias.*' => ['file', 'max:5120'],
         ]);
 
-        // Se crea el avance principal del proyecto
+        // Crea el avance principal y guarda quien lo registro.
         $avance = ProyectoAvance::create([
             'proyecto_id' => $proyecto->id,
             'user_id' => Auth::id(),
@@ -62,7 +39,7 @@ class ProyectoAvanceController extends Controller
             'comentario' => $data['comentario'] ?? null,
         ]);
 
-        // Si se suben evidencias al mismo tiempo, se guardan una por una
+        // Si vienen evidencias, se guardan una por una.
         if ($request->hasFile('evidencias')) {
             foreach ($request->file('evidencias') as $file) {
                 if (!$file) {
@@ -86,12 +63,9 @@ class ProyectoAvanceController extends Controller
             ->with('success', 'Avance registrado correctamente.');
     }
 
-    /**
-     * Muestra el formulario de edición de un avance.
-     * Solo puede acceder el usuario que creó el avance o un administrador.
-     */
     public function edit(ProyectoAvance $avance)
     {
+        // Solo el dueno del avance o el admin puede editar.
         if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
@@ -105,12 +79,9 @@ class ProyectoAvanceController extends Controller
         return view('seguimiento.proyecto_avance_edit', compact('avance'));
     }
 
-    /**
-     * Actualiza los datos del avance.
-     * No se eliminan evidencias aquí, solo se modifican los campos principales.
-     */
     public function update(Request $request, ProyectoAvance $avance)
     {
+        // Repite la proteccion: solo dueno o admin.
         if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
@@ -121,6 +92,7 @@ class ProyectoAvanceController extends Controller
             'comentario' => ['nullable', 'string', 'max:1000'],
         ]);
 
+        // Actualiza solo datos principales, no toca evidencias.
         $avance->update([
             'fecha' => $data['fecha'],
             'porcentaje_avance' => $data['porcentaje_avance'],
@@ -132,20 +104,18 @@ class ProyectoAvanceController extends Controller
             ->with('success', 'Avance actualizado correctamente.');
     }
 
-    /**
-     * Agrega una evidencia a un avance ya existente.
-     * Esto permite subir evidencias en distintos momentos sin sobrescribir.
-     */
     public function addEvidencia(Request $request, ProyectoAvance $avance)
     {
+        // Solo el dueno o admin puede agregar evidencia al avance.
         if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
-        $data = $request->validate([
+        $request->validate([
             'evidencia' => ['required', 'file', 'max:5120'],
         ]);
 
+        // Guarda el archivo y luego guarda su informacion en la tabla.
         $file = $request->file('evidencia');
         $path = $file->store('evidencias/proyectos', 'public');
 
@@ -162,18 +132,16 @@ class ProyectoAvanceController extends Controller
             ->with('success', 'Evidencia agregada correctamente.');
     }
 
-    /**
-     * Elimina una evidencia individual.
-     * Se borra tanto el archivo físico como el registro en base de datos.
-     */
     public function deleteEvidencia(ProyectoAvanceEvidencia $evidencia)
     {
         $avance = $evidencia->avance;
 
+        // Solo el dueno del avance o admin puede borrar evidencias.
         if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
+        // Borra archivo fisico y registro de base.
         Storage::disk('public')->delete($evidencia->path);
         $evidencia->delete();
 
@@ -182,18 +150,16 @@ class ProyectoAvanceController extends Controller
             ->with('success', 'Evidencia eliminada correctamente.');
     }
 
-    /**
-     * Elimina un avance completo.
-     * Antes de eliminar el registro, se eliminan todas sus evidencias físicas.
-     */
     public function destroy(ProyectoAvance $avance)
     {
+        // Solo el dueno del avance o admin puede eliminar el avance completo.
         if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
         $proyectoId = $avance->proyecto_id;
 
+        // Antes de borrar el avance, borra sus evidencias del storage.
         foreach ($avance->evidencias as $ev) {
             Storage::disk('public')->delete($ev->path);
         }

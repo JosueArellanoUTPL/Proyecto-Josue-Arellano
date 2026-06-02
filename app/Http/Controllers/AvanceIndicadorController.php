@@ -8,27 +8,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-/**
- * Controlador de avances de indicadores.
- *
- * Permite:
- * - registrar avances
- * - editar avances existentes
- * - eliminar avances y evidencias
- *
- * El progreso de indicadores y metas se recalcula automáticamente
- * a partir de los avances.
- */
 class AvanceIndicadorController extends Controller
 {
     public function create(Indicador $indicador)
     {
+        // Carga la meta y el plan para mostrar contexto en el formulario.
         $indicador->load('meta.plan');
         return view('seguimiento.indicador_avance', compact('indicador'));
     }
 
     public function store(Request $request, Indicador $indicador)
     {
+        // Valida avance, comentario y evidencia opcional.
         $data = $request->validate([
             'fecha' => ['required', 'date'],
             'valor_reportado' => ['required', 'numeric'],
@@ -36,11 +27,13 @@ class AvanceIndicadorController extends Controller
             'evidencia' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
         ]);
 
+        // Si hay evidencia, se guarda en storage/app/public/evidencias.
         $path = null;
         if ($request->hasFile('evidencia')) {
             $path = $request->file('evidencia')->store('evidencias', 'public');
         }
 
+        // Guarda el avance y el usuario que lo registro.
         IndicadorAvance::create([
             'indicador_id' => $indicador->id,
             'user_id' => Auth::id(),
@@ -57,6 +50,7 @@ class AvanceIndicadorController extends Controller
 
     public function edit(IndicadorAvance $avance)
     {
+        // Solo el dueno del avance o el admin puede editar.
         if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
@@ -68,6 +62,7 @@ class AvanceIndicadorController extends Controller
 
     public function update(Request $request, IndicadorAvance $avance)
     {
+        // Repite la regla: solo dueno o admin.
         if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
@@ -79,6 +74,7 @@ class AvanceIndicadorController extends Controller
             'evidencia' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
         ]);
 
+        // Si sube una evidencia nueva, borra la anterior para no dejar basura.
         if ($request->hasFile('evidencia')) {
             if ($avance->evidencia_path) {
                 Storage::disk('public')->delete($avance->evidencia_path);
@@ -86,6 +82,7 @@ class AvanceIndicadorController extends Controller
             $avance->evidencia_path = $request->file('evidencia')->store('evidencias', 'public');
         }
 
+        // Actualiza los campos principales del avance.
         $avance->update([
             'fecha' => $data['fecha'],
             'valor_reportado' => $data['valor_reportado'],
@@ -99,10 +96,12 @@ class AvanceIndicadorController extends Controller
 
     public function destroy(IndicadorAvance $avance)
     {
+        // Solo el dueno del avance o el admin puede eliminar.
         if ($avance->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
             abort(403);
         }
 
+        // Borra el archivo de evidencia si existia.
         if ($avance->evidencia_path) {
             Storage::disk('public')->delete($avance->evidencia_path);
         }

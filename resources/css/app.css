@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 /*
-    Estilos generales del sistema
-    Aqui centralizamos clases que se repiten en varias vistas Blade.
-    Asi cada vista solo referencia la clase y no vuelve a escribir el mismo CSS.
+    Estilos generales del sistema.
+    Aqui puse clases repetidas para no copiar estilos en cada vista.
 */
 @layer components {
     :root {
+        /* Colores base usados en tarjetas, botones, barras y graficas. */
         --beige: #f5f1ea;
         --card: #ffffff;
         --border: #cfd5dd;
@@ -22,8 +22,9 @@
     }
 
     /*
-        Contenedores principales
-        Se usan en dashboard, seguimiento y alineaciones.
+        Contenedores principales.
+        .wrap es el fondo grande de paginas como dashboard, seguimiento y reportes.
+        .card es la caja blanca reutilizada en tablas, formularios y graficas.
     */
     .wrap {
         background: var(--beige);
@@ -59,8 +60,8 @@
     }
 
     /*
-        Formularios y botones
-        Estas clases evitan repetir estilos en create/edit.
+        Formularios y botones.
+        Se usan en create/edit y tambien en filtros de auditoria/reportes.
     */
     .label {
         font-weight: 800;
@@ -88,6 +89,7 @@
     }
 
     .btn {
+        /* Boton base usado en acciones como guardar, volver, filtrar y reportes. */
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -148,8 +150,8 @@
     }
 
     /*
-        KPIs, estados y progreso
-        Se reutilizan en dashboard y pantallas de seguimiento.
+        KPIs, estados y progreso.
+        .kpi se usa en dashboard/reportes; .progress pinta barras de avance.
     */
     .kpis {
         display: grid;
@@ -186,6 +188,7 @@
     }
 
     .progress div {
+        /* El ancho de este div cambia desde Blade con style="width:...%". */
         height: 100%;
     }
 
@@ -273,7 +276,7 @@
     }
 
     /*
-        Listados y tarjetas clicables
+        Listados y tarjetas clicables.
         Sirven para detalles de entidad, programa, meta y trazabilidad.
     */
     .list {
@@ -322,7 +325,7 @@
 
     /*
         Grillas especificas con nombres propios.
-        Evitamos usar una clase global llamada .grid porque Tailwind ya la usa.
+        Evito llamar .grid a mis clases porque Tailwind ya usa ese nombre.
     */
     .grid-main {
         display: grid;
@@ -391,6 +394,7 @@
     }
 
     .meta-card {
+        /* Tarjeta clicable de metas en seguimiento. */
         text-decoration: none;
         color: inherit;
         transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
@@ -422,8 +426,8 @@
     }
 
     /*
-        Evidencias de avances de proyectos
-        Se usa en ver/editar avance para mostrar imagenes o archivos cargados.
+        Evidencias de avances de proyectos.
+        Se usa para mostrar archivos cargados en el seguimiento de proyectos.
     */
     .evid-grid {
         display: grid;
@@ -445,6 +449,7 @@
     }
 
     .thumb {
+        /* Cuadro pequeno donde aparece una evidencia o imagen cargada. */
         position: relative;
         border: 1px solid var(--border-soft);
         border-radius: 14px;
@@ -566,8 +571,8 @@
     }
 
     /*
-        Dashboard
-        Gráficas livianas hechas con CSS para no depender de librerías externas.
+        Dashboard.
+        Graficas livianas hechas con CSS para no depender de librerias externas.
     */
     .dashboard-hero {
         display: flex;
@@ -615,6 +620,7 @@
     }
 
     .donut {
+        /* Dona del dashboard: --value viene desde Blade con el porcentaje. */
         --value: 0;
         width: 150px;
         aspect-ratio: 1;
@@ -703,6 +709,7 @@
     }
 
     .month-chart {
+        /* Grafica de barras mensual del dashboard. */
         min-height: 180px;
         display: grid;
         grid-template-columns: repeat(6, 1fr);
@@ -740,8 +747,8 @@
     }
 
     /*
-        Reportes
-        Clases usadas por el módulo de reportes para consulta e impresión.
+        Reportes.
+        Clases usadas por el modulo de reportes para consulta e impresion.
     */
     .report-grid {
         display: grid;
@@ -804,6 +811,7 @@
 }
 
 @media print {
+    /* Al imprimir reportes, oculto menu/botones y dejo la pagina limpia. */
     body {
         background: #fff;
     }

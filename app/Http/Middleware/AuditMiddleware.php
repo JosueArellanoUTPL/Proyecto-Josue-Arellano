@@ -9,16 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuditMiddleware
 {
-    /**
-     * Registra acciones de escritura realizadas por usuarios autenticados.
-     *
-     * No registra consultas GET porque eso llenaría la tabla demasiado rápido.
-     * Para este proyecto nos interesa auditar cambios: crear, actualizar y eliminar.
-     */
     public function handle(Request $request, Closure $next): Response
     {
+        // Primero deja que Laravel ejecute la ruta normal.
         $response = $next($request);
 
+        // Despues de guardar/editar/eliminar, aqui se registra la accion.
         if ($this->shouldAudit($request, $response)) {
             AuditLog::create([
                 'user_id' => $request->user()?->id,
@@ -40,14 +36,17 @@ class AuditMiddleware
 
     private function shouldAudit(Request $request, Response $response): bool
     {
+        // Solo audito usuarios logueados.
         if (!$request->user()) {
             return false;
         }
 
+        // No audito GET porque solo consulta y llenaria mucho la tabla.
         if (!in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
             return false;
         }
 
+        // Si la accion fallo, no la guardo como cambio exitoso.
         if ($response->getStatusCode() >= 400) {
             return false;
         }
@@ -57,6 +56,7 @@ class AuditMiddleware
 
     private function actionFromMethod(string $method): string
     {
+        // Traduce el metodo HTTP a una palabra sencilla para la tabla.
         return match ($method) {
             'POST' => 'crear',
             'PUT', 'PATCH' => 'actualizar',
@@ -67,6 +67,7 @@ class AuditMiddleware
 
     private function moduleFromRoute(Request $request): string
     {
+        // El modulo sale del nombre de la ruta: metas.index => Metas.
         $routeName = $request->route()?->getName();
 
         if (!$routeName) {
@@ -80,13 +81,14 @@ class AuditMiddleware
     {
         $routeName = $request->route()?->getName() ?? 'ruta sin nombre';
 
-        return "Acción registrada desde la ruta {$routeName}.";
+        return "Accion registrada desde la ruta {$routeName}.";
     }
 
     private function routeParameters(Request $request): array
     {
         $parameters = $request->route()?->parameters() ?? [];
 
+        // Guarda datos basicos del modelo usado en la ruta, por ejemplo Meta id 3.
         return collect($parameters)->map(function ($value) {
             if (is_object($value) && method_exists($value, 'getKey')) {
                 return [

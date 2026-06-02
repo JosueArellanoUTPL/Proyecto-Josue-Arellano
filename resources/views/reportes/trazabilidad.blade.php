@@ -10,9 +10,10 @@
             <div class="wrap report-page">
                 @include('reportes.partials.header', [
                     'title' => 'Reporte de Trazabilidad',
-                    'subtitle' => 'Relación entre metas, indicadores e instrumentos estratégicos.'
+                    'subtitle' => 'Relacion entre metas, indicadores e instrumentos estrategicos.'
                 ])
 
+                {{-- Tabla de alineaciones: sirve para demostrar trazabilidad estrategica. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="title">Registros encontrados: {{ $alineaciones->count() }}</div>
 
@@ -25,7 +26,7 @@
                                     <th>Indicador</th>
                                     <th>ODS</th>
                                     <th>PDN</th>
-                                    <th>Objetivo Estratégico</th>
+                                    <th>Objetivo Estrategico</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>

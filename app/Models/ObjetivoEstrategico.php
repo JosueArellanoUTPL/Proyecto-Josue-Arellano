@@ -9,6 +9,7 @@ class ObjetivoEstrategico extends Model
 {
     use HasFactory;
 
+    // Campos guardados desde el CRUD de objetivos estrategicos.
     protected $fillable = [
         'nombre',
         'descripcion',

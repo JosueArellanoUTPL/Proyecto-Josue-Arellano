@@ -15,7 +15,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // KPIs principales del sistema.
+        // Tarjetas pequenas de arriba: solo cuentan registros principales.
         $kpis = [
             'planes_activos' => Plan::where('activo', 1)->count(),
             'metas' => Meta::count(),
@@ -25,18 +25,20 @@ class DashboardController extends Controller
             'proyectos' => Proyecto::count(),
         ];
 
-        // Progreso institucional calculado desde metas e indicadores.
+        // Traigo metas con indicadores para calcular el avance general del dashboard.
         $metas = Meta::with(['indicadores.ultimoAvance'])->get();
 
+        // Este porcentaje alimenta la dona de "Avance institucional".
         $progresoInstitucional = $metas->count()
             ? (int) round($metas->avg(fn ($meta) => (float) $meta->progreso))
             : 0;
 
+        // Se asegura que el porcentaje nunca salga de 0 a 100.
         $progresoInstitucional = max(0, min(100, $progresoInstitucional));
         $metasCompletadas = $metas->filter(fn ($meta) => $meta->completada)->count();
         $metasEnProgreso = max(0, $metas->count() - $metasCompletadas);
 
-        // Trazabilidad estratégica: metas alineadas vs no alineadas.
+        // Datos para la tarjeta de alineacion estrategica.
         $totalMetas = Meta::count();
         $metasAlineadas = Meta::whereHas('alineaciones')->count();
         $metasNoAlineadas = max(0, $totalMetas - $metasAlineadas);
@@ -44,7 +46,7 @@ class DashboardController extends Controller
             ? (int) round(($metasAlineadas / $totalMetas) * 100)
             : 0;
 
-        // Progreso de proyectos según su último avance registrado.
+        // Datos para la dona de proyectos segun el ultimo avance registrado.
         $proyectos = Proyecto::with(['ultimoAvance'])->get();
         $progresoProyectos = $proyectos->count()
             ? (int) round($proyectos->avg(fn ($proyecto) => (float) $proyecto->progreso))
@@ -53,7 +55,7 @@ class DashboardController extends Controller
         $proyectosCompletados = $proyectos->filter(fn ($proyecto) => (float) $proyecto->progreso >= 100)->count();
         $proyectosEnProgreso = max(0, $proyectos->count() - $proyectosCompletados);
 
-        // Ranking simple de avance por entidad.
+        // Ranking simple: muestra las 5 entidades con mejor avance promedio.
         $avancePorEntidad = Entidad::with(['plans.metas.indicadores.ultimoAvance'])
             ->orderBy('nombre')
             ->get()
@@ -72,13 +74,14 @@ class DashboardController extends Controller
             ->take(5)
             ->values();
 
-        // Conteo de avances de proyectos en los últimos 6 meses.
+        // Barras del dashboard: cantidad de avances de proyectos en los ultimos 6 meses.
         $inicio = now()->subMonths(5)->startOfMonth();
         $avancesPorMes = ProyectoAvance::whereDate('fecha', '>=', $inicio)
             ->get()
             ->groupBy(fn ($avance) => $avance->fecha->format('Y-m'))
             ->map->count();
 
+        // Aqui se arma cada barra mensual con su etiqueta y total.
         $actividadMensual = collect(range(0, 5))->map(function ($i) use ($inicio, $avancesPorMes) {
             $mes = (clone $inicio)->addMonths($i);
             $key = $mes->format('Y-m');
@@ -89,9 +92,10 @@ class DashboardController extends Controller
             ];
         });
 
+        // Evita division por cero al calcular la altura de las barras en la vista.
         $maxActividadMensual = max(1, $actividadMensual->max('total'));
 
-        // Últimos avances para actividad reciente.
+        // Tarjetas finales: ultimos avances registrados para ver actividad reciente.
         $actividadReciente = ProyectoAvance::with(['proyecto'])
             ->orderBy('created_at', 'desc')
             ->take(6)

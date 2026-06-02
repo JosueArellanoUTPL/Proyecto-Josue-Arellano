@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-// Modelos relacionados
 use App\Models\Meta;
 use App\Models\Indicador;
 use App\Models\Ods;
@@ -16,8 +15,10 @@ class Alineacion extends Model
 {
     use HasFactory;
 
+    // Tabla real de alineaciones estrategicas.
     protected $table = 'alineaciones';
 
+    // Campos que se guardan al crear una alineacion.
     protected $fillable = [
         'meta_id',
         'indicador_id',
@@ -27,47 +28,52 @@ class Alineacion extends Model
         'activo'
     ];
 
-    /**
-     * Relación principal: la alineación siempre pertenece a una meta.
-     */
     public function meta()
     {
+        // La alineacion siempre pertenece a una meta.
         return $this->belongsTo(Meta::class);
     }
 
-    /**
-     * Relación opcional: la alineación puede ser más específica a nivel indicador.
-     */
     public function indicador()
     {
+        // El indicador es opcional para hacer la alineacion mas especifica.
         return $this->belongsTo(Indicador::class);
     }
 
     public function ods()
     {
+        // Relacion con ODS.
         return $this->belongsTo(Ods::class);
     }
 
     public function pdn()
     {
+        // Relacion con PDN.
         return $this->belongsTo(Pdn::class);
     }
 
     public function objetivoEstrategico()
     {
+        // Relacion con objetivo estrategico.
         return $this->belongsTo(ObjetivoEstrategico::class, 'objetivo_estrategico_id');
     }
 
-    /**
-     * Resumen textual para mostrar en listados sin armar lógica en la vista.
-     */
     public function getResumenInstrumentosAttribute(): string
     {
+        // Texto corto para mostrar que instrumentos tiene la alineacion.
         $parts = [];
 
-        if ($this->ods) $parts[] = 'ODS';
-        if ($this->pdn) $parts[] = 'PDN';
-        if ($this->objetivoEstrategico) $parts[] = 'OE';
+        if ($this->ods) {
+            $parts[] = 'ODS';
+        }
+
+        if ($this->pdn) {
+            $parts[] = 'PDN';
+        }
+
+        if ($this->objetivoEstrategico) {
+            $parts[] = 'OE';
+        }
 
         return $parts ? implode(' + ', $parts) : 'Sin instrumentos';
     }

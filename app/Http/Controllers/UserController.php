@@ -11,17 +11,20 @@ class UserController extends Controller
 {
     public function index()
     {
+        // Lista usuarios del sistema. Solo admin entra a este modulo.
         $users = User::orderBy('id', 'desc')->paginate(10);
         return view('usuarios.index', compact('users'));
     }
 
     public function create()
     {
+        // Muestra formulario para crear usuario y asignar rol.
         return view('usuarios.create');
     }
 
     public function store(Request $request)
     {
+        // Valida datos y obliga a escoger uno de los 4 roles permitidos.
         $data = $request->validate([
             'name' => 'required|string|max:150',
             'email' => 'required|email|max:255|unique:users,email',
@@ -29,6 +32,7 @@ class UserController extends Controller
             'role' => ['required', Rule::in(User::roleKeys())],
         ]);
 
+        // Guarda usuario nuevo con clave encriptada.
         User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -42,11 +46,13 @@ class UserController extends Controller
 
     public function edit(User $usuario)
     {
+        // La ruta usa {usuario}; en la vista lo envio como $user.
         return view('usuarios.edit', ['user' => $usuario]);
     }
 
     public function update(Request $request, User $usuario)
     {
+        // Email unico, pero permite conservar el email del usuario actual.
         $data = $request->validate([
             'name' => 'required|string|max:150',
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($usuario->id)],
@@ -54,11 +60,12 @@ class UserController extends Controller
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 
+        // Actualiza datos basicos y rol.
         $usuario->name = $data['name'];
         $usuario->email = $data['email'];
         $usuario->role = $data['role'];
 
-        // Password opcional
+        // La clave es opcional: si queda vacia, se conserva la anterior.
         if (!empty($data['password'])) {
             $usuario->password = Hash::make($data['password']);
         }
@@ -71,7 +78,7 @@ class UserController extends Controller
 
     public function destroy(User $usuario)
     {
-        // Evitar que el admin se elimine a sí mismo por accidente
+        // Evita que el admin borre su propia cuenta por accidente.
         if (auth()->id() === $usuario->id) {
             return redirect()->route('usuarios.index')
                 ->with('success', 'No puedes eliminar tu propio usuario.');

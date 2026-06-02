@@ -5,31 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-// Modelos relacionados
 use App\Models\Indicador;
 use App\Models\User;
 
-/**
- * Modelo IndicadorAvance
- *
- * Representa un registro de avance para un indicador:
- * - valor reportado
- * - fecha de registro
- * - comentario
- * - evidencia (ruta guardada en storage)
- */
 class IndicadorAvance extends Model
 {
     use HasFactory;
 
-    /**
-     * Tabla real usada para almacenar avances de indicadores.
-     */
+    // Tabla donde se guardan los avances de indicadores.
     protected $table = 'indicador_avances';
 
-    /**
-     * Campos permitidos para asignación masiva (store del formulario).
-     */
+    // Campos que se guardan al registrar un avance.
     protected $fillable = [
         'indicador_id',
         'user_id',
@@ -39,29 +25,21 @@ class IndicadorAvance extends Model
         'evidencia_path',
     ];
 
-    /**
-     * Conversión automática de tipos:
-     * - fecha se trata como date (Carbon)
-     * - valor_reportado se trata como decimal (útil para cálculos)
-     */
+    // Convierte fecha y valor para trabajar mejor en calculos y vistas.
     protected $casts = [
         'fecha' => 'date',
         'valor_reportado' => 'decimal:2',
     ];
 
-    /**
-     * Relación: el avance pertenece a un indicador.
-     */
     public function indicador()
     {
+        // El avance pertenece a un indicador.
         return $this->belongsTo(Indicador::class);
     }
 
-    /**
-     * Relación: el avance pertenece a un usuario (quien registró el avance).
-     */
     public function user()
     {
+        // Usuario que registro este avance.
         return $this->belongsTo(User::class);
     }
 }

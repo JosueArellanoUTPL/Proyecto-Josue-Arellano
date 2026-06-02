@@ -12,12 +12,9 @@ use Illuminate\Http\Request;
 
 class AlineacionController extends Controller
 {
-    /**
-     * Lista de alineaciones.
-     * Se cargan relaciones para mostrar nombres/códigos sin consultas repetidas en la vista.
-     */
     public function index()
     {
+        // Lista alineaciones con sus relaciones para no consultar de mas en la vista.
         $alineaciones = Alineacion::with(['meta', 'indicador', 'ods', 'pdn', 'objetivoEstrategico'])
             ->orderBy('id', 'desc')
             ->get();
@@ -25,12 +22,9 @@ class AlineacionController extends Controller
         return view('alineaciones.index', compact('alineaciones'));
     }
 
-    /**
-     * Formulario de creación.
-     * Se cargan catálogos activos para selección.
-     */
     public function create()
     {
+        // Catalogos activos para armar una alineacion estrategica.
         $metas = Meta::where('activo', true)->orderBy('id', 'desc')->get();
         $indicadores = Indicador::where('activo', true)->orderBy('id', 'desc')->get();
         $ods = Ods::where('activo', true)->orderBy('id', 'desc')->get();
@@ -40,15 +34,9 @@ class AlineacionController extends Controller
         return view('alineaciones.create', compact('metas', 'indicadores', 'ods', 'pdns', 'objetivos'));
     }
 
-    /**
-     * Guarda alineación.
-     * Reglas:
-     * - meta_id obligatorio
-     * - indicador_id opcional, pero si viene debe pertenecer a la meta
-     * - al menos uno entre (ods, pdn, objetivo estratégico)
-     */
     public function store(Request $request)
     {
+        // Valida meta, indicador opcional e instrumentos estrategicos.
         $data = $request->validate([
             'meta_id' => ['required', 'exists:metas,id'],
             'indicador_id' => ['nullable', 'exists:indicadores,id'],
@@ -57,21 +45,20 @@ class AlineacionController extends Controller
             'pdn_id' => ['nullable', 'exists:pdns,id'],
             'objetivo_estrategico_id' => ['nullable', 'exists:objetivo_estrategicos,id'],
 
-            // Checkbox: si no viene, se considera false
             'activo' => ['nullable'],
         ]);
 
-        // Checkbox coherente con el resto del sistema
+        // Checkbox activo convertido a true/false.
         $data['activo'] = $request->has('activo');
 
-        // Se exige al menos un instrumento seleccionado
+        // Debe existir al menos un instrumento: ODS, PDN u objetivo.
         if (empty($data['ods_id']) && empty($data['pdn_id']) && empty($data['objetivo_estrategico_id'])) {
             return back()
-                ->withErrors(['ods_id' => 'Se requiere seleccionar al menos un instrumento (ODS, PDN o Objetivo Estratégico).'])
+                ->withErrors(['ods_id' => 'Se requiere seleccionar al menos un instrumento (ODS, PDN o Objetivo Estrategico).'])
                 ->withInput();
         }
 
-        // Coherencia: si se selecciona indicador, debe pertenecer a la meta seleccionada
+        // Si escoge indicador, reviso que ese indicador pertenezca a la meta.
         if (!empty($data['indicador_id'])) {
             $ok = Indicador::where('id', $data['indicador_id'])
                 ->where('meta_id', $data['meta_id'])
@@ -84,18 +71,17 @@ class AlineacionController extends Controller
             }
         }
 
+        // Guarda la alineacion estrategica.
         Alineacion::create($data);
 
         return redirect()
             ->route('alineaciones.index')
-            ->with('success', 'Alineación creada correctamente.');
+            ->with('success', 'Alineacion creada correctamente.');
     }
 
-    /**
-     * Formulario de edición.
-     */
     public function edit(Alineacion $alineacion)
     {
+        // Cargo los mismos catalogos para editar una alineacion.
         $metas = Meta::where('activo', true)->orderBy('id', 'desc')->get();
         $indicadores = Indicador::where('activo', true)->orderBy('id', 'desc')->get();
         $ods = Ods::where('activo', true)->orderBy('id', 'desc')->get();
@@ -105,12 +91,9 @@ class AlineacionController extends Controller
         return view('alineaciones.edit', compact('alineacion', 'metas', 'indicadores', 'ods', 'pdns', 'objetivos'));
     }
 
-    /**
-     * Actualiza alineación.
-     * Se aplican las mismas reglas que en store().
-     */
     public function update(Request $request, Alineacion $alineacion)
     {
+        // Mismas reglas de crear, pero para actualizar.
         $data = $request->validate([
             'meta_id' => ['required', 'exists:metas,id'],
             'indicador_id' => ['nullable', 'exists:indicadores,id'],
@@ -126,7 +109,7 @@ class AlineacionController extends Controller
 
         if (empty($data['ods_id']) && empty($data['pdn_id']) && empty($data['objetivo_estrategico_id'])) {
             return back()
-                ->withErrors(['ods_id' => 'Se requiere seleccionar al menos un instrumento (ODS, PDN o Objetivo Estratégico).'])
+                ->withErrors(['ods_id' => 'Se requiere seleccionar al menos un instrumento (ODS, PDN o Objetivo Estrategico).'])
                 ->withInput();
         }
 
@@ -142,22 +125,21 @@ class AlineacionController extends Controller
             }
         }
 
+        // Actualiza la alineacion seleccionada.
         $alineacion->update($data);
 
         return redirect()
             ->route('alineaciones.index')
-            ->with('success', 'Alineación actualizada correctamente.');
+            ->with('success', 'Alineacion actualizada correctamente.');
     }
 
-    /**
-     * Elimina alineación.
-     */
     public function destroy(Alineacion $alineacion)
     {
+        // Elimina la alineacion desde la tabla.
         $alineacion->delete();
 
         return redirect()
             ->route('alineaciones.index')
-            ->with('success', 'Alineación eliminada correctamente.');
+            ->with('success', 'Alineacion eliminada correctamente.');
     }
 }

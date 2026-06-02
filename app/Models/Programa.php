@@ -11,8 +11,10 @@ class Programa extends Model
 {
     use HasFactory;
 
+    // Tabla real de programas.
     protected $table = 'programas';
 
+    // Campos que se guardan desde el CRUD de programas.
     protected $fillable = [
         'entidad_id',
         'nombre',
@@ -20,19 +22,15 @@ class Programa extends Model
         'activo',
     ];
 
-    /**
-     * Relación: un programa pertenece a una entidad
-     */
     public function entidad()
     {
+        // Un programa pertenece a una entidad.
         return $this->belongsTo(Entidad::class);
     }
 
-    /**
-     * Relación: un programa tiene muchos proyectos
-     */
     public function proyectos()
     {
+        // Un programa puede tener varios proyectos.
         return $this->hasMany(Proyecto::class);
     }
 }

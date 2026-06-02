@@ -36,8 +36,9 @@ use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
-| Rutas públicas
+| Rutas publicas
 |--------------------------------------------------------------------------
+| Aqui solo va lo que puede ver cualquiera sin iniciar sesion.
 */
 Route::get('/', function () {
     return view('welcome');
@@ -47,14 +48,16 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 | Rutas protegidas (login requerido)
 |--------------------------------------------------------------------------
+| Desde aqui casi todo pasa por auth y auditoria.
+| AuditMiddleware guarda cambios como crear, editar o eliminar.
 */
 Route::middleware(['auth', AuditMiddleware::class])->group(function () {
 
-    // Dashboard: los 4 roles pueden consultar.
+    // Dashboard: los 4 roles pueden consultar esta pantalla.
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    // Perfil propio del usuario autenticado.
+    // Perfil propio: cada usuario puede editar sus datos basicos.
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
@@ -68,6 +71,8 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
     |--------------------------------------------------------------------------
     | Seguimiento y consulta (los 4 roles)
     |--------------------------------------------------------------------------
+    | Estas rutas son de lectura: sirven para revisar metas, proyectos,
+    | trazabilidad y reportes sin crear datos nuevos.
     */
     Route::middleware(['role:' . implode(',', User::roleKeys())])->group(function () {
 
@@ -92,7 +97,7 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
         Route::get('/seguimiento/trazabilidad', [TrazabilidadController::class, 'index'])
             ->name('seguimiento.trazabilidad');
 
-        // Reportes consultivos.
+        // Reportes consultivos: sirven para imprimir o exportar como PDF desde el navegador.
         Route::get('/reportes', [ReporteController::class, 'index'])
             ->name('reportes.index');
 
@@ -111,12 +116,13 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Registro de avances y evidencias (Admin y Técnico de Seguimiento)
+    | Registro de avances y evidencias (Admin y Tecnico de Seguimiento)
     |--------------------------------------------------------------------------
+    | Aqui si se crean datos de seguimiento. Por eso solo entran admin y tecnico.
     */
     Route::middleware(['role:admin,tecnico'])->group(function () {
 
-        // Avances de indicadores.
+        // Avances de indicadores: registrar valor, comentario y evidencia.
         Route::get('/seguimiento/indicadores/{indicador}/avance', [AvanceIndicadorController::class, 'create'])
             ->name('indicadores.avance.create');
 
@@ -132,7 +138,7 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
         Route::delete('/seguimiento/indicadores/avances/{avance}', [AvanceIndicadorController::class, 'destroy'])
             ->name('indicadores.avance.destroy');
 
-        // Avances de proyectos.
+        // Avances de proyectos: registrar porcentaje de avance del proyecto.
         Route::get('/seguimiento/proyectos/{proyecto}/avances/create', [ProyectoAvanceController::class, 'create'])
             ->name('proyectos.avance.create');
 
@@ -148,7 +154,7 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
         Route::delete('/seguimiento/proyectos/avances/{avance}', [ProyectoAvanceController::class, 'destroy'])
             ->name('proyectos.avance.destroy');
 
-        // Evidencias de avances de proyecto.
+        // Evidencias de avances de proyecto: archivos que respaldan un avance.
         Route::post('/seguimiento/proyectos/avances/{avance}/evidencias', [ProyectoAvanceController::class, 'addEvidencia'])
             ->name('proyectos.avance.evidencia.add');
 
@@ -158,8 +164,10 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Planificación (Admin y Responsable de Planificación)
+    | Planificacion (Admin y Responsable de Planificacion)
     |--------------------------------------------------------------------------
+    | Rutas CRUD de la parte de planificacion. Aqui se administran catalogos
+    | y datos base: entidades, planes, metas, indicadores, etc.
     */
     Route::middleware(['role:admin,planificacion'])->group(function () {
 
@@ -181,8 +189,9 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | Administración y seguridad (solo Admin)
+    | Administracion y seguridad (solo Admin)
     |--------------------------------------------------------------------------
+    | Solo el administrador puede gestionar usuarios y revisar auditoria.
     */
     Route::middleware(['role:admin'])->group(function () {
 
@@ -197,22 +206,24 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
 |--------------------------------------------------------------------------
 | Rutas por rol (pruebas simples)
 |--------------------------------------------------------------------------
+| Estas rutas son solo para probar rapido si el middleware de roles funciona.
 */
 Route::get('/admin', fn () => 'Panel Admin OK')
     ->middleware(['auth', 'role:admin']);
 
-Route::get('/tecnico', fn () => 'Panel Técnico OK')
+Route::get('/tecnico', fn () => 'Panel Tecnico OK')
     ->middleware(['auth', 'role:tecnico']);
 
 Route::get('/consulta', fn () => 'Panel Consulta OK')
     ->middleware(['auth', 'role:consulta']);
 
-Route::get('/planificacion', fn () => 'Panel Planificación OK')
+Route::get('/planificacion', fn () => 'Panel Planificacion OK')
     ->middleware(['auth', 'role:planificacion']);
 
 /*
 |--------------------------------------------------------------------------
-| Autenticación
+| Autenticacion
 |--------------------------------------------------------------------------
+| Breeze deja aqui sus rutas de login, registro, logout y password.
 */
 require __DIR__.'/auth.php';

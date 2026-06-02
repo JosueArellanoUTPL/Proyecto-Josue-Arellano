@@ -4,26 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Programa;
 
-/**
- * Controlador de seguimiento de Programa.
- *
- * Se muestra:
- * - ficha del programa
- * - KPIs (total proyectos, activos, inactivos)
- * - progreso promedio del programa (promedio del progreso de sus proyectos)
- *
- * El programa no registra avances directamente.
- * Los avances se registran en Proyectos (ProyectoAvance).
- */
 class SeguimientoProgramaController extends Controller
 {
-    /**
-     * Detalle de seguimiento del programa.
-     * Se carga entidad y proyectos con su último avance para calcular progreso real.
-     */
     public function show(Programa $programa)
     {
-        // Se carga entidad y proyectos con último avance (para que $proyecto->progreso funcione)
+        // Carga entidad y proyectos para calcular avance del programa.
         $programa->load([
             'entidad',
             'proyectos' => function ($q) {
@@ -32,12 +17,12 @@ class SeguimientoProgramaController extends Controller
             }
         ]);
 
-        // KPIs simples para tarjetas informativas
+        // KPIs simples para tarjetas informativas.
         $kpiProyectos = $programa->proyectos->count();
-        $kpiActivos   = $programa->proyectos->where('activo', 1)->count();
+        $kpiActivos = $programa->proyectos->where('activo', 1)->count();
         $kpiInactivos = $kpiProyectos - $kpiActivos;
 
-        // Progreso del programa = promedio del progreso de sus proyectos
+        // Progreso del programa = promedio del progreso de sus proyectos.
         if ($kpiProyectos > 0) {
             $avg = $programa->proyectos->avg(function ($pry) {
                 return (float) ($pry->progreso ?? 0);

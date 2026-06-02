@@ -1,25 +1,26 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Auditoría del Sistema
+            Auditoria del Sistema
         </h2>
     </x-slot>
 
-    {{-- Vista de consulta: los estilos reutilizables están en resources/css/app.css --}}
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
+                {{-- Encabezado de auditoria: solo consulta registros. --}}
                 <div class="row">
                     <div>
                         <div class="title">Registro de acciones</div>
                         <div class="muted" style="margin-top:6px;">
-                            Consulta quién realizó cambios, en qué módulo y desde qué ruta.
+                            Consulta quien realizo cambios, en que modulo y desde que ruta.
                         </div>
                     </div>
 
-                    <a class="btn" href="{{ route('dashboard') }}">← Dashboard</a>
+                    <a class="btn" href="{{ route('dashboard') }}">Volver al Dashboard</a>
                 </div>
 
+                {{-- Filtros para buscar acciones especificas. --}}
                 <form method="GET" action="{{ route('auditoria.index') }}" class="card" style="margin-top:16px;">
                     <div class="grid2">
                         <div>
@@ -35,7 +36,7 @@
                         </div>
 
                         <div>
-                            <label class="label">Módulo</label>
+                            <label class="label">Modulo</label>
                             <select name="module" class="input">
                                 <option value="">Todos</option>
                                 @foreach($modules as $module)
@@ -47,7 +48,7 @@
                         </div>
 
                         <div>
-                            <label class="label">Acción</label>
+                            <label class="label">Accion</label>
                             <select name="action" class="input">
                                 <option value="">Todas</option>
                                 @foreach($actions as $action)
@@ -75,6 +76,7 @@
                     </div>
                 </form>
 
+                {{-- Tabla de historial: aqui se ve lo guardado por AuditMiddleware. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="title">Historial</div>
                     <div class="muted" style="margin-top:6px;">
@@ -87,8 +89,8 @@
                                 <tr class="text-left border-b">
                                     <th class="py-2">Fecha</th>
                                     <th class="py-2">Usuario</th>
-                                    <th class="py-2">Módulo</th>
-                                    <th class="py-2">Acción</th>
+                                    <th class="py-2">Modulo</th>
+                                    <th class="py-2">Accion</th>
                                     <th class="py-2">Ruta</th>
                                     <th class="py-2">IP</th>
                                 </tr>
@@ -116,7 +118,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="6" class="py-4 text-center muted">
-                                            No hay registros de auditoría con los filtros actuales.
+                                            No hay registros de auditoria con los filtros actuales.
                                         </td>
                                     </tr>
                                 @endforelse

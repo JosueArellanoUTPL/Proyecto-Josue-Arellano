@@ -9,6 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
 
+                {{-- Encabezado del dashboard con accesos rapidos. --}}
                 <div class="dashboard-hero">
                     <div>
                         <div class="title">Panel Ejecutivo</div>
@@ -23,6 +24,7 @@
                     </div>
                 </div>
 
+                {{-- Tarjetas KPI: muestran conteos generales del sistema. --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style="margin-top:18px;">
                     <div class="kpi" style="background:#eef7f5">
                         <div class="label">Planes activos</div>
@@ -45,6 +47,7 @@
                     </div>
                 </div>
 
+                {{-- Graficas principales: donas y avance de alineacion. --}}
                 <div class="dashboard-grid">
                     <div class="card dashboard-score">
                         <div>
@@ -54,6 +57,7 @@
                             </div>
                         </div>
 
+                        {{-- La variable --value alimenta la dona hecha con CSS. --}}
                         <div class="donut" style="--value: {{ $progresoInstitucional }};">
                             <div>
                                 <strong>{{ $progresoInstitucional }}%</strong>
@@ -77,7 +81,7 @@
                         <div>
                             <div class="title">Proyectos</div>
                             <div class="muted" style="margin-top:6px;">
-                                Avance promedio del último seguimiento registrado.
+                                Avance promedio del ultimo seguimiento registrado.
                             </div>
                         </div>
 
@@ -101,9 +105,9 @@
                     </div>
 
                     <div class="card">
-                        <div class="title">Alineación estratégica</div>
+                        <div class="title">Alineacion estrategica</div>
                         <div class="muted" style="margin-top:6px;">
-                            Porcentaje de metas vinculadas a instrumentos estratégicos.
+                            Porcentaje de metas vinculadas a instrumentos estrategicos.
                         </div>
 
                         <div class="big-number">{{ $porcentajeAlineacion }}%</div>
@@ -124,11 +128,12 @@
                     </div>
                 </div>
 
+                {{-- Ranking por entidad y grafica mensual. --}}
                 <div class="dashboard-grid-2">
                     <div class="card">
                         <div class="title">Avance por entidad</div>
                         <div class="muted" style="margin-top:6px;">
-                            Ranking de entidades según el progreso promedio de sus metas.
+                            Ranking de entidades segun el progreso promedio de sus metas.
                         </div>
 
                         <div class="bar-list">
@@ -154,12 +159,13 @@
                     <div class="card">
                         <div class="title">Actividad mensual</div>
                         <div class="muted" style="margin-top:6px;">
-                            Avances de proyectos registrados en los últimos 6 meses.
+                            Avances de proyectos registrados en los ultimos 6 meses.
                         </div>
 
                         <div class="month-chart">
                             @foreach($actividadMensual as $mes)
                                 @php
+                                    // Altura visual de cada barra segun el mes con mayor actividad.
                                     $height = $maxActividadMensual > 0
                                         ? max(8, round(($mes['total'] / $maxActividadMensual) * 120))
                                         : 8;
@@ -174,12 +180,13 @@
                     </div>
                 </div>
 
+                {{-- Ultimos avances registrados en proyectos. --}}
                 <div class="card mt-6">
                     <div class="row">
                         <div>
                             <div class="title">Actividad reciente</div>
                             <div class="muted" style="margin-top:6px;">
-                                Últimos avances registrados en proyectos.
+                                Ultimos avances registrados en proyectos.
                             </div>
                         </div>
                         <a class="btn" href="{{ route('reportes.proyectos') }}">Ver reporte</a>
@@ -188,6 +195,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                         @forelse($actividadReciente as $a)
                             @php
+                                // Normalizo el porcentaje para pintar la barra de cada tarjeta.
                                 $pp = max(0, min(100, (int)round((float)$a->porcentaje_avance)));
                                 $pdone = $pp >= 100;
                             @endphp

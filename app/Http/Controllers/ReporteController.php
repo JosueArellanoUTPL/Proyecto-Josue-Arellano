@@ -13,24 +13,19 @@ use Illuminate\Http\Request;
 
 class ReporteController extends Controller
 {
-    /**
-     * Menú principal del módulo de reportes.
-     * No calcula datos pesados; solo muestra accesos a reportes disponibles.
-     */
     public function index()
     {
+        // Pantalla inicial del modulo: solo muestra accesos a los reportes.
         return view('reportes.index');
     }
 
-    /**
-     * Reporte general del estado institucional.
-     * Resume totales y avances promedio de metas/proyectos.
-     */
     public function institucional()
     {
+        // Datos generales para el reporte institucional.
         $metas = Meta::with('indicadores.ultimoAvance')->get();
         $proyectos = Proyecto::with('ultimoAvance')->get();
 
+        // Promedios que se muestran como porcentajes principales.
         $progresoMetas = $metas->count()
             ? round($metas->avg(fn ($meta) => (float) $meta->progreso), 2)
             : 0;
@@ -39,6 +34,7 @@ class ReporteController extends Controller
             ? round($proyectos->avg(fn ($proyecto) => (float) $proyecto->progreso), 2)
             : 0;
 
+        // Numeros pequenos tipo KPI del reporte.
         $kpis = [
             'entidades' => Entidad::count(),
             'programas' => Programa::count(),
@@ -51,6 +47,7 @@ class ReporteController extends Controller
             'progreso_proyectos' => $progresoProyectos,
         ];
 
+        // Se carga todo lo necesario para la tabla de resumen por entidad.
         $entidades = Entidad::with([
                 'plans.metas.indicadores.ultimoAvance',
                 'programas',
@@ -62,15 +59,13 @@ class ReporteController extends Controller
         return view('reportes.institucional', compact('kpis', 'entidades'));
     }
 
-    /**
-     * Reporte de metas con filtros simples.
-     * Permite revisar avance por entidad y estado de cumplimiento.
-     */
     public function metas(Request $request)
     {
+        // Consulta base: metas con su plan, entidad e indicadores.
         $query = Meta::with(['plan.entidad', 'indicadores.ultimoAvance'])
             ->orderBy('id', 'desc');
 
+        // Filtro por entidad, usando la entidad del plan.
         if ($request->filled('entidad_id')) {
             $query->whereHas('plan', function ($planQuery) use ($request) {
                 $planQuery->where('entidad_id', $request->entidad_id);
@@ -79,6 +74,7 @@ class ReporteController extends Controller
 
         $metas = $query->get();
 
+        // Este filtro se hace en coleccion porque "completada" es un atributo calculado.
         if ($request->filled('estado')) {
             $metas = $metas->filter(function ($meta) use ($request) {
                 return $request->estado === 'completadas'
@@ -92,11 +88,9 @@ class ReporteController extends Controller
         return view('reportes.metas', compact('metas', 'entidades'));
     }
 
-    /**
-     * Reporte de proyectos con avance actual y número de evidencias.
-     */
     public function proyectos(Request $request)
     {
+        // Consulta base: proyectos con entidad, programa, ultimo avance y evidencias.
         $query = Proyecto::with([
                 'entidad',
                 'programa',
@@ -105,6 +99,7 @@ class ReporteController extends Controller
             ])
             ->orderBy('id', 'desc');
 
+        // Filtro simple por entidad.
         if ($request->filled('entidad_id')) {
             $query->where('entidad_id', $request->entidad_id);
         }
@@ -115,12 +110,9 @@ class ReporteController extends Controller
         return view('reportes.proyectos', compact('proyectos', 'entidades'));
     }
 
-    /**
-     * Reporte de trazabilidad estratégica.
-     * Muestra relaciones Meta/Indicador con ODS, PDN y Objetivos Estratégicos.
-     */
     public function trazabilidad()
     {
+        // Reporte de relaciones: meta, indicador, ODS, PDN y objetivo estrategico.
         $alineaciones = Alineacion::with([
                 'meta.plan.entidad',
                 'indicador',

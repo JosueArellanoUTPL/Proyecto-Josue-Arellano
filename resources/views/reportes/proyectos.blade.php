@@ -13,6 +13,7 @@
                     'subtitle' => 'Consulta de avance actual, historial y evidencias por proyecto.'
                 ])
 
+                {{-- Filtro por entidad para revisar proyectos de una institucion especifica. --}}
                 <form method="GET" action="{{ route('reportes.proyectos') }}" class="card no-print" style="margin-top:16px;">
                     <div>
                         <label class="label">Entidad</label>
@@ -32,6 +33,7 @@
                     </div>
                 </form>
 
+                {{-- Tabla del reporte: resume avance y evidencias por proyecto. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="title">Proyectos encontrados: {{ $proyectos->count() }}</div>
 
@@ -43,7 +45,7 @@
                                     <th>Entidad</th>
                                     <th>Programa</th>
                                     <th>Avance</th>
-                                    <th>Última fecha</th>
+                                    <th>Ultima fecha</th>
                                     <th>Registros</th>
                                     <th>Evidencias</th>
                                 </tr>
@@ -51,6 +53,7 @@
                             <tbody>
                                 @forelse($proyectos as $proyecto)
                                     @php
+                                        // Cuenta todas las evidencias de los avances del proyecto.
                                         $evidencias = $proyecto->avances->sum(fn($avance) => $avance->evidencias->count());
                                     @endphp
                                     <tr>

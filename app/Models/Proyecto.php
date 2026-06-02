@@ -12,6 +12,7 @@ class Proyecto extends Model
 {
     use HasFactory;
 
+    // Campos que se guardan al crear o editar proyectos.
     protected $fillable = [
         'nombre',
         'descripcion',
@@ -20,44 +21,36 @@ class Proyecto extends Model
         'activo'
     ];
 
-    /**
-     * Relaciones base
-     */
     public function entidad()
     {
+        // El proyecto pertenece a una entidad.
         return $this->belongsTo(Entidad::class);
     }
 
     public function programa()
     {
+        // El proyecto pertenece a un programa.
         return $this->belongsTo(Programa::class);
     }
 
-    /**
-     * Avances del proyecto
-     */
     public function avances()
     {
+        // Historial de avances registrados para este proyecto.
         return $this->hasMany(ProyectoAvance::class);
     }
 
-    /**
-     * Último avance registrado (por fecha)
-     */
     public function ultimoAvance()
     {
+        // Ultimo avance por fecha: sirve para mostrar el avance actual.
         return $this->hasOne(ProyectoAvance::class)->latestOfMany('fecha');
     }
 
-    /**
-     * Progreso calculado automáticamente
-     * Se basa en el último avance registrado
-     */
     public function getProgresoAttribute()
     {
+        // El progreso del proyecto se toma del ultimo avance registrado.
         $valor = (float) ($this->ultimoAvance?->porcentaje_avance ?? 0);
 
-        // Seguridad: siempre entre 0 y 100
+        // Seguridad: siempre entre 0 y 100.
         return max(0, min(100, $valor));
     }
 }
