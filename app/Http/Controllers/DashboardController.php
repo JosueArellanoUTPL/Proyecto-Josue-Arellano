@@ -81,13 +81,29 @@ class DashboardController extends Controller
             ->groupBy(fn ($avance) => $avance->fecha->format('Y-m'))
             ->map->count();
 
+        // Labels en espanol para que la grafica no muestre Jan, Feb, etc.
+        $meses = [
+            1 => 'ene',
+            2 => 'feb',
+            3 => 'mar',
+            4 => 'abr',
+            5 => 'may',
+            6 => 'jun',
+            7 => 'jul',
+            8 => 'ago',
+            9 => 'sep',
+            10 => 'oct',
+            11 => 'nov',
+            12 => 'dic',
+        ];
+
         // Aqui se arma cada barra mensual con su etiqueta y total.
-        $actividadMensual = collect(range(0, 5))->map(function ($i) use ($inicio, $avancesPorMes) {
+        $actividadMensual = collect(range(0, 5))->map(function ($i) use ($inicio, $avancesPorMes, $meses) {
             $mes = (clone $inicio)->addMonths($i);
             $key = $mes->format('Y-m');
 
             return [
-                'label' => $mes->format('M'),
+                'label' => $meses[(int) $mes->format('n')],
                 'total' => $avancesPorMes->get($key, 0),
             ];
         });

@@ -19,6 +19,7 @@
         --purple: #c6b7e2;
         --text: #1f2937;
         --muted: #6b7280;
+        --red: #860707;
     }
 
     /*
@@ -231,7 +232,7 @@
     }
 
     .dot.blue {
-        background: var(--blue);
+        background:  var(--blue);
     }
 
     .dot.green {
@@ -808,6 +809,230 @@
         font-weight: 800;
         background: #f6f8fb;
     }
+
+    /*
+        Layout principal con menu lateral.
+        Esto reemplaza la barra superior para que los modulos queden siempre visibles.
+    */
+    .app-shell {
+        min-height: 100vh;
+        background: var(--beige);
+    }
+
+    .app-main {
+        min-height: 100vh;
+    }
+
+    .app-header {
+        background: #fffaf3;
+        border-bottom: 1px solid var(--border-soft);
+    }
+
+    .sidebar {
+        background: #fffaf3;
+        border-right: 1px solid var(--border-soft);
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .sidebar-brand {
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border-soft);
+    }
+
+    .sidebar-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 900;
+        color: var(--text);
+        text-decoration: none;
+    }
+
+    .sidebar-role {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .sidebar-nav {
+        display: grid;
+        gap: 4px;
+    }
+
+    .sidebar-section {
+        margin-top: 8px;
+        padding: 0 10px;
+        font-size: 11px;
+        font-weight: 900;
+        color: var(--muted);
+        text-transform: uppercase;
+    }
+
+    .side-link {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        min-height: 34px;
+        padding: 7px 10px;
+        border-radius: 10px;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+        border: 1px solid transparent;
+        background: transparent;
+        text-align: left;
+    }
+
+    .side-link:hover,
+    .side-link.active {
+        background: #f0f4fb;
+        border-color: var(--border-soft);
+        color: #365a99;
+    }
+
+    .sidebar-user {
+        margin-top: auto;
+        padding-top: 14px;
+        border-top: 1px solid var(--border-soft);
+        display: grid;
+        gap: 6px;
+    }
+
+    .logout-link {
+        cursor: pointer;
+    }
+
+    @media (min-width: 1024px) {
+        .app-shell {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+    }
+
+    @media (max-width: 1023px) {
+        .sidebar {
+            border-right: 0;
+            border-bottom: 1px solid var(--border-soft);
+        }
+
+        .sidebar-nav {
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        }
+    }
+}
+
+/*
+    Capa visual para CRUD antiguos.
+    Reusa las clases Tailwind que ya tenian esas vistas y las vuelve pastel.
+*/
+main .bg-white.shadow.rounded {
+    background: var(--card) !important;
+    border: 1px solid var(--border-soft) !important;
+    border-radius: 18px !important;
+    box-shadow: none !important;
+}
+
+main .bg-blue-600 {
+    background: #f0f4fb !important;
+    border: 1px solid var(--border) !important;
+    color: #365a99 !important;
+}
+
+main .hover\:bg-blue-700:hover {
+    background: #e6eefc !important;
+}
+
+main .bg-yellow-500 {
+    background: #fff6ee !important;
+    border: 1px solid #f4c095 !important;
+    color: #7a4a12 !important;
+}
+
+main .hover\:bg-yellow-600:hover {
+    background: #ffecd8 !important;
+}
+
+main .bg-red-600 {
+    background: #fff0f0 !important;
+    border: 1px solid #f2b9b9 !important;
+    color: #8a1f1f !important;
+}
+
+main .hover\:bg-red-700:hover {
+    background: #ffe2e2 !important;
+}
+
+main table thead tr {
+    background: #f6f8fb;
+}
+
+main table th,
+main table td {
+    color: var(--text);
+}
+
+/*
+    Pantallas de login/registro.
+    Mismo estilo pastel para que no se vea como Breeze por defecto.
+*/
+.auth-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    background: var(--beige);
+}
+
+.auth-brand {
+    text-align: center;
+}
+
+.auth-logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 92px;
+    height: 92px;
+    border-radius: 24px;
+    background: #fffaf3;
+    border: 1px solid var(--border-soft);
+}
+
+.auth-title {
+    margin-top: 12px;
+    font-weight: 900;
+    color: var(--text);
+    font-size: 20px;
+}
+
+.auth-subtitle {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    margin-top: 22px;
+    padding: 24px;
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 18px;
 }
 
 @media print {

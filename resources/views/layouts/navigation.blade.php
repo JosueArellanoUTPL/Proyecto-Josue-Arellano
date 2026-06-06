@@ -1,136 +1,128 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex items-center">
-                <a href="{{ route('dashboard') }}" class="flex items-center">
-                    <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                </a>
-
-                {{-- Menu principal de escritorio. --}}
-                <div class="hidden sm:flex sm:items-center sm:ms-10 sm:gap-2">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        Dashboard
-                    </x-nav-link>
-
-                    @auth
-                        {{-- Este menu lo ven los 4 roles porque es de consulta/seguimiento. --}}
-                        <x-dropdown align="left" width="56">
-                            <x-slot name="trigger">
-                                <button type="button"
-                                    class="inline-flex items-center gap-1 px-3 py-2 rounded-md
-                                           text-sm font-medium text-gray-700
-                                           hover:bg-gray-100 hover:text-gray-900
-                                           transition">
-                                    Seguimiento
-                                    <svg class="h-4 w-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.293 7.293L10 12l4.707-4.707" />
-                                    </svg>
-                                </button>
-                            </x-slot>
-
-                            <x-slot name="content">
-                                <x-dropdown-link :href="route('seguimiento.metas')">
-                                    Seguimiento de Metas
-                                </x-dropdown-link>
-
-                                <x-dropdown-link :href="route('seguimiento.organizacion')">
-                                    Organizacion (Entidades)
-                                </x-dropdown-link>
-
-                                <x-dropdown-link :href="route('seguimiento.trazabilidad')">
-                                    Matriz de Trazabilidad
-                                </x-dropdown-link>
-
-                                <x-dropdown-link :href="route('reportes.index')">
-                                    Reportes
-                                </x-dropdown-link>
-                            </x-slot>
-                        </x-dropdown>
-
-                        {{-- Administracion aparece solo para admin o planificacion. --}}
-                        @if(auth()->user()->canManagePlanning() || auth()->user()->isAdmin())
-                            <x-dropdown align="left" width="56">
-                                <x-slot name="trigger">
-                                    <button type="button"
-                                        class="inline-flex items-center gap-1 px-3 py-2 rounded-md
-                                               text-sm font-medium text-gray-700
-                                               hover:bg-gray-100 hover:text-gray-900
-                                               transition">
-                                        Administracion
-                                        <svg class="h-4 w-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.293 7.293L10 12l4.707-4.707" />
-                                        </svg>
-                                    </button>
-                                </x-slot>
-
-                                <x-slot name="content">
-                                    {{-- Responsable de planificacion y admin ven estos CRUD. --}}
-                                    @if(auth()->user()->canManagePlanning())
-                                        <div class="px-4 py-2 text-xs text-gray-500">Planificacion</div>
-                                        <x-dropdown-link :href="route('pdn.index')">PND / PDN</x-dropdown-link>
-                                        <x-dropdown-link :href="route('ods.index')">ODS</x-dropdown-link>
-                                        <x-dropdown-link :href="route('objetivos-estrategicos.index')">Objetivos Estrategicos</x-dropdown-link>
-
-                                        <div class="border-t my-2"></div>
-
-                                        <div class="px-4 py-2 text-xs text-gray-500">Plan y Seguimiento</div>
-                                        <x-dropdown-link :href="route('plans.index')">Planes</x-dropdown-link>
-                                        <x-dropdown-link :href="route('metas.index')">Metas</x-dropdown-link>
-                                        <x-dropdown-link :href="route('indicadores.index')">Indicadores</x-dropdown-link>
-                                        <x-dropdown-link :href="route('alineaciones.index')">Alineaciones</x-dropdown-link>
-
-                                        <div class="border-t my-2"></div>
-
-                                        <div class="px-4 py-2 text-xs text-gray-500">Ejecucion</div>
-                                        <x-dropdown-link :href="route('programas.index')">Programas</x-dropdown-link>
-                                        <x-dropdown-link :href="route('proyectos.index')">Proyectos</x-dropdown-link>
-                                        <x-dropdown-link :href="route('entidades.index')">Entidades</x-dropdown-link>
-                                    @endif
-
-                                    {{-- Solo admin ve usuarios y auditoria. --}}
-                                    @if(auth()->user()->isAdmin())
-                                        <div class="border-t my-2"></div>
-
-                                        <div class="px-4 py-2 text-xs text-gray-500">Seguridad</div>
-                                        <x-dropdown-link :href="route('usuarios.index')">Usuarios</x-dropdown-link>
-                                        <x-dropdown-link :href="route('auditoria.index')">Auditoria</x-dropdown-link>
-                                    @endif
-                                </x-slot>
-                            </x-dropdown>
-                        @endif
-                    @endauth
-                </div>
-            </div>
-
-            {{-- Menu de usuario: perfil y cerrar sesion. --}}
-            <div class="hidden sm:flex sm:items-center">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button type="button"
-                            class="inline-flex items-center gap-1 px-3 py-2 rounded-md
-                                   text-sm font-medium text-gray-700
-                                   hover:bg-gray-100 hover:text-gray-900
-                                   transition">
-                            {{ Auth::user()->name }}
-                            <svg class="h-4 w-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M5.293 7.293L10 12l4.707-4.707" />
-                            </svg>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">Perfil</x-dropdown-link>
-
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault(); this.closest('form').submit();">
-                                Cerrar sesion
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-        </div>
+<aside class="sidebar" data-sidebar>
+    {{-- Menu lateral fijo: aqui quedan visibles los modulos principales. --}}
+    <div class="sidebar-brand">
+        <a href="{{ route('dashboard') }}" class="sidebar-logo">
+            <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+            <span>SIPeIP</span>
+        </a>
+        <div class="sidebar-role">{{ auth()->user()->roleLabel() }}</div>
     </div>
-</nav>
+
+    <nav class="sidebar-nav">
+        <div class="sidebar-section">Principal</div>
+
+        <a href="{{ route('dashboard') }}"
+           class="side-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            Dashboard
+        </a>
+
+        {{-- Estos accesos son de consulta y seguimiento para los roles permitidos. --}}
+        <div class="sidebar-section">Seguimiento</div>
+
+        <a href="{{ route('seguimiento.metas') }}"
+           class="side-link {{ request()->routeIs('seguimiento.metas', 'seguimiento.meta.show') ? 'active' : '' }}">
+            Metas
+        </a>
+
+        <a href="{{ route('seguimiento.organizacion') }}"
+           class="side-link {{ request()->routeIs('seguimiento.organizacion*') ? 'active' : '' }}">
+            Organizacion
+        </a>
+
+        <a href="{{ route('seguimiento.trazabilidad') }}"
+           class="side-link {{ request()->routeIs('seguimiento.trazabilidad') ? 'active' : '' }}">
+            Trazabilidad
+        </a>
+
+        <a href="{{ route('reportes.index') }}"
+           class="side-link {{ request()->routeIs('reportes.*') ? 'active' : '' }}">
+            Reportes
+        </a>
+
+        {{-- Responsable de planificacion y admin ven estos modulos CRUD. --}}
+        @if(auth()->user()->canManagePlanning())
+            <div class="sidebar-section">Planificacion</div>
+
+            <a href="{{ route('entidades.index') }}"
+               class="side-link {{ request()->routeIs('entidades.*') ? 'active' : '' }}">
+                Entidades
+            </a>
+
+            <a href="{{ route('programas.index') }}"
+               class="side-link {{ request()->routeIs('programas.*') ? 'active' : '' }}">
+                Programas
+            </a>
+
+            <a href="{{ route('proyectos.index') }}"
+               class="side-link {{ request()->routeIs('proyectos.*') ? 'active' : '' }}">
+                Proyectos
+            </a>
+
+            <a href="{{ route('plans.index') }}"
+               class="side-link {{ request()->routeIs('plans.*') ? 'active' : '' }}">
+                Planes
+            </a>
+
+            <a href="{{ route('metas.index') }}"
+               class="side-link {{ request()->routeIs('metas.*') ? 'active' : '' }}">
+                Metas CRUD
+            </a>
+
+            <a href="{{ route('indicadores.index') }}"
+               class="side-link {{ request()->routeIs('indicadores.*') ? 'active' : '' }}">
+                Indicadores
+            </a>
+
+            <a href="{{ route('alineaciones.index') }}"
+               class="side-link {{ request()->routeIs('alineaciones.*') ? 'active' : '' }}">
+                Alineaciones
+            </a>
+
+            <div class="sidebar-section">Catalogos</div>
+
+            <a href="{{ route('pdn.index') }}"
+               class="side-link {{ request()->routeIs('pdn.*') ? 'active' : '' }}">
+                PND / PDN
+            </a>
+
+            <a href="{{ route('ods.index') }}"
+               class="side-link {{ request()->routeIs('ods.*') ? 'active' : '' }}">
+                ODS
+            </a>
+
+            <a href="{{ route('objetivos-estrategicos.index') }}"
+               class="side-link {{ request()->routeIs('objetivos-estrategicos.*') ? 'active' : '' }}">
+                Objetivos
+            </a>
+        @endif
+
+        {{-- Solo admin ve seguridad. --}}
+        @if(auth()->user()->isAdmin())
+            <div class="sidebar-section">Seguridad</div>
+
+            <a href="{{ route('usuarios.index') }}"
+               class="side-link {{ request()->routeIs('usuarios.*') ? 'active' : '' }}">
+                Usuarios
+            </a>
+
+            <a href="{{ route('auditoria.index') }}"
+               class="side-link {{ request()->routeIs('auditoria.*') ? 'active' : '' }}">
+                Auditoria
+            </a>
+        @endif
+    </nav>
+
+    {{-- Usuario actual y cierre de sesion. --}}
+    <div class="sidebar-user">
+        <a href="{{ route('profile.edit') }}" class="side-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}">
+            {{ Auth::user()->name }}
+        </a>
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="side-link logout-link">
+                Cerrar sesion
+            </button>
+        </form>
+    </div>
+</aside>
