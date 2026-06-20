@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
 
 class RoleAccessTest extends TestCase
 {
@@ -36,11 +36,6 @@ class RoleAccessTest extends TestCase
 
         $response = $this->actingAs($tecnico)->get('/usuarios');
 
-        // Tu middleware puede devolver 403 (forbidden) o redirigir.
-        // Usamos assertTrue para aceptar cualquiera de las 2 opciones.
-        $this->assertTrue(
-            $response->status() === 403 || $response->isRedirect(),
-            'Se esperaba 403 o redirección para el rol técnico.'
-        );
+        $response->assertForbidden();
     }
 }

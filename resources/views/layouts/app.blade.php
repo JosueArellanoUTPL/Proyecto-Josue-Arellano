@@ -15,7 +15,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        {{-- Layout general: sidebar a la izquierda y contenido a la derecha. --}}
+        {{-- Estructura principal. --}}
         <div class="app-shell">
             @include('layouts.navigation')
 

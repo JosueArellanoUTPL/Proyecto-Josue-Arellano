@@ -4,7 +4,6 @@
             Registrar avance de Proyecto
         </h2>
     </x-slot>
-    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
@@ -65,8 +64,7 @@
                         <div>
                             <label class="label">Evidencia (opcional)</label>
 
-                            {{-- En creación se permite subir 1 evidencia.
-                                 Si luego se desea agregar más, se hace desde el historial del avance. --}}
+                            {{-- Evidencia inicial. --}}
                             <input type="file" name="evidencias[]" class="input" accept=".pdf,.jpg,.jpeg,.png">
                             <div class="muted" style="margin-top:6px;">
                                 Se puede agregar más evidencias después desde el avance.

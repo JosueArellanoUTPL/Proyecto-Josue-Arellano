@@ -2,17 +2,17 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Models\Alineacion;
 use App\Models\Entidad;
-use App\Models\User;
+use App\Models\Meta;
+use App\Models\ObjetivoEstrategico;
+use App\Models\Ods;
 use App\Models\Pdn;
 use App\Models\Plan;
-use App\Models\Meta;
-use App\Models\Ods;
-use App\Models\ObjetivoEstrategico;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
 
 class AlineacionCrudTest extends TestCase
 {

@@ -1,4 +1,5 @@
 <x-guest-layout>
+    {{-- Formulario de autenticacion. --}}
     <div class="mb-4 text-sm text-gray-600">
         Esta es una zona segura. Confirma tu clave antes de continuar.
     </div>

@@ -8,23 +8,26 @@ use Illuminate\Http\Request;
 
 class MetaController extends Controller
 {
+    // Listar metas.
     public function index()
     {
-        // Lista metas con su plan para mostrar la tabla principal.
         $metas = Meta::with('plan')->withCount('indicadores')->orderBy('id', 'desc')->get();
+
         return view('metas.index', compact('metas'));
     }
 
+    // Mostrar formulario para crear meta.
     public function create()
     {
-        // Solo cargo planes activos para asociar la nueva meta.
         $plans = Plan::where('activo', true)->orderBy('id', 'desc')->get();
+
         return view('metas.create', compact('plans'));
     }
 
+    // Guardar meta.
     public function store(Request $request)
     {
-        // Valida los datos que vienen del formulario de crear meta.
+        // Validacion de meta.
         $data = $request->validate([
             'codigo' => 'required|string|max:30|unique:metas,codigo',
             'nombre' => 'required|string|max:200',
@@ -33,23 +36,24 @@ class MetaController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Aqui se crea la meta en la base de datos.
         Meta::create($data);
 
         return redirect()->route('metas.index')
             ->with('success', 'Meta creada correctamente.');
     }
 
+    // Mostrar formulario para editar meta.
     public function edit(Meta $meta)
     {
-        // Cargo planes activos para el select de edicion.
         $plans = Plan::where('activo', true)->orWhere('id', $meta->plan_id)->orderBy('id', 'desc')->get();
+
         return view('metas.edit', compact('meta', 'plans'));
     }
 
+    // Actualizar meta.
     public function update(Request $request, Meta $meta)
     {
-        // Valida los datos antes de actualizar la meta.
+        // Validacion de meta.
         $data = $request->validate([
             'codigo' => 'required|string|max:30|unique:metas,codigo,'.$meta->id,
             'nombre' => 'required|string|max:200',
@@ -58,7 +62,7 @@ class MetaController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Una meta con proyectos solo puede cambiar a otro plan de la misma entidad.
+        // Restriccion de entidad para proyectos relacionados.
         $nuevoPlan = Plan::findOrFail($data['plan_id']);
         $entidadActual = $meta->plan?->entidad_id;
         if ($meta->proyectos()->exists() && (int) $entidadActual !== (int) $nuevoPlan->entidad_id) {
@@ -67,16 +71,16 @@ class MetaController extends Controller
                 ->withInput();
         }
 
-        // Actualiza la meta seleccionada.
         $meta->update($data);
 
         return redirect()->route('metas.index')
             ->with('success', 'Meta actualizada correctamente.');
     }
 
+    // Desactivar meta.
     public function destroy(Meta $meta)
     {
-        // Se desactiva para conservar indicadores, proyectos y alineaciones.
+        // Desactivacion para conservar relaciones.
         $meta->update(['activo' => false]);
 
         return redirect()->route('metas.index')

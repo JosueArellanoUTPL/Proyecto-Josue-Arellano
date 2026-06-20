@@ -6,25 +6,24 @@ use App\Models\Proyecto;
 
 class SeguimientoProyectoController extends Controller
 {
+    // Mostrar seguimiento del proyecto.
     public function show(Proyecto $proyecto)
     {
-        // Carga datos necesarios para ver proyecto, historial y evidencias.
         $proyecto->load([
             'programa.entidad',
             'meta.plan',
 
-            // Historial completo de avances con usuario y evidencias.
+            // Historial de avances.
             'avances' => function ($q) {
                 $q->with(['user', 'evidencias'])
-                  ->orderBy('fecha', 'desc')
-                  ->orderBy('id', 'desc');
+                    ->orderBy('fecha', 'desc')
+                    ->orderBy('id', 'desc');
             },
 
-            // Ultimo avance para calcular el progreso actual.
             'ultimoAvance',
         ]);
 
-        // Progreso actual tomado desde el accessor del modelo Proyecto.
+        // Calculo del avance del proyecto.
         $progresoProyecto = (int) round($proyecto->progreso);
 
         return view('seguimiento.proyecto_show', compact('proyecto', 'progresoProyecto'));

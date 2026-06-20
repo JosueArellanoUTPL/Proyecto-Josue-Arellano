@@ -4,7 +4,6 @@
             Detalle de Entidad
         </h2>
     </x-slot>
-    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -43,7 +42,7 @@
 
                 <div class="grid2">
 
-                    {{-- Programas y Proyectos --}}
+                    {{-- Programas y proyectos. --}}
                     <div class="card">
                         <div class="title">Programas</div>
                         <div class="muted" style="margin-top:6px;">Programas asociados a esta entidad.</div>
@@ -94,7 +93,7 @@
                         </div>
                     </div>
 
-                    {{-- Planes y Metas --}}
+                    {{-- Planes y metas. --}}
                     <div class="card">
                         <div class="title">Planes y Metas</div>
                         <div class="muted" style="margin-top:6px;">Metas asociadas a los planes de esta entidad.</div>

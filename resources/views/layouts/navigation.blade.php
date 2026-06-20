@@ -1,5 +1,5 @@
 <aside class="sidebar" data-sidebar>
-    {{-- Menu lateral fijo: aqui quedan visibles los modulos principales. --}}
+    {{-- Navegacion principal. --}}
     <div class="sidebar-brand">
         <a href="{{ route('dashboard') }}" class="sidebar-logo">
             <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
@@ -16,7 +16,7 @@
             Dashboard
         </a>
 
-        {{-- Responsable de planificacion y admin ven estos modulos CRUD. --}}
+        {{-- Modulos de planificacion. --}}
         @if(auth()->user()->canManagePlanning())
             <div class="sidebar-section">Planificación institucional</div>
 
@@ -73,7 +73,7 @@
             </a>
         @endif
 
-        {{-- Consulta operativa: aquí se revisan resultados, no se mantienen catálogos. --}}
+        {{-- Modulos de consulta. --}}
         <div class="sidebar-section">Seguimiento y consulta</div>
 
         <a href="{{ route('seguimiento.metas') }}"
@@ -96,7 +96,7 @@
             Reportes
         </a>
 
-        {{-- Solo admin ve seguridad. --}}
+        {{-- Modulos de administrador. --}}
         @if(auth()->user()->isAdmin())
             <div class="sidebar-section">Seguridad</div>
 
@@ -112,7 +112,7 @@
         @endif
     </nav>
 
-    {{-- Usuario actual y cierre de sesion. --}}
+    {{-- Sesion del usuario. --}}
     <div class="sidebar-user">
         <a href="{{ route('profile.edit') }}" class="side-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}">
             {{ Auth::user()->name }}

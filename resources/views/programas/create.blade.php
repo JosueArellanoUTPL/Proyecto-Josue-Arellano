@@ -9,6 +9,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
 
             <div class="bg-white shadow rounded p-6" style="background:#ffffff; border:1px solid #d9dee6;">
+                {{-- Mensajes de validacion. --}}
                 @if ($errors->any())
                     <div class="mb-4 p-3 bg-red-100 border border-red-300 rounded">
                         <ul class="list-disc ml-5">
@@ -20,6 +21,7 @@
                 @endif
 
                 <form method="POST" action="{{ route('programas.store') }}">
+                    {{-- Formulario de datos. --}}
                     @csrf
 
                     <div class="mb-4">
@@ -28,7 +30,7 @@
                                class="w-full border rounded px-3 py-2" required>
                     </div>
 
-                    {{-- ENTIDAD --}}
+                    {{-- Entidad. --}}
                     <div class="mb-4">
                         <label class="block mb-1 font-semibold">Entidad</label>
                         <select name="entidad_id" class="w-full border rounded px-3 py-2"

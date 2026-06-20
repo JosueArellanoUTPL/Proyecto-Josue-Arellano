@@ -8,12 +8,13 @@ use Illuminate\Http\Request;
 
 class AuditLogController extends Controller
 {
+    // Mostrar historial de auditoria.
     public function index(Request $request)
     {
-        // Consulta principal de auditoria: trae los registros mas recientes.
+        // Consulta de auditoria.
         $query = AuditLog::with('user')->latest();
 
-        // Filtros de la pantalla de auditoria.
+        // Filtros de auditoria.
         if ($request->filled('user_id')) {
             $query->where('user_id', $request->user_id);
         }
@@ -34,10 +35,8 @@ class AuditLogController extends Controller
             $query->whereDate('created_at', '<=', $request->to);
         }
 
-        // Paginacion de 15 para que la tabla no crezca demasiado.
         $logs = $query->paginate(15)->withQueryString();
 
-        // Datos para llenar los select de filtros.
         $users = User::orderBy('name')->get(['id', 'name', 'email']);
         $modules = AuditLog::select('module')
             ->whereNotNull('module')

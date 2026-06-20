@@ -1,4 +1,5 @@
 <x-guest-layout>
+    {{-- Formulario de autenticacion. --}}
     <div class="mb-4 text-sm text-gray-600">
         Gracias por registrarte. Antes de continuar, verifica tu correo usando el enlace que te enviamos.
         Si no recibiste el correo, podemos enviarte otro.

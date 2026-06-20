@@ -9,19 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // Aplicar cambios.
     public function up(): void
-{
-    Schema::create('objetivo_estrategicos', function (Blueprint $table) {
-        $table->id();
-        $table->string('nombre', 200);
-        $table->text('descripcion')->nullable();
-        $table->boolean('activo')->default(true);
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('objetivo_estrategicos', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre', 200);
+            $table->text('descripcion')->nullable();
+            $table->boolean('activo')->default(true);
+            $table->timestamps();
+        });
+    }
+
     /**
      * Reverse the migrations.
      */
+    // Revertir cambios.
     public function down(): void
     {
         Schema::dropIfExists('objetivo_estrategicos');

@@ -13,7 +13,7 @@
                     'subtitle' => 'Consulta de avance actual, historial y evidencias por proyecto.'
                 ])
 
-                {{-- Filtro por entidad para revisar proyectos de una institucion especifica. --}}
+                {{-- Filtro por entidad. --}}
                 <form method="GET" action="{{ route('reportes.proyectos') }}" class="card no-print" style="margin-top:16px;">
                     <div>
                         <label class="label">Entidad</label>
@@ -33,7 +33,7 @@
                     </div>
                 </form>
 
-                {{-- Tabla del reporte: resume avance y evidencias por proyecto. --}}
+                {{-- Resultados. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="title">Proyectos encontrados: {{ $proyectos->count() }}</div>
 

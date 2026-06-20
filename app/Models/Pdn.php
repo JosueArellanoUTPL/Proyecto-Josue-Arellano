@@ -9,11 +9,11 @@ class Pdn extends Model
 {
     use HasFactory;
 
-    // Campos guardados desde el CRUD del PND.
+    // Campos permitidos.
     protected $fillable = [
         'codigo',
         'nombre',
         'descripcion',
-        'activo'
+        'activo',
     ];
 }

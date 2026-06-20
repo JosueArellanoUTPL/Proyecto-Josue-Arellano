@@ -8,13 +8,12 @@
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
-                {{-- Pantalla principal de reportes: solo tiene accesos a cada reporte. --}}
+                {{-- Reportes disponibles. --}}
                 <div class="title">Generacion de reportes</div>
                 <div class="muted" style="margin-top:6px;">
                     Reportes básicos para consulta, seguimiento y respaldo institucional.
                 </div>
 
-                {{-- Cada tarjeta entra a un reporte diferente. --}}
                 <div class="report-grid">
                     <a href="{{ route('reportes.metas') }}" class="card report-card">
                         <div class="title">Reporte de metas</div>

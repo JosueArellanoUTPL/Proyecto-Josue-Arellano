@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
 
-                {{-- Encabezado del dashboard con accesos rapidos. --}}
+                {{-- Encabezado. --}}
                 <div class="dashboard-hero">
                     <div>
                         <div class="title">Panel Ejecutivo</div>
@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                {{-- Tarjetas KPI: muestran conteos generales del sistema. --}}
+                {{-- Conteos generales. --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style="margin-top:18px;">
                     <div class="kpi" style="background:#eef7f5">
                         <div class="label">Planes activos</div>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                {{-- Graficas principales: donas y avance de alineacion. --}}
+                {{-- Resumen de avance. --}}
                 <div class="dashboard-grid">
                     <div class="card dashboard-score">
                         <div>
@@ -57,7 +57,6 @@
                             </div>
                         </div>
 
-                        {{-- La variable --value alimenta la dona hecha con CSS. --}}
                         <div class="donut" style="--value: {{ $progresoInstitucional }};">
                             <div>
                                 <strong>{{ $progresoInstitucional }}%</strong>
@@ -132,7 +131,7 @@
                     </div>
                 </div>
 
-                {{-- Ranking por entidad y distribucion sencilla de metas. --}}
+                {{-- Avance por entidad y estado de metas. --}}
                 <div class="dashboard-grid-2">
                     <div class="card">
                         <div class="title">Avance por entidad</div>
@@ -182,7 +181,7 @@
                     </div>
                 </div>
 
-                {{-- Ultimos avances registrados en proyectos. --}}
+                {{-- Actividad reciente. --}}
                 <div class="card mt-6">
                     <div class="row">
                         <div>

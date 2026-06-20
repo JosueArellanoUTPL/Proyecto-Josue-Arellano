@@ -8,20 +8,19 @@ use Illuminate\Http\Request;
 
 class SeguimientoController extends Controller
 {
+    // Listar metas para seguimiento.
     public function index(Request $request)
     {
         $request->validate([
             'entidad_id' => ['nullable', 'exists:entidades,id'],
         ]);
 
-        // Vista de seguimiento: lista metas con plan, indicadores y ultimo avance.
         $query = Meta::where('activo', 1)->with([
-                'plan.entidad',
-                'indicadores' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
-                'proyectos' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
-            ]);
+            'plan.entidad',
+            'indicadores' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
+            'proyectos' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
+        ]);
 
-        // La entidad se obtiene desde el plan al que pertenece cada meta.
         if ($request->filled('entidad_id')) {
             $query->whereHas('plan', function ($planQuery) use ($request) {
                 $planQuery->where('entidad_id', $request->entidad_id);
@@ -32,7 +31,7 @@ class SeguimientoController extends Controller
         $entidades = Entidad::where('activo', 1)->orderBy('nombre')->get();
         $entidadSeleccionada = $request->query('entidad_id');
 
-        // Solo las metas con indicadores activos pueden tener avance.
+        // Calculo del resumen de metas.
         $metasMedibles = $metas->filter(fn ($meta) => $meta->indicadores->isNotEmpty());
         $resumen = [
             'total' => $metas->count(),
@@ -52,14 +51,14 @@ class SeguimientoController extends Controller
         ));
     }
 
+    // Mostrar seguimiento de una meta.
     public function show(Meta $meta)
     {
-        // Detalle de una meta: carga indicadores, ultimo avance e historial.
         $meta->load([
             'plan',
             'indicadores.ultimoAvance',
             'indicadores.avances',
-            'proyectos' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance')
+            'proyectos' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
         ]);
 
         return view('seguimiento.meta_show', compact('meta'));

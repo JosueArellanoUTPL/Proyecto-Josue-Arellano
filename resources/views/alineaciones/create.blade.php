@@ -1,10 +1,10 @@
 <x-app-layout>
+    {{-- Seccion de encabezado. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Crear Alineación
         </h2>
     </x-slot>
-    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
@@ -21,6 +21,7 @@
                     <span class="chip"><span class="dot orange"></span>Validación</span>
                 </div>
 
+                {{-- Mensajes de validacion. --}}
                 @if ($errors->any())
                     <div class="errbox">
                         <div class="title">Revisar campos</div>
@@ -33,6 +34,7 @@
                 @endif
 
                 <form method="POST" action="{{ route('alineaciones.store') }}" class="card" style="margin-top:16px;">
+                    {{-- Formulario de datos. --}}
                     @csrf
 
                     <div style="display:grid; gap:12px;">

@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
 
-                {{-- Datos principales del proyecto y boton para registrar avance. --}}
+                {{-- Datos del proyecto. --}}
                 <div class="row">
                     <div>
                         <div class="title">{{ $proyecto->nombre }}</div>
@@ -27,7 +27,7 @@
 
                     <div class="flex gap-2">
                         <a class="btn" href="{{ route('seguimiento.programa.show', $proyecto->programa_id) }}">Volver</a>
-                        {{-- Solo admin y tecnico pueden registrar avances. --}}
+                        {{-- Permiso de seguimiento. --}}
                         @if(auth()->user()->canRegisterSeguimiento())
                             <a class="btn" href="{{ route('proyectos.avance.create', $proyecto->id) }}" style="background:#eef7f5;">
                                 + Registrar avance
@@ -41,7 +41,7 @@
                     $p = max(0, min(100, (int)$progresoProyecto));
                 @endphp
 
-                {{-- Barra de avance actual del proyecto. --}}
+                {{-- Progreso actual. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="row" style="align-items:center;">
                         <div class="title">Avance actual</div>
@@ -52,7 +52,7 @@
                     </div>
                 </div>
 
-                {{-- Historial completo de avances del proyecto. --}}
+                {{-- Historial de avances. --}}
                 <div class="card" style="margin-top:14px;">
                     <div class="title">Historial de avances</div>
 
@@ -65,7 +65,7 @@
                                         <span class="muted">- {{ $a->fecha->format('d/m/Y') }}</span>
                                     </div>
 
-                                    {{-- Editar/eliminar solo para admin o el usuario que creo el avance. --}}
+                                    {{-- Permisos del avance. --}}
                                     @if(auth()->user()->isAdmin() || auth()->id() === $a->user_id)
                                         <div style="display:flex; gap:10px;">
                                             <a class="btn" href="{{ route('proyectos.avance.edit', $a->id) }}">Editar</a>
@@ -77,7 +77,7 @@
                                     @endif
                                 </div>
 
-                                {{-- Evidencias asociadas a este avance. --}}
+                                {{-- Evidencias. --}}
                                 <div class="evid-grid">
                                     @foreach($a->evidencias as $ev)
                                         <div class="thumb">
@@ -98,7 +98,7 @@
                                     @endforeach
                                 </div>
 
-                                {{-- Permite agregar mas evidencia sin borrar la anterior. --}}
+                                {{-- Nueva evidencia. --}}
                                 @if(auth()->user()->isAdmin() || auth()->id() === $a->user_id)
                                     <form method="POST" enctype="multipart/form-data"
                                           action="{{ route('proyectos.avance.evidencia.add', $a->id) }}"

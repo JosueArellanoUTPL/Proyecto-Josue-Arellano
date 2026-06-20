@@ -5,44 +5,40 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Proyecto;
-use App\Models\User;
-use App\Models\ProyectoAvanceEvidencia;
-
 class ProyectoAvance extends Model
 {
     use HasFactory;
 
-    // Campos del formulario de avance de proyecto.
+    // Campos permitidos.
     protected $fillable = [
         'proyecto_id',
         'user_id',
         'fecha',
         'porcentaje_avance',
-        'comentario'
+        'comentario',
     ];
 
-    // Fecha como Carbon y porcentaje como decimal.
+    // Conversion de tipos.
     protected $casts = [
         'fecha' => 'date',
         'porcentaje_avance' => 'decimal:2',
     ];
 
+    // Relacion con el proyecto.
     public function proyecto()
     {
-        // El avance pertenece a un proyecto.
         return $this->belongsTo(Proyecto::class);
     }
 
+    // Relacion con el usuario.
     public function user()
     {
-        // Usuario que registro el avance.
         return $this->belongsTo(User::class);
     }
 
+    // Relacion con las evidencias.
     public function evidencias()
     {
-        // Un avance puede tener varios archivos de evidencia.
         return $this->hasMany(ProyectoAvanceEvidencia::class, 'proyecto_avance_id');
     }
 }

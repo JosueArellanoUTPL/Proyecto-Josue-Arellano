@@ -9,22 +9,24 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    // Listar usuarios.
     public function index()
     {
-        // Lista usuarios del sistema. Solo admin entra a este modulo.
         $users = User::orderBy('id', 'desc')->paginate(10);
+
         return view('usuarios.index', compact('users'));
     }
 
+    // Mostrar formulario para crear usuario.
     public function create()
     {
-        // Muestra formulario para crear usuario y asignar rol.
         return view('usuarios.create');
     }
 
+    // Guardar usuario.
     public function store(Request $request)
     {
-        // Valida datos y obliga a escoger uno de los 4 roles permitidos.
+        // Validacion de usuario y rol.
         $data = $request->validate([
             'name' => 'required|string|max:150',
             'email' => 'required|email|max:255|unique:users,email',
@@ -32,7 +34,6 @@ class UserController extends Controller
             'role' => ['required', Rule::in(User::roleKeys())],
         ]);
 
-        // Guarda usuario nuevo con clave encriptada.
         User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -45,15 +46,16 @@ class UserController extends Controller
             ->with('success', 'Usuario creado correctamente.');
     }
 
+    // Mostrar formulario para editar usuario.
     public function edit(User $usuario)
     {
-        // La ruta usa {usuario}; en la vista lo envio como $user.
         return view('usuarios.edit', ['user' => $usuario]);
     }
 
+    // Actualizar usuario.
     public function update(Request $request, User $usuario)
     {
-        // Email unico, pero permite conservar el email del usuario actual.
+        // Validacion de usuario y rol.
         $data = $request->validate([
             'name' => 'required|string|max:150',
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($usuario->id)],
@@ -62,14 +64,13 @@ class UserController extends Controller
             'activo' => ['nullable', 'boolean'],
         ]);
 
-        // Actualiza datos basicos y rol.
         $usuario->name = $data['name'];
         $usuario->email = $data['email'];
         $usuario->role = $data['role'];
         $usuario->activo = $request->boolean('activo');
 
-        // La clave es opcional: si queda vacia, se conserva la anterior.
-        if (!empty($data['password'])) {
+        // Actualizacion opcional de clave.
+        if (! empty($data['password'])) {
             $usuario->password = Hash::make($data['password']);
         }
 
@@ -79,15 +80,16 @@ class UserController extends Controller
             ->with('success', 'Usuario actualizado correctamente.');
     }
 
+    // Desactivar usuario.
     public function destroy(User $usuario)
     {
-        // Evita que el admin borre su propia cuenta por accidente.
+        // Proteccion de la cuenta actual.
         if (auth()->id() === $usuario->id) {
             return redirect()->route('usuarios.index')
                 ->with('success', 'No puedes eliminar tu propio usuario.');
         }
 
-        // No se borra: así permanecen sus avances y registros de auditoría.
+        // Desactivacion para conservar auditoria.
         $usuario->update(['activo' => false]);
 
         return redirect()->route('usuarios.index')

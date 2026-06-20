@@ -1,4 +1,5 @@
 <x-guest-layout>
+    {{-- Formulario de autenticacion. --}}
     <div class="mb-4 text-sm text-gray-600">
         Ingresa tu correo electronico y te enviaremos un enlace para restablecer tu clave.
     </div>

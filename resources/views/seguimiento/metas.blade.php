@@ -4,7 +4,6 @@
             Seguimiento de Metas
         </h2>
     </x-slot>
-    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -19,7 +18,7 @@
                         </div>
                     </div>
 
-                    {{-- Leyenda clara y con color --}}
+                    {{-- Leyenda. --}}
                     <div class="legend">
                         <div class="legend-item">
                             <span class="dot blue"></span>
@@ -36,7 +35,7 @@
                     </div>
                 </div>
 
-                {{-- Los indicadores quedan arriba y corresponden a la entidad filtrada. --}}
+                {{-- Resumen. --}}
                 <div class="kpis seguimiento-kpis">
                     <div class="kpi">
                         <div class="label">Metas</div>
@@ -60,7 +59,7 @@
                     </div>
                 </div>
 
-                {{-- El formulario se envia al cambiar la entidad. --}}
+                {{-- Filtro por entidad. --}}
                 <form method="GET" action="{{ route('seguimiento.metas') }}" class="card seguimiento-filter">
                     <div>
                         <label class="label" for="entidad_id">Filtrar por entidad</label>
@@ -79,7 +78,7 @@
                     </noscript>
                 </form>
 
-                {{-- Aqui solo aparecen las metas de la entidad seleccionada. --}}
+                {{-- Metas filtradas. --}}
                 <div class="metas-grid seguimiento-metas-grid">
                         @forelse($metas as $meta)
                             @php
@@ -101,7 +100,6 @@
                                         </div>
                                     </div>
 
-                                    {{-- Badge tipo botón fijo --}}
                                     <span class="status-btn {{ $pending ? 'pending' : ($done ? 'done' : 'progressing') }}">
                                         <span class="pill-dot"></span>
                                         {{ $meta->estado_seguimiento }}

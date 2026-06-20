@@ -5,59 +5,46 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Plan;
-use App\Models\Indicador;
-use App\Models\Alineacion;
-use App\Models\Proyecto;
-
 class Meta extends Model
 {
     use HasFactory;
 
-    // Campos que se guardan cuando creo o edito una meta.
+    // Campos permitidos.
     protected $fillable = [
         'codigo',
         'nombre',
         'descripcion',
         'plan_id',
-        'activo'
+        'activo',
     ];
 
-    /* =========================
-     | Relaciones
-     ========================= */
-
+    // Relacion con el plan.
     public function plan()
     {
-        // Una meta pertenece a un plan.
         return $this->belongsTo(Plan::class);
     }
 
+    // Relacion con los indicadores.
     public function indicadores()
     {
-        // Una meta puede tener varios indicadores.
         return $this->hasMany(Indicador::class);
     }
 
+    // Relacion con las alineaciones.
     public function alineaciones()
     {
-        // Una meta puede estar conectada con ODS, PND y objetivos estratégicos.
         return $this->hasMany(Alineacion::class);
     }
 
+    // Relacion con los proyectos.
     public function proyectos()
     {
-        // Una meta puede cumplirse mediante varios proyectos.
         return $this->hasMany(Proyecto::class);
     }
 
-    /* =========================
-     | Calculos para seguimiento
-     ========================= */
-
+    // Calculo del progreso de la meta.
     public function getProgresoAttribute(): float
     {
-        // El progreso de la meta sale del promedio de sus indicadores.
         if ($this->indicadores->count() === 0) {
             return 0;
         }
@@ -68,9 +55,9 @@ class Meta extends Model
         );
     }
 
+    // Calculo del estado completado.
     public function getCompletadaAttribute(): bool
     {
-        // La meta se marca completa si todos sus indicadores llegaron al 100%.
         if ($this->indicadores->count() === 0) {
             return false;
         }
@@ -78,9 +65,9 @@ class Meta extends Model
         return $this->indicadores->every(fn ($indicador) => $indicador->completado);
     }
 
+    // Texto del estado de seguimiento.
     public function getEstadoSeguimientoAttribute(): string
     {
-        // Sin indicadores todavia no existe una forma de medir la meta.
         if ($this->indicadores->isEmpty()) {
             return 'Pendiente de indicadores';
         }

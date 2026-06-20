@@ -7,22 +7,24 @@ use Illuminate\Http\Request;
 
 class PdnController extends Controller
 {
+    // Listar PDN.
     public function index()
     {
-        // Lista registros del PND.
         $items = Pdn::orderBy('id', 'desc')->get();
+
         return view('pdn.index', compact('items'));
     }
 
+    // Mostrar formulario para crear PDN.
     public function create()
     {
-        // Formulario para crear un PND.
         return view('pdn.create');
     }
 
+    // Guardar PDN.
     public function store(Request $request)
     {
-        // Valida codigo, nombre y estado activo.
+        // Validacion de PND.
         $data = $request->validate([
             'codigo' => 'required|string|max:20|unique:pdns,codigo',
             'nombre' => 'required|string|max:200',
@@ -30,22 +32,22 @@ class PdnController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Guarda el registro PND.
         Pdn::create($data);
 
         return redirect()->route('pdn.index')
             ->with('success', 'PND creado correctamente.');
     }
 
+    // Mostrar formulario para editar PDN.
     public function edit(Pdn $pdn)
     {
-        // En la vista lo manejo como item para reutilizar nombres.
         return view('pdn.edit', ['item' => $pdn]);
     }
 
+    // Actualizar PDN.
     public function update(Request $request, Pdn $pdn)
     {
-        // Valida antes de actualizar.
+        // Validacion de PND.
         $data = $request->validate([
             'codigo' => 'required|string|max:20|unique:pdns,codigo,'.$pdn->id,
             'nombre' => 'required|string|max:200',
@@ -53,16 +55,16 @@ class PdnController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Actualiza el registro.
         $pdn->update($data);
 
         return redirect()->route('pdn.index')
             ->with('success', 'PND actualizado correctamente.');
     }
 
+    // Desactivar PDN.
     public function destroy(Pdn $pdn)
     {
-        // Se desactiva para conservar planes y alineaciones históricas.
+        // Desactivacion para conservar planes.
         $pdn->update(['activo' => false]);
 
         return redirect()->route('pdn.index')

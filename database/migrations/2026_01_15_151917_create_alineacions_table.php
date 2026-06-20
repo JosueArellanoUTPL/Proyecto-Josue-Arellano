@@ -10,32 +10,31 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('alineaciones', function (Blueprint $table) {
-        $table->id();
+    {
+        Schema::create('alineaciones', function (Blueprint $table) {
+            $table->id();
 
-        // Siempre alineamos una META (obligatorio)
-        $table->foreignId('meta_id')->constrained('metas')->cascadeOnDelete();
+            // Relacion principal.
+            $table->foreignId('meta_id')->constrained('metas')->cascadeOnDelete();
 
-        // Opcional: si quieres alinear un INDICADOR específico
-        $table->foreignId('indicador_id')->nullable()->constrained('indicadores')->nullOnDelete();
+            // Columna historica retirada en una migracion posterior.
+            $table->foreignId('indicador_id')->nullable()->constrained('indicadores')->nullOnDelete();
 
-        // Instrumentos de alineación (al menos uno debe estar lleno)
-        $table->foreignId('ods_id')->nullable()->constrained('ods')->nullOnDelete();
-        $table->foreignId('pdn_id')->nullable()->constrained('pdns')->nullOnDelete();
-        $table->foreignId('objetivo_estrategico_id')->nullable()->constrained('objetivo_estrategicos')->nullOnDelete();
+            // Instrumentos estrategicos.
+            $table->foreignId('ods_id')->nullable()->constrained('ods')->nullOnDelete();
+            $table->foreignId('pdn_id')->nullable()->constrained('pdns')->nullOnDelete();
+            $table->foreignId('objetivo_estrategico_id')->nullable()->constrained('objetivo_estrategicos')->nullOnDelete();
 
-        $table->boolean('activo')->default(true);
-        $table->timestamps();
-    });
-}
-
+            $table->boolean('activo')->default(true);
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('alineacions');
+        Schema::dropIfExists('alineaciones');
     }
 };

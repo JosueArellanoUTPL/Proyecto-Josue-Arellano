@@ -2,16 +2,16 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Pdn;
 use App\Models\Entidad;
-use App\Models\Plan;
-use App\Models\Meta;
 use App\Models\Indicador;
 use App\Models\IndicadorAvance;
+use App\Models\Meta;
+use App\Models\Pdn;
+use App\Models\Plan;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
+use Tests\TestCase;
 
 class MetaCompletadaTest extends TestCase
 {

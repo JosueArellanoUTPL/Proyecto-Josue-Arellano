@@ -26,7 +26,7 @@
                     <a href="{{ route('alineaciones.create') }}" class="btn">Nueva alineacion</a>
                 </div>
 
-                {{-- Primero se selecciona una entidad y luego aparecen sus metas. --}}
+                {{-- Filtros. --}}
                 <form method="GET" action="{{ route('alineaciones.index') }}" class="card alignment-filter" data-alignment-filter>
                     <div>
                         <label class="label" for="entidad_id">Entidad</label>
@@ -58,7 +58,7 @@
                     </div>
                 </form>
 
-                {{-- Listado uniforme: cada fila mantiene las mismas tres columnas. --}}
+                {{-- Listado. --}}
                 <div class="card alignment-panel">
                     <div class="alignment-list-header" aria-hidden="true">
                         <span>Meta</span>

@@ -15,6 +15,7 @@ return new class extends Migration
      * - tipo de acción: crear, actualizar, eliminar, etc.
      * - ruta, método HTTP e IP
      */
+    // Aplicar cambios.
     public function up(): void
     {
         Schema::create('audit_logs', function (Blueprint $table) {
@@ -35,6 +36,7 @@ return new class extends Migration
         });
     }
 
+    // Revertir cambios.
     public function down(): void
     {
         Schema::dropIfExists('audit_logs');

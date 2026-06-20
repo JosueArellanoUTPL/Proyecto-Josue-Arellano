@@ -10,16 +10,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuditMiddleware
 {
+    // Registrar cambios realizados.
     public function handle(Request $request, Closure $next): Response
     {
-        // Guarda una copia sencilla del modelo antes de actualizarlo.
+        // Estado anterior del registro.
         $routeModel = $this->routeModel($request);
         $before = $this->modelSnapshot($routeModel);
 
-        // Primero deja que Laravel ejecute la ruta normal.
         $response = $next($request);
 
-        // Despues de guardar/editar/eliminar, aqui se registra la accion.
+        // Registro de auditoria.
         if ($this->shouldAudit($request, $response)) {
             AuditLog::create([
                 'user_id' => $request->user()?->id,
@@ -42,19 +42,18 @@ class AuditMiddleware
         return $response;
     }
 
+    // Decidir si se guarda la auditoria.
     private function shouldAudit(Request $request, Response $response): bool
     {
-        // Solo audito usuarios logueados.
-        if (!$request->user()) {
+        // Validacion de auditoria.
+        if (! $request->user()) {
             return false;
         }
 
-        // No audito GET porque solo consulta y llenaria mucho la tabla.
-        if (!in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
+        if (! in_array($request->method(), ['POST', 'PUT', 'PATCH', 'DELETE'], true)) {
             return false;
         }
 
-        // Si la accion fallo, no la guardo como cambio exitoso.
         if ($response->getStatusCode() >= 400) {
             return false;
         }
@@ -62,11 +61,12 @@ class AuditMiddleware
         return true;
     }
 
+    // Obtener la accion realizada.
     private function actionFromRequest(Request $request): string
     {
         $method = $request->method();
 
-        // Estos DELETE conservan el registro y solamente cambian activo a false.
+        // Rutas que desactivan registros.
         $deactivationRoutes = [
             'entidades.destroy',
             'programas.destroy',
@@ -86,7 +86,6 @@ class AuditMiddleware
             return 'desactivar';
         }
 
-        // Traduce el metodo HTTP a una palabra sencilla para la tabla.
         return match ($method) {
             'POST' => 'crear',
             'PUT', 'PATCH' => 'actualizar',
@@ -95,18 +94,19 @@ class AuditMiddleware
         };
     }
 
+    // Obtener el modulo desde la ruta.
     private function moduleFromRoute(Request $request): string
     {
-        // El modulo sale del nombre de la ruta: metas.index => Metas.
         $routeName = $request->route()?->getName();
 
-        if (!$routeName) {
+        if (! $routeName) {
             return 'general';
         }
 
         return str($routeName)->before('.')->replace('-', ' ')->title()->toString();
     }
 
+    // Crear descripcion de auditoria.
     private function description(Request $request): string
     {
         $routeName = $request->route()?->getName() ?? 'ruta sin nombre';
@@ -114,11 +114,11 @@ class AuditMiddleware
         return "Accion registrada desde la ruta {$routeName}.";
     }
 
+    // Obtener parametros de la ruta.
     private function routeParameters(Request $request): array
     {
         $parameters = $request->route()?->parameters() ?? [];
 
-        // Guarda datos basicos del modelo usado en la ruta, por ejemplo Meta id 3.
         return collect($parameters)->map(function ($value) {
             if (is_object($value) && method_exists($value, 'getKey')) {
                 return [
@@ -131,25 +131,27 @@ class AuditMiddleware
         })->toArray();
     }
 
+    // Obtener modelo de la ruta.
     private function routeModel(Request $request): ?Model
     {
-        // Toma el primer modelo recibido por la ruta, por ejemplo Proyecto o Meta.
         return collect($request->route()?->parameters() ?? [])
             ->first(fn ($value) => $value instanceof Model);
     }
 
+    // Copiar datos del modelo.
     private function modelSnapshot(?Model $model): ?array
     {
-        if (!$model) {
+        if (! $model) {
             return null;
         }
 
-        // Nunca se guardan claves ni tokens dentro de la auditoría.
+        // Datos protegidos.
         return collect($model->getAttributes())
             ->except(['password', 'remember_token'])
             ->toArray();
     }
 
+    // Quitar datos sensibles.
     private function safeRequestData(Request $request): array
     {
         $data = $request->except([
@@ -161,7 +163,6 @@ class AuditMiddleware
             'evidencias',
         ]);
 
-        // La bitácora guarda valores simples y evita serializar objetos o archivos.
         return collect($data)->map(function ($value) {
             return is_scalar($value) || $value === null ? $value : '[dato compuesto]';
         })->toArray();

@@ -6,7 +6,7 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-// Recuerda la posicion del menu lateral sin interferir con los clicks.
+// Guardar posicion del menu lateral.
 document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('[data-sidebar]');
 

@@ -12,7 +12,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        {{-- Landing publica: reemplaza la pantalla generica de Laravel. --}}
+        {{-- Portada publica. --}}
         <main class="landing-page">
             <header class="landing-nav">
                 <a href="{{ url('/') }}" class="landing-brand">
@@ -40,7 +40,7 @@
 
                 </div>
 
-                {{-- Grafico decorativo sin datos para evitar confundirlo con informacion real. --}}
+                {{-- Grafico decorativo. --}}
                 <div class="landing-preview" aria-hidden="true">
                     <div class="preview-chart">
                         <div style="height:34%"></div>

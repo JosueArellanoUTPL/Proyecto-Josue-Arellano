@@ -9,22 +9,24 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // Aplicar cambios.
     public function up(): void
     {
         Schema::create('proyecto_avance_evidencias', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('proyecto_avance_id')->constrained()->cascadeOnDelete();
-    $table->string('path');
-    $table->string('original_name')->nullable();
-    $table->string('mime_type')->nullable();
-    $table->unsignedBigInteger('size')->nullable();
-    $table->timestamps();
-});
+            $table->id();
+            $table->foreignId('proyecto_avance_id')->constrained()->cascadeOnDelete();
+            $table->string('path');
+            $table->string('original_name')->nullable();
+            $table->string('mime_type')->nullable();
+            $table->unsignedBigInteger('size')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
      * Reverse the migrations.
      */
+    // Revertir cambios.
     public function down(): void
     {
         Schema::dropIfExists('proyecto_avance_evidencias');

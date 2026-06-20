@@ -9,10 +9,11 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // Aplicar cambios.
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            if (!Schema::hasColumn('users', 'role')) {
+            if (! Schema::hasColumn('users', 'role')) {
                 $table->string('role')->default('tecnico')->after('email');
             }
         });
@@ -21,6 +22,7 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
+    // Revertir cambios.
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
@@ -30,4 +32,3 @@ return new class extends Migration
         });
     }
 };
-

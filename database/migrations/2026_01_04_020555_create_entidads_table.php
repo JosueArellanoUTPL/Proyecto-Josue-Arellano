@@ -9,19 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // Aplicar cambios.
     public function up(): void
-{
-    Schema::create('entidades', function (Blueprint $table) {
-        $table->id();
-        $table->string('nombre', 150);
-        $table->text('descripcion')->nullable();
-        $table->boolean('activo')->default(true);
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('entidades', function (Blueprint $table) {
+            $table->id();
+            $table->string('nombre', 150);
+            $table->text('descripcion')->nullable();
+            $table->boolean('activo')->default(true);
+            $table->timestamps();
+        });
+    }
 
-public function down(): void
-{
-    Schema::dropIfExists('entidades');
-}
+    // Revertir cambios.
+    public function down(): void
+    {
+        Schema::dropIfExists('entidades');
+    }
 };

@@ -7,22 +7,24 @@ use Illuminate\Http\Request;
 
 class OdsController extends Controller
 {
+    // Listar ODS.
     public function index()
     {
-        // Lista ODS registrados.
         $items = Ods::orderBy('id', 'desc')->get();
+
         return view('ods.index', compact('items'));
     }
 
+    // Mostrar formulario para crear ODS.
     public function create()
     {
-        // Formulario para crear ODS.
         return view('ods.create');
     }
 
+    // Guardar ODS.
     public function store(Request $request)
     {
-        // Valida codigo, nombre y estado activo.
+        // Validacion de ODS.
         $data = $request->validate([
             'codigo' => 'required|string|max:10|unique:ods,codigo',
             'nombre' => 'required|string|max:200',
@@ -30,22 +32,22 @@ class OdsController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Guarda el ODS.
         Ods::create($data);
 
         return redirect()->route('ods.index')
             ->with('success', 'ODS creado correctamente.');
     }
 
+    // Mostrar formulario para editar ODS.
     public function edit(Ods $od)
     {
-        // En la vista lo manejo como item para reutilizar nombres.
         return view('ods.edit', ['item' => $od]);
     }
 
+    // Actualizar ODS.
     public function update(Request $request, Ods $od)
     {
-        // Valida antes de actualizar.
+        // Validacion de ODS.
         $data = $request->validate([
             'codigo' => 'required|string|max:10|unique:ods,codigo,'.$od->id,
             'nombre' => 'required|string|max:200',
@@ -53,16 +55,16 @@ class OdsController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Actualiza el ODS.
         $od->update($data);
 
         return redirect()->route('ods.index')
             ->with('success', 'ODS actualizado correctamente.');
     }
 
+    // Desactivar ODS.
     public function destroy(Ods $od)
     {
-        // Se desactiva para conservar las alineaciones históricas.
+        // Desactivacion para conservar alineaciones.
         $od->update(['activo' => false]);
 
         return redirect()->route('ods.index')

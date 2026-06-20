@@ -9,6 +9,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
 
             <div class="bg-white shadow rounded p-6">
+                {{-- Mensajes de validacion. --}}
                 @if ($errors->any())
                     <div class="mb-4 p-3 bg-red-100 border border-red-300 rounded">
                         <ul class="list-disc ml-5">
@@ -20,6 +21,7 @@
                 @endif
 
                 <form method="POST" action="{{ route('plans.update', $plan->id) }}">
+                    {{-- Formulario de datos. --}}
                     @csrf
                     @method('PUT')
 
@@ -59,7 +61,7 @@
                         </div>
                     </div>
 
-                    {{-- NUEVO: Entidad --}}
+                    {{-- Entidad. --}}
                     <div class="mb-4">
                         <label class="block mb-1">Entidad</label>
                         <select name="entidad_id" class="w-full border rounded px-3 py-2">

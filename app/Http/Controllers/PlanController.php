@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Plan;
-use App\Models\Pdn;
 use App\Models\Entidad;
+use App\Models\Pdn;
+use App\Models\Plan;
 use Illuminate\Http\Request;
 
 class PlanController extends Controller
 {
+    // Listar planes.
     public function index()
     {
-        // Lista planes con su PND y entidad para mostrar información completa.
         $plans = Plan::with(['pdn', 'entidad'])
             ->orderBy('id', 'desc')
             ->get();
@@ -19,18 +19,19 @@ class PlanController extends Controller
         return view('plans.index', compact('plans'));
     }
 
+    // Mostrar formulario para crear plan.
     public function create()
     {
-        // Catalogos activos para llenar los select del formulario.
         $pdns = Pdn::where('activo', true)->orderBy('id', 'desc')->get();
         $entidades = Entidad::where('activo', true)->orderBy('id', 'desc')->get();
 
         return view('plans.create', compact('pdns', 'entidades'));
     }
 
+    // Guardar plan.
     public function store(Request $request)
     {
-        // Valida que el plan tenga código, fechas correctas, PND y entidad.
+        // Validacion de plan.
         $data = $request->validate([
             'codigo' => 'required|string|max:30|unique:plans,codigo',
             'nombre' => 'required|string|max:200',
@@ -42,25 +43,25 @@ class PlanController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Guarda el plan.
         Plan::create($data);
 
         return redirect()->route('plans.index')
             ->with('success', 'Plan creado correctamente.');
     }
 
+    // Mostrar formulario para editar plan.
     public function edit(Plan $plan)
     {
-        // Datos para los select al editar el plan.
         $pdns = Pdn::where('activo', true)->orWhere('id', $plan->pdn_id)->orderBy('id', 'desc')->get();
         $entidades = Entidad::where('activo', true)->orWhere('id', $plan->entidad_id)->orderBy('id', 'desc')->get();
 
         return view('plans.edit', compact('plan', 'pdns', 'entidades'));
     }
 
+    // Actualizar plan.
     public function update(Request $request, Plan $plan)
     {
-        // Misma validacion de crear, pero actualizando el plan existente.
+        // Validacion de plan.
         $data = $request->validate([
             'codigo' => 'required|string|max:30|unique:plans,codigo,'.$plan->id,
             'nombre' => 'required|string|max:200',
@@ -72,7 +73,7 @@ class PlanController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Evita que las metas y proyectos del plan queden asociados a otra entidad.
+        // Restriccion de entidad para proyectos relacionados.
         $tieneProyectos = $plan->metas()->whereHas('proyectos')->exists();
         if ((int) $plan->entidad_id !== (int) $data['entidad_id'] && $tieneProyectos) {
             return back()
@@ -80,16 +81,16 @@ class PlanController extends Controller
                 ->withInput();
         }
 
-        // Actualiza el plan seleccionado.
         $plan->update($data);
 
         return redirect()->route('plans.index')
             ->with('success', 'Plan actualizado correctamente.');
     }
 
+    // Desactivar plan.
     public function destroy(Plan $plan)
     {
-        // Se desactiva para no borrar metas, indicadores y avances en cascada.
+        // Desactivacion para conservar relaciones.
         $plan->update(['activo' => false]);
 
         return redirect()->route('plans.index')

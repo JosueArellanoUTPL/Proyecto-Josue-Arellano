@@ -6,23 +6,23 @@ use App\Models\Programa;
 
 class SeguimientoProgramaController extends Controller
 {
+    // Mostrar seguimiento del programa.
     public function show(Programa $programa)
     {
-        // Carga entidad y proyectos para calcular avance del programa.
         $programa->load([
             'entidad',
             'proyectos' => function ($q) {
                 $q->with(['ultimoAvance'])
-                  ->orderBy('id', 'desc');
-            }
+                    ->orderBy('id', 'desc');
+            },
         ]);
 
-        // KPIs simples para tarjetas informativas.
+        // Conteo de proyectos.
         $kpiProyectos = $programa->proyectos->count();
         $kpiActivos = $programa->proyectos->where('activo', 1)->count();
         $kpiInactivos = $kpiProyectos - $kpiActivos;
 
-        // Progreso del programa = promedio del progreso de sus proyectos.
+        // Calculo del avance del programa.
         if ($kpiProyectos > 0) {
             $avg = $programa->proyectos->avg(function ($pry) {
                 return (float) ($pry->progreso ?? 0);

@@ -4,7 +4,6 @@
             Matriz de Trazabilidad Institucional
         </h2>
     </x-slot>
-    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -20,7 +19,7 @@
                     <a class="btn" href="{{ route('dashboard') }}">← Dashboard</a>
                 </div>
 
-                {{-- Barra compacta para filtrar sin ocupar gran parte de la pantalla. --}}
+                {{-- Filtros. --}}
                 <form class="card trace-filters" method="GET" action="{{ route('seguimiento.trazabilidad') }}">
                     <div class="trace-filters__top">
                         <div>

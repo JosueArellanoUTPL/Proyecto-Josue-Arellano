@@ -9,19 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // Aplicar cambios.
     public function up(): void
-{
-    Schema::table('programas', function (Blueprint $table) {
-        $table->foreignId('entidad_id')->nullable()->constrained('entidades')->nullOnDelete()->after('id');
-    });
-}
+    {
+        Schema::table('programas', function (Blueprint $table) {
+            $table->foreignId('entidad_id')->nullable()->constrained('entidades')->nullOnDelete()->after('id');
+        });
+    }
+
     /**
      * Reverse the migrations.
      */
+    // Revertir cambios.
     public function down(): void
     {
         Schema::table('programas', function (Blueprint $table) {
-            //
+            $table->dropConstrainedForeignId('entidad_id');
         });
     }
 };

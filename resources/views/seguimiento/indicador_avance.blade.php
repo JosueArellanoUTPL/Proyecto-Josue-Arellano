@@ -1,10 +1,10 @@
 <x-app-layout>
+    {{-- Seccion de encabezado. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Registrar Avance de Indicador
         </h2>
     </x-slot>
-    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">

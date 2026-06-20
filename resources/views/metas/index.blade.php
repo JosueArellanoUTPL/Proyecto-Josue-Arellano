@@ -1,4 +1,5 @@
 <x-app-layout>
+    {{-- Seccion de encabezado. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Metas
@@ -8,6 +9,7 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
+            {{-- Mensaje de resultado. --}}
             @if (session('success'))
                 <div class="mb-4 p-3 bg-green-100 border border-green-300 rounded text-green-800">
                     {{ session('success') }}
@@ -21,6 +23,7 @@
                 </a>
             </div>
 
+            {{-- Seccion de tabla. --}}
             <div class="bg-white shadow rounded p-4 overflow-x-auto">
                 <table class="w-full">
                     <thead>

@@ -4,13 +4,12 @@
             Editar Avance de Proyecto
         </h2>
     </x-slot>
-    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
 
-                {{-- Encabezado --}}
+                {{-- Encabezado. --}}
                 <div class="row">
                     <div>
                         <div class="title">Editar avance</div>
@@ -28,7 +27,7 @@
                     </a>
                 </div>
 
-                {{-- Progreso actual del avance --}}
+                {{-- Progreso actual. --}}
                 @php
                     $p = max(0, min(100, (int)round($avance->porcentaje_avance)));
                     $done = $p >= 100;
@@ -48,7 +47,7 @@
                     </div>
                 </div>
 
-                {{-- Form de edición --}}
+                {{-- Edicion del avance. --}}
                 <div class="grid2">
                     <form class="card" method="POST" action="{{ route('proyectos.avance.update', $avance->id) }}">
                         @csrf
@@ -95,14 +94,14 @@
                         </div>
                     </form>
 
-                    {{-- Evidencias del avance --}}
+                    {{-- Evidencias. --}}
                     <div class="card">
                         <div class="title">Evidencias</div>
                         <div class="muted" style="margin-top:6px;">
                             Se permite agregar evidencias en distintos momentos sin sobrescribir las anteriores.
                         </div>
 
-                        {{-- Agregar evidencia (1 archivo por vez) --}}
+                        {{-- Nueva evidencia. --}}
                         <form method="POST"
                               action="{{ route('proyectos.avance.evidencia.add', $avance->id) }}"
                               enctype="multipart/form-data"
@@ -112,7 +111,7 @@
                             <button class="btn" type="submit">+ Evidencia</button>
                         </form>
 
-                        {{-- Galería --}}
+                        {{-- Archivos cargados. --}}
                         @if($avance->evidencias->count())
                             <div class="evid-grid">
                                 @foreach($avance->evidencias as $ev)

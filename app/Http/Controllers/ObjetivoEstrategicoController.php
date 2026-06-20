@@ -7,22 +7,24 @@ use Illuminate\Http\Request;
 
 class ObjetivoEstrategicoController extends Controller
 {
+    // Listar objetivos estrategicos.
     public function index()
     {
-        // Lista objetivos estrategicos registrados.
         $items = ObjetivoEstrategico::orderBy('id', 'desc')->get();
+
         return view('objetivos_estrategicos.index', compact('items'));
     }
 
+    // Mostrar formulario para crear objetivo.
     public function create()
     {
-        // Formulario para crear objetivo estrategico.
         return view('objetivos_estrategicos.create');
     }
 
+    // Guardar objetivo estrategico.
     public function store(Request $request)
     {
-        // Valida nombre, descripcion y estado.
+        // Validacion de objetivo estrategico.
         $data = $request->validate([
             'codigo' => 'required|string|max:20|unique:objetivo_estrategicos,codigo',
             'nombre' => 'required|string|max:200',
@@ -30,7 +32,6 @@ class ObjetivoEstrategicoController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Guarda el objetivo estrategico.
         ObjetivoEstrategico::create($data);
 
         return redirect()
@@ -38,17 +39,18 @@ class ObjetivoEstrategicoController extends Controller
             ->with('success', 'Objetivo estrategico creado correctamente.');
     }
 
+    // Mostrar formulario para editar objetivo.
     public function edit(ObjetivoEstrategico $objetivos_estrategico)
     {
-        // En la vista lo manejo como item para reutilizar nombres.
         return view('objetivos_estrategicos.edit', [
-            'item' => $objetivos_estrategico
+            'item' => $objetivos_estrategico,
         ]);
     }
 
+    // Actualizar objetivo estrategico.
     public function update(Request $request, ObjetivoEstrategico $objetivos_estrategico)
     {
-        // Valida antes de actualizar.
+        // Validacion de objetivo estrategico.
         $data = $request->validate([
             'codigo' => 'required|string|max:20|unique:objetivo_estrategicos,codigo,'.$objetivos_estrategico->id,
             'nombre' => 'required|string|max:200',
@@ -56,7 +58,6 @@ class ObjetivoEstrategicoController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Actualiza el objetivo estrategico.
         $objetivos_estrategico->update($data);
 
         return redirect()
@@ -64,9 +65,10 @@ class ObjetivoEstrategicoController extends Controller
             ->with('success', 'Objetivo estrategico actualizado correctamente.');
     }
 
+    // Desactivar objetivo estrategico.
     public function destroy(ObjetivoEstrategico $objetivos_estrategico)
     {
-        // Se desactiva para conservar las alineaciones históricas.
+        // Desactivacion para conservar alineaciones.
         $objetivos_estrategico->update(['activo' => false]);
 
         return redirect()

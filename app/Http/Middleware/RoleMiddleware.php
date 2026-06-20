@@ -8,21 +8,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
+    // Validar acceso segun el rol.
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
         $user = $request->user();
 
-        // Si alguien llega sin login, lo mando al login.
-        if (!$user) {
+        // Validacion de autenticacion.
+        if (! $user) {
             return redirect()->route('login');
         }
 
-        // Aqui se compara el rol del usuario contra los roles permitidos en la ruta.
-        if (!in_array($user->role, $roles, true)) {
+        // Validacion de rol.
+        if (! in_array($user->role, $roles, true)) {
             abort(403, 'No autorizado.');
         }
 
-        // Si el rol coincide, la peticion continua al controlador.
         return $next($request);
     }
 }

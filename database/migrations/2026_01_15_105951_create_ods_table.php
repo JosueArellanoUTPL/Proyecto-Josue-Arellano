@@ -9,20 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // Aplicar cambios.
     public function up(): void
-{
-    Schema::create('ods', function (Blueprint $table) {
-        $table->id();
-        $table->string('codigo', 10); // Ej: ODS 1, ODS 2
-        $table->string('nombre', 200);
-        $table->text('descripcion')->nullable();
-        $table->boolean('activo')->default(true);
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('ods', function (Blueprint $table) {
+            $table->id();
+            $table->string('codigo', 10); // Ej: ODS 1, ODS 2
+            $table->string('nombre', 200);
+            $table->text('descripcion')->nullable();
+            $table->boolean('activo')->default(true);
+            $table->timestamps();
+        });
+    }
+
     /**
      * Reverse the migrations.
      */
+    // Revertir cambios.
     public function down(): void
     {
         Schema::dropIfExists('ods');

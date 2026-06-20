@@ -1,14 +1,15 @@
 <x-app-layout>
+    {{-- Encabezado con la meta seleccionada. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Detalle de Meta
+            Meta: {{ $meta->nombre }}
         </h2>
     </x-slot>
 
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            {{-- Mensaje que aparece despues de registrar/editar/eliminar un avance. --}}
+            {{-- Mensaje de resultado. --}}
             @if (session('success'))
                 <div class="mb-4 p-3 bg-green-100 border border-green-300 rounded text-green-800">
                     {{ session('success') }}
@@ -17,7 +18,7 @@
 
             <div class="wrap">
 
-                {{-- Encabezado con datos principales de la meta. --}}
+                {{-- Datos de la meta. --}}
                 <div class="flex justify-between flex-wrap gap-4 items-start">
                     <div>
                         <div class="title">{{ $meta->codigo }} - {{ $meta->nombre }}</div>
@@ -39,7 +40,7 @@
                     $pending = $meta->indicadores->isEmpty();
                 @endphp
 
-                {{-- Barra general de progreso de la meta. --}}
+                {{-- Progreso de la meta. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="flex justify-between items-start gap-3">
                         <div>
@@ -58,7 +59,7 @@
                     @endif
                 </div>
 
-                {{-- Proyectos que ayudan directamente al cumplimiento de esta meta. --}}
+                {{-- Proyectos relacionados. --}}
                 <div class="title" style="margin-top:22px;">Proyectos relacionados</div>
                 <div class="grid-ind">
                     @forelse($meta->proyectos as $proyecto)
@@ -75,7 +76,7 @@
                     @endforelse
                 </div>
 
-                {{-- Lista de indicadores de esta meta. --}}
+                {{-- Indicadores. --}}
                 <div class="title" style="margin-top:22px;">Indicadores</div>
                 <div class="muted" style="margin-top:6px;">
                     Cada indicador puede registrar multiples avances con evidencias.
@@ -107,7 +108,7 @@
                                 <div style="width:{{ $ip }}%; background:{{ $idone ? 'var(--green)' : 'var(--orange)' }}"></div>
                             </div>
 
-                            {{-- Ultimo avance registrado del indicador. --}}
+                            {{-- Ultimo avance. --}}
                             <div class="muted" style="margin-top:12px;">
                                 Ultimo avance:
                             </div>
@@ -122,7 +123,7 @@
                                         <span class="muted">Sin evidencia</span>
                                     @endif
 
-                                    {{-- Estos botones solo aparecen para admin o el usuario que creo el avance. --}}
+                                    {{-- Permisos del avance. --}}
                                     @if(auth()->id() === $last->user_id || auth()->user()->isAdmin())
                                         <a class="link" href="{{ route('indicadores.avance.edit', $last->id) }}">
                                             Editar
@@ -141,7 +142,7 @@
                                 <div class="muted">Sin avances registrados</div>
                             @endif
 
-                            {{-- Solo admin y tecnico pueden registrar avances. --}}
+                            {{-- Permiso de seguimiento. --}}
                             @if(auth()->user()->canRegisterSeguimiento())
                                 <div class="mt-4">
                                     <a class="btn" href="{{ route('indicadores.avance.create', $ind->id) }}">

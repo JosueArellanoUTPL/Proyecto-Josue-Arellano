@@ -2,13 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
-    Estilos generales del sistema.
-    Aqui puse clases repetidas para no copiar estilos en cada vista.
-*/
+/* Estilos base. */
 @layer components {
     :root {
-        /* Colores base usados en tarjetas, botones, barras y graficas. */
+        /* Paleta de colores. */
         --beige: #f5f1ea;
         --card: #ffffff;
         --border: #cfd5dd;
@@ -22,11 +19,7 @@
         --red: #860707;
     }
 
-    /*
-        Contenedores principales.
-        .wrap es el fondo grande de paginas como dashboard, seguimiento y reportes.
-        .card es la caja blanca reutilizada en tablas, formularios y graficas.
-    */
+    /* Contenedores. */
     .wrap {
         background: var(--beige);
         border-radius: 20px;
@@ -60,10 +53,7 @@
         flex-wrap: wrap;
     }
 
-    /*
-        Formularios y botones.
-        Se usan en create/edit y tambien en filtros de auditoria/reportes.
-    */
+    /* Formularios y botones. */
     .label {
         font-weight: 800;
         font-size: 13px;
@@ -90,7 +80,6 @@
     }
 
     .btn {
-        /* Boton base usado en acciones como guardar, volver, filtrar y reportes. */
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -125,35 +114,7 @@
         background: #e3f3ef;
     }
 
-    .btn-mini {
-        height: 30px;
-        padding: 0 12px;
-        border-radius: 10px;
-        border: 1px solid var(--border);
-        font-weight: 800;
-        font-size: 12px;
-        background: #fafafa;
-        color: var(--text);
-        text-decoration: none;
-    }
-
-    .btn-mini:hover {
-        background: #f6f8fb;
-    }
-
-    .btn-warn {
-        background: #fff6ee;
-    }
-
-    .btn-danger {
-        background: #fff0f0;
-        border-color: #f2b9b9;
-    }
-
-    /*
-        KPIs, estados y progreso.
-        .kpi se usa en dashboard/reportes; .progress pinta barras de avance.
-    */
+    /* Resumen y progreso. */
     .kpis {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -189,7 +150,6 @@
     }
 
     .progress div {
-        /* El ancho de este div cambia desde Blade con style="width:...%". */
         height: 100%;
     }
 
@@ -284,10 +244,7 @@
         background: #94a3b8;
     }
 
-    /*
-        Listados y tarjetas clicables.
-        Sirven para detalles de entidad, programa, meta y trazabilidad.
-    */
+    /* Listados. */
     .list {
         margin-top: 12px;
         display: grid;
@@ -332,22 +289,7 @@
         color: var(--muted);
     }
 
-    /*
-        Grillas especificas con nombres propios.
-        Evito llamar .grid a mis clases porque Tailwind ya usa ese nombre.
-    */
-    .grid-main {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 20px;
-        margin-top: 24px;
-    }
-
-    @media (min-width: 1024px) {
-        .grid-main {
-            grid-template-columns: 360px 1fr;
-        }
-    }
+    /* Grillas. */
 
     .grid2 {
         display: grid;
@@ -362,7 +304,7 @@
         }
     }
 
-    /* Barra pequena usada solamente para los filtros de trazabilidad. */
+    /* Filtros de trazabilidad. */
     .trace-filters {
         margin-top: 16px;
         padding: 14px;
@@ -414,7 +356,7 @@
         padding: 0 10px;
     }
 
-    /* Filtro compacto y listado ordenado del modulo de alineaciones. */
+    /* Alineaciones. */
     .alignment-filter {
         margin-top: 16px;
         padding: 14px;
@@ -552,7 +494,7 @@
         }
     }
 
-    /* Orden de la pantalla: indicadores, filtro de entidad y metas. */
+    /* Seguimiento de metas. */
     .seguimiento-kpis {
         grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     }
@@ -601,7 +543,6 @@
         }
     }
 
-    .alignments-grid,
     .entity-grid,
     .metas-grid,
     .project-history-grid {
@@ -618,18 +559,11 @@
         }
     }
 
-    @media (min-width: 900px) {
-        .alignments-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
-
     .project-history-grid {
         margin-top: 14px;
     }
 
     .meta-card {
-        /* Tarjeta clicable de metas en seguimiento. */
         text-decoration: none;
         color: inherit;
         transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
@@ -641,29 +575,7 @@
         border-color: #bfc7d2;
     }
 
-    .actions {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
-
-    .kv {
-        margin-top: 10px;
-        display: grid;
-        gap: 8px;
-    }
-
-    .kv .line {
-        display: flex;
-        justify-content: space-between;
-        gap: 10px;
-    }
-
-    /*
-        Evidencias de avances de proyectos.
-        Se usa para mostrar archivos cargados en el seguimiento de proyectos.
-    */
+    /* Evidencias. */
     .evid-grid {
         display: grid;
         grid-template-columns: repeat(6, 1fr);
@@ -684,7 +596,6 @@
     }
 
     .thumb {
-        /* Cuadro pequeno donde aparece una evidencia o imagen cargada. */
         position: relative;
         border: 1px solid var(--border-soft);
         border-radius: 14px;
@@ -771,9 +682,7 @@
         color: var(--text);
     }
 
-    /*
-        Cajas para mensajes de validacion y ayuda.
-    */
+    /* Validaciones y ayuda. */
     .err,
     .error {
         font-size: 13px;
@@ -805,10 +714,7 @@
         background: #fafafa;
     }
 
-    /*
-        Dashboard.
-        Graficas livianas hechas con CSS para no depender de librerias externas.
-    */
+    /* Dashboard. */
     .dashboard-hero {
         display: flex;
         justify-content: space-between;
@@ -855,7 +761,6 @@
     }
 
     .donut {
-        /* Dona del dashboard: --value viene desde Blade con el porcentaje. */
         --value: 0;
         width: 150px;
         aspect-ratio: 1;
@@ -943,10 +848,7 @@
         font-weight: 700;
     }
 
-    /*
-        Reportes.
-        Clases usadas por el modulo de reportes para consulta e impresion.
-    */
+    /* Reportes. */
     .report-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -1006,10 +908,7 @@
         background: #f6f8fb;
     }
 
-    /*
-        Layout principal con menu lateral.
-        Esto reemplaza la barra superior para que los modulos queden siempre visibles.
-    */
+    /* Menu lateral. */
     .app-shell {
         min-height: 100vh;
         background: var(--beige);
@@ -1129,10 +1028,7 @@
     }
 }
 
-/*
-    Capa visual para CRUD antiguos.
-    Reusa las clases Tailwind que ya tenian esas vistas y las vuelve pastel.
-*/
+/* Estilo de los CRUD. */
 main .bg-white.shadow.rounded {
     background: var(--card) !important;
     border: 1px solid var(--border-soft) !important;
@@ -1179,10 +1075,7 @@ main table td {
     color: var(--text);
 }
 
-/*
-    Pantallas de login/registro.
-    Mismo estilo pastel para que no se vea como Breeze por defecto.
-*/
+/* Autenticacion. */
 .auth-shell {
     min-height: 100vh;
     display: flex;
@@ -1231,10 +1124,7 @@ main table td {
     border-radius: 18px;
 }
 
-/*
-    Landing publica de la ruta /.
-    Reemplaza la pantalla generica de Laravel y mantiene la paleta pastel.
-*/
+/* Portada publica. */
 .landing-page {
     min-height: 100vh;
     background: var(--beige);
@@ -1361,7 +1251,7 @@ main table td {
 }
 
 @media print {
-    /* Al imprimir reportes, oculto menu/botones y dejo la pagina limpia. */
+    /* Impresion de reportes. */
     body {
         background: #fff;
     }

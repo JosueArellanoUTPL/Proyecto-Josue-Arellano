@@ -8,7 +8,7 @@
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
-                {{-- Encabezado de auditoria: solo consulta registros. --}}
+                {{-- Encabezado. --}}
                 <div class="row">
                     <div>
                         <div class="title">Registro de acciones</div>
@@ -20,7 +20,7 @@
                     <a class="btn" href="{{ route('dashboard') }}">Volver al Dashboard</a>
                 </div>
 
-                {{-- Filtros para buscar acciones especificas. --}}
+                {{-- Filtros. --}}
                 <form method="GET" action="{{ route('auditoria.index') }}" class="card" style="margin-top:16px;">
                     <div class="grid2">
                         <div>
@@ -76,7 +76,7 @@
                     </div>
                 </form>
 
-                {{-- Tabla de historial: aqui se ve lo guardado por AuditMiddleware. --}}
+                {{-- Historial. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="title">Historial</div>
                     <div class="muted" style="margin-top:6px;">

@@ -1,11 +1,12 @@
 @php
-    // Estos valores sirven tanto al formulario de crear como al de editar.
+    // Valores del formulario.
     $proyectoActual = $proyecto ?? null;
     $entidadSeleccionada = old('entidad_filtro', $proyectoActual?->programa?->entidad_id);
     $programaSeleccionado = old('programa_id', $proyectoActual?->programa_id);
     $metaSeleccionada = old('meta_id', $proyectoActual?->meta_id);
 @endphp
 
+{{-- Campos del proyecto. --}}
 <div data-project-fields>
     <div class="mb-4">
         <label class="block mb-1">Código</label>
@@ -77,8 +78,9 @@
     </div>
 </div>
 
+{{-- Filtro de programas y metas por entidad. --}}
 <script>
-    // Muestra solamente programas y metas de la entidad seleccionada.
+    // Filtro por entidad.
     document.addEventListener('DOMContentLoaded', function () {
         const fields = document.querySelector('[data-project-fields]');
         const entitySelect = fields?.querySelector('[data-entity-select]');

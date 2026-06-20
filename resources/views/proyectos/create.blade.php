@@ -6,6 +6,7 @@
     <div class="py-6">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow rounded p-6">
+                {{-- Mensajes de validacion. --}}
                 @if ($errors->any())
                     <div class="mb-4 p-3 bg-red-100 border border-red-300 rounded">
                         <ul class="list-disc ml-5">
@@ -17,9 +18,10 @@
                 @endif
 
                 <form method="POST" action="{{ route('proyectos.store') }}">
+                    {{-- Formulario de datos. --}}
                     @csrf
 
-                    {{-- Los campos compartidos con editar proyecto están en este archivo. --}}
+                    {{-- Campos del proyecto. --}}
                     @include('proyectos.partials.form-fields')
 
                     <div class="flex gap-3 mt-6">

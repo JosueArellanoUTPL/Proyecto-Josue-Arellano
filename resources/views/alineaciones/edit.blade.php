@@ -1,10 +1,10 @@
 <x-app-layout>
+    {{-- Seccion de encabezado. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Editar Alineación
         </h2>
     </x-slot>
-    {{-- Los estilos reutilizables de esta vista ahora estan en resources/css/app.css --}}
 
     <div class="py-10">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
@@ -15,6 +15,7 @@
                     Se actualiza la meta y los instrumentos estratégicos asociados.
                 </div>
 
+                {{-- Mensajes de validacion. --}}
                 @if ($errors->any())
                     <div class="errbox">
                         <div class="title">Revisar campos</div>
@@ -27,6 +28,7 @@
                 @endif
 
                 <form method="POST" action="{{ route('alineaciones.update', $alineacion->id) }}" class="card" style="margin-top:16px;">
+                    {{-- Formulario de datos. --}}
                     @csrf
                     @method('PUT')
 

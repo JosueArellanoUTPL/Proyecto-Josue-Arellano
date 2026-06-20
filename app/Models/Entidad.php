@@ -5,18 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Plan;
-use App\Models\Programa;
-use App\Models\Proyecto;
-
 class Entidad extends Model
 {
     use HasFactory;
 
-    // Nombre real de la tabla. Laravel no adivina bien "entidades".
+    // Nombre de la tabla.
     protected $table = 'entidades';
 
-    // Campos que se pueden guardar desde el CRUD de entidades.
+    // Campos permitidos.
     protected $fillable = [
         'codigo',
         'nombre',
@@ -24,21 +20,22 @@ class Entidad extends Model
         'activo',
     ];
 
+    // Relacion con los planes.
     public function plans()
     {
-        // Una entidad puede tener varios planes.
         return $this->hasMany(Plan::class);
     }
 
+    // Relacion con los programas.
     public function programas()
     {
-        // Una entidad puede tener varios programas.
         return $this->hasMany(Programa::class);
     }
 
+    // Relacion con proyectos mediante programas.
     public function proyectos()
     {
-        // Llega a los proyectos mediante los programas de la entidad.
+        // Proyectos derivados de sus programas.
         return $this->hasManyThrough(
             Proyecto::class,
             Programa::class,

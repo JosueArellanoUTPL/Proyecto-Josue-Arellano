@@ -9,21 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-  public function up(): void
-{
-    Schema::create('pdns', function (Blueprint $table) {
-        $table->id();
-        $table->string('codigo', 20);
-        $table->string('nombre', 200);
-        $table->text('descripcion')->nullable();
-        $table->boolean('activo')->default(true);
-        $table->timestamps();
-    });
-}
+    // Aplicar cambios.
+    public function up(): void
+    {
+        Schema::create('pdns', function (Blueprint $table) {
+            $table->id();
+            $table->string('codigo', 20);
+            $table->string('nombre', 200);
+            $table->text('descripcion')->nullable();
+            $table->boolean('activo')->default(true);
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
+    // Revertir cambios.
     public function down(): void
     {
         Schema::dropIfExists('pdns');

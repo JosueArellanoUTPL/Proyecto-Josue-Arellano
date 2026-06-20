@@ -1,3 +1,4 @@
+{{-- Ventana modal. --}}
 @props([
     'name',
     'show' => false,

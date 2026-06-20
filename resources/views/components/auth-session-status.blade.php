@@ -1,3 +1,4 @@
+{{-- Mensaje de sesion. --}}
 @props(['status'])
 
 @if ($status)

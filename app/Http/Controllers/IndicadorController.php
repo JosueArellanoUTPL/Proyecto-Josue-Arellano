@@ -8,23 +8,26 @@ use Illuminate\Http\Request;
 
 class IndicadorController extends Controller
 {
+    // Listar indicadores.
     public function index()
     {
-        // Lista indicadores con su meta para mostrar contexto en la tabla.
         $indicadores = Indicador::with('meta')->orderBy('id', 'desc')->get();
+
         return view('indicadores.index', compact('indicadores'));
     }
 
+    // Mostrar formulario para crear indicador.
     public function create()
     {
-        // Solo uso metas activas para crear un indicador nuevo.
         $metas = Meta::where('activo', true)->orderBy('id', 'desc')->get();
+
         return view('indicadores.create', compact('metas'));
     }
 
+    // Guardar indicador.
     public function store(Request $request)
     {
-        // Valida el formulario antes de guardar el indicador.
+        // Validacion de indicador.
         $data = $request->validate([
             'codigo' => 'required|string|max:30|unique:indicadores,codigo',
             'nombre' => 'required|string|max:200',
@@ -36,29 +39,28 @@ class IndicadorController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Crea el indicador asociado a una meta.
         Indicador::create($data);
 
         return redirect()->route('indicadores.index')
             ->with('success', 'Indicador creado correctamente.');
     }
 
+    // Mostrar formulario para editar indicador.
     public function edit(Indicador $indicadore)
     {
-        // Laravel usa $indicadore por el resource; aqui lo renombro para entenderlo mejor.
         $indicador = $indicadore;
 
-        // Metas disponibles para cambiar la asociacion del indicador.
         $metas = Meta::where('activo', true)->orWhere('id', $indicador->meta_id)->orderBy('id', 'desc')->get();
+
         return view('indicadores.edit', compact('indicador', 'metas'));
     }
 
+    // Actualizar indicador.
     public function update(Request $request, Indicador $indicadore)
     {
-        // Misma idea: renombro la variable para que el codigo sea mas claro.
         $indicador = $indicadore;
 
-        // Valida los datos antes de actualizar.
+        // Validacion de indicador.
         $data = $request->validate([
             'codigo' => 'required|string|max:30|unique:indicadores,codigo,'.$indicadore->id,
             'nombre' => 'required|string|max:200',
@@ -70,16 +72,16 @@ class IndicadorController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        // Actualiza el indicador seleccionado.
         $indicador->update($data);
 
         return redirect()->route('indicadores.index')
             ->with('success', 'Indicador actualizado correctamente.');
     }
 
+    // Desactivar indicador.
     public function destroy(Indicador $indicadore)
     {
-        // Se desactiva para conservar su historial de avances.
+        // Desactivacion para conservar avances.
         $indicador = $indicadore;
         $indicador->update(['activo' => false]);
 

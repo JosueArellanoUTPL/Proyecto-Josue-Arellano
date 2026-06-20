@@ -13,7 +13,7 @@
                     'subtitle' => 'Relacion entre metas e instrumentos estrategicos.'
                 ])
 
-                {{-- Tabla de alineaciones: sirve para demostrar trazabilidad estrategica. --}}
+                {{-- Resultados. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="title">Registros encontrados: {{ $alineaciones->count() }}</div>
 

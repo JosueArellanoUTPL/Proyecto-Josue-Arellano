@@ -10,7 +10,7 @@ class AuditLog extends Model
 {
     use HasFactory;
 
-    // Campos que guarda cada registro de auditoria.
+    // Campos permitidos.
     protected $fillable = [
         'user_id',
         'module',
@@ -23,14 +23,14 @@ class AuditLog extends Model
         'metadata',
     ];
 
-    // Metadata se guarda como JSON y Laravel la devuelve como array.
+    // Conversion de tipos.
     protected $casts = [
         'metadata' => 'array',
     ];
 
+    // Relacion con el usuario.
     public function user(): BelongsTo
     {
-        // Usuario que hizo la accion. Puede quedar null si se elimina el usuario.
         return $this->belongsTo(User::class);
     }
 }

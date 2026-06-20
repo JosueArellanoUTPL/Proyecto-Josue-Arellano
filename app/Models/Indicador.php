@@ -5,17 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Meta;
-use App\Models\IndicadorAvance;
-
 class Indicador extends Model
 {
     use HasFactory;
 
-    // Nombre real de la tabla en MySQL.
+    // Nombre de la tabla.
     protected $table = 'indicadores';
 
-    // Campos que vienen de los formularios de indicadores.
+    // Campos permitidos.
     protected $fillable = [
         'codigo',
         'nombre',
@@ -24,61 +21,50 @@ class Indicador extends Model
         'linea_base',
         'valor_meta',
         'unidad',
-        'activo'
+        'activo',
     ];
 
-    /* =========================
-     | Relaciones
-     ========================= */
-
+    // Relacion con la meta.
     public function meta()
     {
-        // Cada indicador pertenece a una meta.
         return $this->belongsTo(Meta::class);
     }
 
+    // Relacion con los avances.
     public function avances()
     {
-        // Historial completo de avances registrados para este indicador.
         return $this->hasMany(IndicadorAvance::class);
     }
 
+    // Ultimo avance registrado.
     public function ultimoAvance()
     {
-        // Toma el avance mas reciente por fecha para calcular el progreso actual.
         return $this->hasOne(IndicadorAvance::class)->latestOfMany('fecha');
     }
 
-    /* =========================
-     | Calculos para seguimiento
-     ========================= */
-
+    // Calculo del progreso del indicador.
     public function getProgresoAttribute(): float
     {
-        // Formula: compara valor actual contra linea base y valor meta.
         $lineaBase = $this->linea_base;
         $valorMeta = $this->valor_meta;
         $valorActual = $this->ultimoAvance?->valor_reportado;
 
-        // Si falta algun dato importante, el avance queda en 0.
         if ($lineaBase === null || $valorMeta === null || $valorActual === null) {
             return 0;
         }
 
-        // Si base y meta son iguales, se completa cuando el valor reportado coincide.
         if ((float) $valorMeta === (float) $lineaBase) {
             return (float) $valorActual === (float) $valorMeta ? 100 : 0;
         }
 
         $porcentaje = (($valorActual - $lineaBase) / ($valorMeta - $lineaBase)) * 100;
 
-        // El porcentaje se limita entre 0 y 100 para que no rompa las barras.
         return round(max(0, min(100, $porcentaje)), 2);
     }
 
+    // Calculo del estado completado.
     public function getCompletadoAttribute(): bool
     {
-        // Se considera completo cuando llega al 100%.
         return $this->progreso >= 100;
     }
 }
