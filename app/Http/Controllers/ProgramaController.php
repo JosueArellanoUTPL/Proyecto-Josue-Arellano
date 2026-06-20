@@ -29,6 +29,7 @@ class ProgramaController extends Controller
     {
         // Valida el formulario antes de crear.
         $validated = $request->validate([
+            'codigo'      => ['required', 'string', 'max:30', 'unique:programas,codigo'],
             'entidad_id'  => ['required', 'exists:entidades,id'],
             'nombre'      => ['required', 'string', 'max:150'],
             'descripcion' => ['nullable', 'string'],
@@ -49,6 +50,7 @@ class ProgramaController extends Controller
     {
         // Entidades disponibles para cambiar la asociacion.
         $entidades = Entidad::where('activo', 1)
+            ->orWhere('id', $programa->entidad_id)
             ->orderBy('nombre')
             ->get();
 
@@ -59,6 +61,7 @@ class ProgramaController extends Controller
     {
         // Valida antes de actualizar.
         $validated = $request->validate([
+            'codigo'      => ['required', 'string', 'max:30', 'unique:programas,codigo,'.$programa->id],
             'entidad_id'  => ['required', 'exists:entidades,id'],
             'nombre'      => ['required', 'string', 'max:150'],
             'descripcion' => ['nullable', 'string'],
@@ -66,6 +69,13 @@ class ProgramaController extends Controller
         ]);
 
         $validated['activo'] = $request->has('activo');
+
+        // Un programa con proyectos no puede moverse a otra entidad.
+        if ((int) $programa->entidad_id !== (int) $validated['entidad_id'] && $programa->proyectos()->exists()) {
+            return back()
+                ->withErrors(['entidad_id' => 'No puedes cambiar la entidad porque el programa ya tiene proyectos.'])
+                ->withInput();
+        }
 
         // Actualiza el programa seleccionado.
         $programa->update($validated);
@@ -76,10 +86,10 @@ class ProgramaController extends Controller
 
     public function destroy(Programa $programa)
     {
-        // Elimina el programa desde el listado.
-        $programa->delete();
+        // Se desactiva para conservar sus proyectos y avances.
+        $programa->update(['activo' => false]);
 
         return redirect()->route('programas.index')
-            ->with('success', 'Programa eliminado correctamente.');
+            ->with('success', 'Programa desactivado correctamente.');
     }
 }

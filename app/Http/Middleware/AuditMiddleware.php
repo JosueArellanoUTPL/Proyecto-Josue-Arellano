@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\AuditLog;
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,6 +12,10 @@ class AuditMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // Guarda una copia sencilla del modelo antes de actualizarlo.
+        $routeModel = $this->routeModel($request);
+        $before = $this->modelSnapshot($routeModel);
+
         // Primero deja que Laravel ejecute la ruta normal.
         $response = $next($request);
 
@@ -19,7 +24,7 @@ class AuditMiddleware
             AuditLog::create([
                 'user_id' => $request->user()?->id,
                 'module' => $this->moduleFromRoute($request),
-                'action' => $this->actionFromMethod($request->method()),
+                'action' => $this->actionFromRequest($request),
                 'method' => $request->method(),
                 'route_name' => $request->route()?->getName(),
                 'url' => $request->fullUrl(),
@@ -27,6 +32,9 @@ class AuditMiddleware
                 'description' => $this->description($request),
                 'metadata' => [
                     'route_parameters' => $this->routeParameters($request),
+                    'request_data' => $this->safeRequestData($request),
+                    'before' => $before,
+                    'after' => $routeModel?->exists ? $this->modelSnapshot($routeModel) : null,
                 ],
             ]);
         }
@@ -54,8 +62,30 @@ class AuditMiddleware
         return true;
     }
 
-    private function actionFromMethod(string $method): string
+    private function actionFromRequest(Request $request): string
     {
+        $method = $request->method();
+
+        // Estos DELETE conservan el registro y solamente cambian activo a false.
+        $deactivationRoutes = [
+            'entidades.destroy',
+            'programas.destroy',
+            'proyectos.destroy',
+            'plans.destroy',
+            'metas.destroy',
+            'indicadores.destroy',
+            'ods.destroy',
+            'pdn.destroy',
+            'objetivos-estrategicos.destroy',
+            'alineaciones.destroy',
+            'usuarios.destroy',
+            'profile.destroy',
+        ];
+
+        if ($method === 'DELETE' && in_array($request->route()?->getName(), $deactivationRoutes, true)) {
+            return 'desactivar';
+        }
+
         // Traduce el metodo HTTP a una palabra sencilla para la tabla.
         return match ($method) {
             'POST' => 'crear',
@@ -98,6 +128,42 @@ class AuditMiddleware
             }
 
             return $value;
+        })->toArray();
+    }
+
+    private function routeModel(Request $request): ?Model
+    {
+        // Toma el primer modelo recibido por la ruta, por ejemplo Proyecto o Meta.
+        return collect($request->route()?->parameters() ?? [])
+            ->first(fn ($value) => $value instanceof Model);
+    }
+
+    private function modelSnapshot(?Model $model): ?array
+    {
+        if (!$model) {
+            return null;
+        }
+
+        // Nunca se guardan claves ni tokens dentro de la auditoría.
+        return collect($model->getAttributes())
+            ->except(['password', 'remember_token'])
+            ->toArray();
+    }
+
+    private function safeRequestData(Request $request): array
+    {
+        $data = $request->except([
+            '_token',
+            '_method',
+            'password',
+            'password_confirmation',
+            'evidencia',
+            'evidencias',
+        ]);
+
+        // La bitácora guarda valores simples y evita serializar objetos o archivos.
+        return collect($data)->map(function ($value) {
+            return is_scalar($value) || $value === null ? $value : '[dato compuesto]';
         })->toArray();
     }
 }

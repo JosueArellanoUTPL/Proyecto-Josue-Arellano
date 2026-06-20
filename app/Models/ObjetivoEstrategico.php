@@ -11,6 +11,7 @@ class ObjetivoEstrategico extends Model
 
     // Campos guardados desde el CRUD de objetivos estrategicos.
     protected $fillable = [
+        'codigo',
         'nombre',
         'descripcion',
         'activo'

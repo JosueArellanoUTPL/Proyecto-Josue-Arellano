@@ -276,6 +276,14 @@
         background: var(--orange);
     }
 
+    .status-btn.pending {
+        background: #f1f5f9;
+    }
+
+    .status-btn.pending .pill-dot {
+        background: #94a3b8;
+    }
+
     /*
         Listados y tarjetas clicables.
         Sirven para detalles de entidad, programa, meta y trazabilidad.
@@ -351,6 +359,232 @@
     @media (min-width: 1024px) {
         .grid2 {
             grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    /* Barra pequena usada solamente para los filtros de trazabilidad. */
+    .trace-filters {
+        margin-top: 16px;
+        padding: 14px;
+    }
+
+    .trace-filters__top,
+    .trace-filters__legend,
+    .trace-filters__actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .trace-filters__top {
+        justify-content: space-between;
+    }
+
+    .trace-filters__top .title {
+        font-size: 15px;
+    }
+
+    .trace-filters__fields {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+        margin-top: 10px;
+        align-items: end;
+    }
+
+    .trace-filters .label {
+        margin-bottom: 4px;
+        font-size: 12px;
+    }
+
+    .trace-filters .input {
+        min-height: 34px;
+        padding: 6px 9px;
+        border-radius: 8px;
+        font-size: 12px;
+    }
+
+    .trace-filters__actions {
+        align-self: end;
+    }
+
+    .trace-filters__actions .btn {
+        flex: 1 1 auto;
+        padding: 0 10px;
+    }
+
+    /* Filtro compacto y listado ordenado del modulo de alineaciones. */
+    .alignment-filter {
+        margin-top: 16px;
+        padding: 14px;
+        display: grid;
+        grid-template-columns: minmax(180px, 1fr) minmax(180px, 1fr) auto;
+        gap: 12px;
+        align-items: end;
+    }
+
+    .alignment-filter .label {
+        margin-bottom: 4px;
+    }
+
+    .alignment-filter .input {
+        padding: 7px 10px;
+        border-radius: 8px;
+        font-size: 13px;
+    }
+
+    .alignment-filter__actions,
+    .alignment-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .alignment-panel {
+        margin-top: 14px;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .alignment-list-header,
+    .alignment-list-row {
+        display: grid;
+        grid-template-columns: minmax(240px, 1.2fr) minmax(280px, 1fr) 150px;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .alignment-list-header {
+        padding: 11px 16px;
+        background: #f8fafc;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        border-bottom: 1px solid var(--border-soft);
+    }
+
+    .alignment-list-row {
+        padding: 16px;
+        border-bottom: 1px solid var(--border-soft);
+    }
+
+    .alignment-list-row:last-child {
+        border-bottom: 0;
+    }
+
+    .alignment-meta,
+    .alignment-instruments {
+        display: grid;
+        gap: 5px;
+        min-width: 0;
+    }
+
+    .alignment-meta strong,
+    .alignment-instruments strong {
+        color: var(--text);
+        overflow-wrap: anywhere;
+    }
+
+    .alignment-meta span {
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .alignment-instruments > div {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 8px;
+        font-size: 12px;
+    }
+
+    .alignment-instruments span {
+        color: var(--muted);
+        font-weight: 700;
+    }
+
+    .alignment-actions {
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .alignment-action {
+        border: 0;
+        padding: 2px 0;
+        background: transparent;
+        color: #4f6fa8;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .alignment-action:hover {
+        text-decoration: underline;
+    }
+
+    .alignment-action--danger {
+        color: #a45b5b;
+    }
+
+    .alignment-empty {
+        padding: 24px 16px;
+        color: var(--muted);
+        text-align: center;
+    }
+
+    @media (max-width: 800px) {
+        .alignment-filter {
+            grid-template-columns: 1fr;
+        }
+
+        .alignment-list-header {
+            display: none;
+        }
+
+        .alignment-list-row {
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .alignment-actions {
+            justify-content: flex-start;
+        }
+    }
+
+    /* Orden de la pantalla: indicadores, filtro de entidad y metas. */
+    .seguimiento-kpis {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    }
+
+    .seguimiento-filter {
+        margin-top: 14px;
+        padding: 12px 14px;
+        display: flex;
+        align-items: end;
+        gap: 10px;
+    }
+
+    .seguimiento-filter > div {
+        width: min(100%, 430px);
+    }
+
+    .seguimiento-filter .label {
+        margin-bottom: 4px;
+    }
+
+    .seguimiento-filter .input {
+        padding: 7px 10px;
+        border-radius: 8px;
+    }
+
+    .seguimiento-metas-grid {
+        margin-top: 14px;
+    }
+
+    @media (max-width: 700px) {
+        .seguimiento-kpis {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
 
@@ -709,44 +943,6 @@
         font-weight: 700;
     }
 
-    .month-chart {
-        /* Grafica de barras mensual del dashboard. */
-        min-height: 180px;
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        gap: 10px;
-        align-items: end;
-        margin-top: 18px;
-    }
-
-    .month-bar {
-        display: grid;
-        gap: 6px;
-        align-items: end;
-        justify-items: center;
-        min-width: 0;
-    }
-
-    .month-bar span {
-        font-size: 12px;
-        font-weight: 800;
-        color: var(--text);
-    }
-
-    .month-bar div {
-        width: 100%;
-        max-width: 38px;
-        border-radius: 10px 10px 4px 4px;
-        background: linear-gradient(180deg, var(--blue), var(--green));
-        border: 1px solid var(--border-soft);
-    }
-
-    .month-bar small {
-        font-size: 11px;
-        color: var(--muted);
-        text-transform: capitalize;
-    }
-
     /*
         Reportes.
         Clases usadas por el modulo de reportes para consulta e impresion.
@@ -1069,8 +1265,7 @@ main table td {
     height: 42px;
 }
 
-.landing-actions,
-.landing-cta {
+.landing-actions {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
@@ -1109,44 +1304,45 @@ main table td {
     line-height: 1.7;
 }
 
-.landing-cta {
-    margin-top: 22px;
-}
-
 .landing-preview {
     background: #fffaf3;
     border: 1px solid var(--border-soft);
     border-radius: 18px;
     padding: 20px;
-}
-
-.preview-top {
+    min-height: 300px;
     display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    align-items: flex-start;
-}
-
-.preview-grid {
-    margin-top: 16px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    align-items: stretch;
 }
 
 .preview-chart {
-    height: 130px;
-    margin-top: 18px;
+    width: 100%;
+    min-height: 258px;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
     align-items: end;
+    padding: 18px 12px 8px;
+    border-bottom: 1px solid var(--border);
 }
 
 .preview-chart div {
-    border-radius: 10px 10px 4px 4px;
+    border-radius: 7px 7px 2px 2px;
     border: 1px solid var(--border-soft);
-    background: linear-gradient(180deg, var(--blue), var(--green));
+    background: var(--blue);
+}
+
+.preview-chart div:nth-child(2),
+.preview-chart div:nth-child(5) {
+    background: var(--green);
+}
+
+.preview-chart div:nth-child(3),
+.preview-chart div:nth-child(7) {
+    background: var(--orange);
+}
+
+.preview-chart div:nth-child(4) {
+    background: var(--purple);
 }
 
 .landing-modules {

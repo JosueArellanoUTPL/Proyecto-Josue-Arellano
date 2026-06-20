@@ -26,6 +26,7 @@
                     <thead>
                         <tr class="text-left border-b">
                             <th class="py-2">ID</th>
+                            <th class="py-2">Código</th>
                             <th class="py-2">Nombre</th>
                             <th class="py-2">Activo</th>
                             <th class="py-2 text-center w-56">Acciones</th>
@@ -36,6 +37,7 @@
                         @forelse ($entidades as $entidad)
                             <tr class="border-b">
                                 <td class="py-2">{{ $entidad->id }}</td>
+                                <td class="py-2">{{ $entidad->codigo }}</td>
                                 <td class="py-2">{{ $entidad->nombre }}</td>
                                 <td class="py-2">{{ $entidad->activo ? 'Sí' : 'No' }}</td>
 
@@ -48,12 +50,12 @@
 
                                         <form method="POST"
                                               action="{{ route('entidades.destroy', $entidad->id) }}"
-                                              onsubmit="return confirm('¿Seguro que deseas eliminar esta entidad?');">
+                                              onsubmit="return confirm('¿Seguro que deseas desactivar esta entidad?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
                                                     class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition">
-                                                Eliminar
+                                                Desactivar
                                             </button>
                                         </form>
                                     </div>
@@ -61,7 +63,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="py-4 text-center text-gray-500" colspan="4">
+                                <td class="py-4 text-center text-gray-500" colspan="5">
                                     No hay entidades registradas.
                                 </td>
                             </tr>

@@ -28,7 +28,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:150',
             'email' => 'required|email|max:255|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:8|confirmed',
             'role' => ['required', Rule::in(User::roleKeys())],
         ]);
 
@@ -38,6 +38,7 @@ class UserController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role' => $data['role'],
+            'activo' => true,
         ]);
 
         return redirect()->route('usuarios.index')
@@ -57,13 +58,15 @@ class UserController extends Controller
             'name' => 'required|string|max:150',
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($usuario->id)],
             'role' => ['required', Rule::in(User::roleKeys())],
-            'password' => 'nullable|string|min:6|confirmed',
+            'password' => 'nullable|string|min:8|confirmed',
+            'activo' => ['nullable', 'boolean'],
         ]);
 
         // Actualiza datos basicos y rol.
         $usuario->name = $data['name'];
         $usuario->email = $data['email'];
         $usuario->role = $data['role'];
+        $usuario->activo = $request->boolean('activo');
 
         // La clave es opcional: si queda vacia, se conserva la anterior.
         if (!empty($data['password'])) {
@@ -84,9 +87,10 @@ class UserController extends Controller
                 ->with('success', 'No puedes eliminar tu propio usuario.');
         }
 
-        $usuario->delete();
+        // No se borra: así permanecen sus avances y registros de auditoría.
+        $usuario->update(['activo' => false]);
 
         return redirect()->route('usuarios.index')
-            ->with('success', 'Usuario eliminado correctamente.');
+            ->with('success', 'Usuario desactivado correctamente.');
     }
 }

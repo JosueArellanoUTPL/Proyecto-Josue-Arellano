@@ -14,7 +14,7 @@ class ProyectoAvanceController extends Controller
     public function create(Proyecto $proyecto)
     {
         // Muestra datos del proyecto para registrar un avance con contexto.
-        $proyecto->load(['entidad', 'programa']);
+        $proyecto->load(['programa.entidad']);
 
         return view('seguimiento.proyecto_avance_create', compact('proyecto'));
     }
@@ -27,7 +27,7 @@ class ProyectoAvanceController extends Controller
             'porcentaje_avance' => ['required', 'numeric', 'min:0', 'max:100'],
             'comentario' => ['nullable', 'string', 'max:1000'],
             'evidencias' => ['nullable', 'array'],
-            'evidencias.*' => ['file', 'max:5120'],
+            'evidencias.*' => ['file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
         ]);
 
         // Crea el avance principal y guarda quien lo registro.
@@ -71,8 +71,7 @@ class ProyectoAvanceController extends Controller
         }
 
         $avance->load([
-            'proyecto.entidad',
-            'proyecto.programa',
+            'proyecto.programa.entidad',
             'evidencias'
         ]);
 
@@ -112,7 +111,7 @@ class ProyectoAvanceController extends Controller
         }
 
         $request->validate([
-            'evidencia' => ['required', 'file', 'max:5120'],
+            'evidencia' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
         ]);
 
         // Guarda el archivo y luego guarda su informacion en la tabla.

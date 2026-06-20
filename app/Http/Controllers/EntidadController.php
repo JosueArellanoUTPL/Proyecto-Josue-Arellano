@@ -24,6 +24,7 @@ class EntidadController extends Controller
     {
         // Valida los campos del formulario.
         $validated = $request->validate([
+            'codigo' => ['required', 'string', 'max:20', 'unique:entidades,codigo'],
             'nombre' => ['required', 'string', 'max:150'],
             'descripcion' => ['nullable', 'string'],
             'activo' => ['nullable'],
@@ -39,12 +40,6 @@ class EntidadController extends Controller
             ->with('success', 'Entidad creada correctamente.');
     }
 
-    public function show(Entidad $entidade)
-    {
-        // No uso detalle individual de entidad en este CRUD.
-        return redirect()->route('entidades.index');
-    }
-
     public function edit(Entidad $entidade)
     {
         // Laravel usa $entidade; lo renombro para que la vista sea mas clara.
@@ -56,6 +51,7 @@ class EntidadController extends Controller
     {
         // Valida antes de actualizar.
         $validated = $request->validate([
+            'codigo' => ['required', 'string', 'max:20', 'unique:entidades,codigo,'.$entidade->id],
             'nombre' => ['required', 'string', 'max:150'],
             'descripcion' => ['nullable', 'string'],
             'activo' => ['nullable'],
@@ -72,10 +68,10 @@ class EntidadController extends Controller
 
     public function destroy(Entidad $entidade)
     {
-        // Elimina la entidad desde el listado.
-        $entidade->delete();
+        // Se desactiva para conservar planes, programas y proyectos relacionados.
+        $entidade->update(['activo' => false]);
 
         return redirect()->route('entidades.index')
-            ->with('success', 'Entidad eliminada correctamente.');
+            ->with('success', 'Entidad desactivada correctamente.');
     }
 }

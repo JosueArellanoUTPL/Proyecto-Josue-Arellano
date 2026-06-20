@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Plan;
 use App\Models\Indicador;
 use App\Models\Alineacion;
+use App\Models\Proyecto;
 
 class Meta extends Model
 {
@@ -19,8 +20,6 @@ class Meta extends Model
         'nombre',
         'descripcion',
         'plan_id',
-        'valor_objetivo',
-        'unidad',
         'activo'
     ];
 
@@ -42,8 +41,14 @@ class Meta extends Model
 
     public function alineaciones()
     {
-        // Una meta puede estar conectada con ODS, PDN y objetivos estrategicos.
+        // Una meta puede estar conectada con ODS, PND y objetivos estratégicos.
         return $this->hasMany(Alineacion::class);
+    }
+
+    public function proyectos()
+    {
+        // Una meta puede cumplirse mediante varios proyectos.
+        return $this->hasMany(Proyecto::class);
     }
 
     /* =========================
@@ -71,5 +76,15 @@ class Meta extends Model
         }
 
         return $this->indicadores->every(fn ($indicador) => $indicador->completado);
+    }
+
+    public function getEstadoSeguimientoAttribute(): string
+    {
+        // Sin indicadores todavia no existe una forma de medir la meta.
+        if ($this->indicadores->isEmpty()) {
+            return 'Pendiente de indicadores';
+        }
+
+        return $this->completada ? 'Completada' : 'En progreso';
     }
 }

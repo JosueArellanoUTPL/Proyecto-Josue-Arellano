@@ -18,6 +18,9 @@
                             Programa: <strong>{{ $proyecto->programa->nombre ?? '-' }}</strong>
                         </div>
                         <div class="muted" style="margin-top:6px;">
+                            Meta: <strong>{{ $proyecto->meta ? $proyecto->meta->codigo.' - '.$proyecto->meta->nombre : 'Sin asignar' }}</strong>
+                        </div>
+                        <div class="muted" style="margin-top:6px;">
                             {{ $proyecto->descripcion ?? 'Sin descripcion.' }}
                         </div>
                     </div>
@@ -78,7 +81,13 @@
                                 <div class="evid-grid">
                                     @foreach($a->evidencias as $ev)
                                         <div class="thumb">
-                                            <img src="{{ asset('storage/'.$ev->path) }}">
+                                            @if($ev->isImage())
+                                                <img src="{{ asset('storage/'.$ev->path) }}" alt="{{ $ev->original_name ?? 'Evidencia' }}">
+                                            @else
+                                                <a class="link" href="{{ asset('storage/'.$ev->path) }}" target="_blank">
+                                                    {{ $ev->original_name ?? 'Ver PDF' }}
+                                                </a>
+                                            @endif
                                             @if(auth()->user()->isAdmin() || auth()->id() === $a->user_id)
                                                 <form method="POST" action="{{ route('proyectos.avance.evidencia.delete', $ev->id) }}">
                                                     @csrf @method('DELETE')
@@ -95,7 +104,7 @@
                                           action="{{ route('proyectos.avance.evidencia.add', $a->id) }}"
                                           style="margin-top:10px;">
                                         @csrf
-                                        <input type="file" name="evidencia" required>
+                                        <input type="file" name="evidencia" accept=".pdf,.jpg,.jpeg,.png" required>
                                         <button class="btn" style="margin-left:8px;">+ Evidencia</button>
                                     </form>
                                 @endif

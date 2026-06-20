@@ -9,14 +9,14 @@ class PdnController extends Controller
 {
     public function index()
     {
-        // Lista registros PND/PDN.
+        // Lista registros del PND.
         $items = Pdn::orderBy('id', 'desc')->get();
         return view('pdn.index', compact('items'));
     }
 
     public function create()
     {
-        // Formulario para crear PND/PDN.
+        // Formulario para crear un PND.
         return view('pdn.create');
     }
 
@@ -24,17 +24,17 @@ class PdnController extends Controller
     {
         // Valida codigo, nombre y estado activo.
         $data = $request->validate([
-            'codigo' => 'required|string|max:20',
+            'codigo' => 'required|string|max:20|unique:pdns,codigo',
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'activo' => 'required|boolean',
         ]);
 
-        // Guarda el registro PND/PDN.
+        // Guarda el registro PND.
         Pdn::create($data);
 
         return redirect()->route('pdn.index')
-            ->with('success', 'Registro PND/PDN creado correctamente.');
+            ->with('success', 'PND creado correctamente.');
     }
 
     public function edit(Pdn $pdn)
@@ -47,7 +47,7 @@ class PdnController extends Controller
     {
         // Valida antes de actualizar.
         $data = $request->validate([
-            'codigo' => 'required|string|max:20',
+            'codigo' => 'required|string|max:20|unique:pdns,codigo,'.$pdn->id,
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'activo' => 'required|boolean',
@@ -57,15 +57,15 @@ class PdnController extends Controller
         $pdn->update($data);
 
         return redirect()->route('pdn.index')
-            ->with('success', 'Registro PND/PDN actualizado correctamente.');
+            ->with('success', 'PND actualizado correctamente.');
     }
 
     public function destroy(Pdn $pdn)
     {
-        // Elimina el registro.
-        $pdn->delete();
+        // Se desactiva para conservar planes y alineaciones históricas.
+        $pdn->update(['activo' => false]);
 
         return redirect()->route('pdn.index')
-            ->with('success', 'Registro PND/PDN eliminado correctamente.');
+            ->with('success', 'PND desactivado correctamente.');
     }
 }

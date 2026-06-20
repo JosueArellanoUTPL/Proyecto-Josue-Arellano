@@ -12,7 +12,7 @@
 
                 <div class="title">Configuración de Alineación</div>
                 <div class="muted" style="margin-top:6px;">
-                    Se registra una relación entre una meta (y opcionalmente un indicador) con instrumentos estratégicos.
+                    Se registra una relación entre una meta y los instrumentos estratégicos.
                 </div>
 
                 <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
@@ -37,29 +37,29 @@
 
                     <div style="display:grid; gap:12px;">
                         <div>
-                            <label class="label">Meta (obligatorio)</label>
-                            <select id="meta_id" name="meta_id" class="input">
+                            <label class="label">Entidad</label>
+                            <div class="muted" style="margin-bottom:6px;">
+                                Primero selecciona una entidad para ver solamente sus metas.
+                            </div>
+                            <select id="entidad_filtro" class="input">
                                 <option value="">Seleccione</option>
-                                @foreach ($metas as $m)
-                                    <option value="{{ $m->id }}" {{ old('meta_id') == $m->id ? 'selected' : '' }}>
-                                        {{ $m->codigo }} - {{ $m->nombre }}
+                                @foreach ($entidades as $entidad)
+                                    <option value="{{ $entidad->id }}">
+                                        {{ $entidad->codigo }} - {{ $entidad->nombre }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div>
-                            <label class="label">Indicador (opcional)</label>
-                            <div class="muted" style="margin-bottom:6px;">
-                                Solo se muestran indicadores que pertenecen a la meta seleccionada.
-                            </div>
-                            <select id="indicador_id" name="indicador_id" class="input">
-                                <option value="">(Ninguno)</option>
-                                @foreach ($indicadores as $i)
-                                    <option value="{{ $i->id }}"
-                                            data-meta="{{ $i->meta_id }}"
-                                            {{ old('indicador_id') == $i->id ? 'selected' : '' }}>
-                                        {{ $i->codigo }} - {{ $i->nombre }}
+                            <label class="label">Meta (obligatorio)</label>
+                            <select id="meta_id" name="meta_id" class="input">
+                                <option value="">Seleccione</option>
+                                @foreach ($metas as $m)
+                                    <option value="{{ $m->id }}"
+                                        data-entidad="{{ $m->plan?->entidad_id }}"
+                                        {{ old('meta_id') == $m->id ? 'selected' : '' }}>
+                                        {{ $m->codigo }} - {{ $m->nombre }} (PND: {{ $m->plan?->pdn?->codigo ?? 'Sin asignar' }})
                                     </option>
                                 @endforeach
                             </select>
@@ -68,7 +68,7 @@
                         <div class="hint">
                             <div class="title">Instrumentos estratégicos</div>
                             <div class="muted" style="margin-top:6px;">
-                                Se requiere seleccionar al menos uno: ODS, PDN o Objetivo Estratégico.
+                                El PND se toma automáticamente del plan. Selecciona al menos un ODS o un objetivo estratégico.
                             </div>
 
                             <div style="display:grid; gap:12px; margin-top:12px;">
@@ -79,18 +79,6 @@
                                         @foreach ($ods as $o)
                                             <option value="{{ $o->id }}" {{ old('ods_id') == $o->id ? 'selected' : '' }}>
                                                 {{ $o->codigo }} - {{ $o->nombre }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label class="label">PDN</label>
-                                    <select name="pdn_id" class="input">
-                                        <option value="">(Ninguno)</option>
-                                        @foreach ($pdns as $p)
-                                            <option value="{{ $p->id }}" {{ old('pdn_id') == $p->id ? 'selected' : '' }}>
-                                                {{ $p->codigo }} - {{ $p->nombre }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -132,35 +120,36 @@
     </div>
 
     <script>
-        // Filtrado de indicadores según la meta seleccionada.
-        // Esto evita seleccionar un indicador que no corresponde a la meta.
+        // Filtra las metas para mostrar solo las de la entidad seleccionada.
         (function () {
+            const entidadSelect = document.getElementById('entidad_filtro');
             const metaSelect = document.getElementById('meta_id');
-            const indSelect  = document.getElementById('indicador_id');
 
-            if (!metaSelect || !indSelect) return;
+            if (!entidadSelect || !metaSelect) return;
 
-            const allOptions = Array.from(indSelect.querySelectorAll('option'));
+            const metaOptions = Array.from(metaSelect.querySelectorAll('option'));
 
-            function applyFilter() {
-                const metaId = metaSelect.value;
-                const current = indSelect.value;
+            function applyMetaFilter(resetMeta = false) {
+                const entidadId = entidadSelect.value;
 
-                allOptions.forEach(opt => {
-                    if (!opt.value) return; // "(Ninguno)" siempre visible
-                    const belongs = opt.getAttribute('data-meta');
-                    opt.hidden = metaId ? (belongs !== metaId) : false;
+                metaOptions.forEach(option => {
+                    if (!option.value) return;
+                    option.hidden = entidadId ? option.dataset.entidad !== entidadId : true;
                 });
 
-                // Si el indicador seleccionado no corresponde a la meta, se resetea a "(Ninguno)"
-                const selected = allOptions.find(o => o.value === current);
-                if (selected && selected.hidden) {
-                    indSelect.value = '';
+                if (resetMeta) {
+                    metaSelect.value = '';
                 }
+
             }
 
-            metaSelect.addEventListener('change', applyFilter);
-            applyFilter();
+            const selectedMeta = metaOptions.find(option => option.selected && option.value);
+            if (selectedMeta) {
+                entidadSelect.value = selectedMeta.dataset.entidad;
+            }
+
+            entidadSelect.addEventListener('change', () => applyMetaFilter(true));
+            applyMetaFilter();
         })();
     </script>
 </x-app-layout>

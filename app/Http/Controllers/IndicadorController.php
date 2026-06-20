@@ -26,13 +26,13 @@ class IndicadorController extends Controller
     {
         // Valida el formulario antes de guardar el indicador.
         $data = $request->validate([
-            'codigo' => 'required|string|max:30',
+            'codigo' => 'required|string|max:30|unique:indicadores,codigo',
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'meta_id' => 'required|exists:metas,id',
-            'linea_base' => 'nullable|numeric',
-            'valor_meta' => 'nullable|numeric',
-            'unidad' => 'nullable|string|max:50',
+            'linea_base' => 'required|numeric',
+            'valor_meta' => 'required|numeric',
+            'unidad' => 'required|string|max:50',
             'activo' => 'required|boolean',
         ]);
 
@@ -49,7 +49,7 @@ class IndicadorController extends Controller
         $indicador = $indicadore;
 
         // Metas disponibles para cambiar la asociacion del indicador.
-        $metas = Meta::where('activo', true)->orderBy('id', 'desc')->get();
+        $metas = Meta::where('activo', true)->orWhere('id', $indicador->meta_id)->orderBy('id', 'desc')->get();
         return view('indicadores.edit', compact('indicador', 'metas'));
     }
 
@@ -60,13 +60,13 @@ class IndicadorController extends Controller
 
         // Valida los datos antes de actualizar.
         $data = $request->validate([
-            'codigo' => 'required|string|max:30',
+            'codigo' => 'required|string|max:30|unique:indicadores,codigo,'.$indicadore->id,
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'meta_id' => 'required|exists:metas,id',
-            'linea_base' => 'nullable|numeric',
-            'valor_meta' => 'nullable|numeric',
-            'unidad' => 'nullable|string|max:50',
+            'linea_base' => 'required|numeric',
+            'valor_meta' => 'required|numeric',
+            'unidad' => 'required|string|max:50',
             'activo' => 'required|boolean',
         ]);
 
@@ -79,11 +79,11 @@ class IndicadorController extends Controller
 
     public function destroy(Indicador $indicadore)
     {
-        // Renombro y elimino el indicador seleccionado.
+        // Se desactiva para conservar su historial de avances.
         $indicador = $indicadore;
-        $indicador->delete();
+        $indicador->update(['activo' => false]);
 
         return redirect()->route('indicadores.index')
-            ->with('success', 'Indicador eliminado correctamente.');
+            ->with('success', 'Indicador desactivado correctamente.');
     }
 }

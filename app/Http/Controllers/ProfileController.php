@@ -38,7 +38,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Delete the user's account.
+     * Deactivate the user's account without removing its history.
      */
     public function destroy(Request $request): RedirectResponse
     {
@@ -50,7 +50,8 @@ class ProfileController extends Controller
 
         Auth::logout();
 
-        $user->delete();
+        // Se conserva el usuario para no perder autores de avances y auditoría.
+        $user->update(['activo' => false]);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

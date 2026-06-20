@@ -47,6 +47,14 @@
                     </div>
 
                     <div class="mb-4">
+                        <label class="inline-flex items-center gap-2">
+                            <input type="checkbox" name="activo" value="1"
+                                   {{ old('activo', $user->activo) ? 'checked' : '' }}>
+                            <span>Usuario activo</span>
+                        </label>
+                    </div>
+
+                    <div class="mb-4">
                         <label class="block mb-1 font-semibold">Nueva contraseña (opcional)</label>
                         <input name="password" type="password"
                                class="w-full border rounded px-3 py-2">

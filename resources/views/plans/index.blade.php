@@ -29,7 +29,7 @@
                             <th class="py-2">Código</th>
                             <th class="py-2">Nombre</th>
                             <th class="py-2">Entidad</th>
-                            <th class="py-2">PND/PDN</th>
+                            <th class="py-2">PND</th>
                             <th class="py-2">Periodo</th>
                             <th class="py-2">Activo</th>
                             <th class="py-2 text-center w-56">Acciones</th>
@@ -56,12 +56,12 @@
 
                                         <form method="POST"
                                               action="{{ route('plans.destroy', $plan->id) }}"
-                                              onsubmit="return confirm('¿Seguro que deseas eliminar este plan?');">
+                                              onsubmit="return confirm('¿Seguro que deseas desactivar este plan?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
                                                     class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition">
-                                                Eliminar
+                                                Desactivar
                                             </button>
                                         </form>
                                     </div>

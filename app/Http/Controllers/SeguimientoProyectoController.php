@@ -10,8 +10,8 @@ class SeguimientoProyectoController extends Controller
     {
         // Carga datos necesarios para ver proyecto, historial y evidencias.
         $proyecto->load([
-            'entidad',
-            'programa',
+            'programa.entidad',
+            'meta.plan',
 
             // Historial completo de avances con usuario y evidencias.
             'avances' => function ($q) {

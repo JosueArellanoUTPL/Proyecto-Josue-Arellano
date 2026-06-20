@@ -31,6 +31,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'activo',
     ];
 
     // Datos ocultos por seguridad cuando el usuario se convierte a array o JSON.
@@ -44,6 +45,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'activo' => 'boolean',
         ];
     }
 
@@ -56,7 +58,7 @@ class User extends Authenticatable
     public function roleLabel(): string
     {
         // Convierte el rol guardado en base a una etiqueta entendible.
-        return self::ROLE_LABELS[$this->role] ?? $this->role;
+        return self::ROLE_LABELS[$this->role] ?? 'Sin rol asignado';
     }
 
     public function isAdmin(): bool

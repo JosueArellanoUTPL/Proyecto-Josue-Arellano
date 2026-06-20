@@ -26,9 +26,8 @@ class TrazabilidadController extends Controller
         $q = Alineacion::query()
             ->with([
                 'meta.plan.entidad',
-                'indicador',
+                'meta.plan.pdn',
                 'ods',
-                'pdn',
                 'objetivoEstrategico'
             ]);
 
@@ -45,7 +44,7 @@ class TrazabilidadController extends Controller
             $q->where('ods_id', $fOds);
         }
         if (!empty($fPdn)) {
-            $q->where('pdn_id', $fPdn);
+            $q->whereHas('meta.plan', fn ($plan) => $plan->where('pdn_id', $fPdn));
         }
         if (!empty($fObjetivo)) {
             $q->where('objetivo_estrategico_id', $fObjetivo);
@@ -59,13 +58,6 @@ class TrazabilidadController extends Controller
         }
 
         $alineaciones = $q->orderBy('id', 'desc')->get();
-
-        // KPIs pequenos para la cabecera de trazabilidad.
-        $kpiTotal = $alineaciones->count();
-        $kpiConIndicador = $alineaciones->whereNotNull('indicador_id')->count();
-        $kpiConODS = $alineaciones->whereNotNull('ods_id')->count();
-        $kpiConPDN = $alineaciones->whereNotNull('pdn_id')->count();
-        $kpiConOE = $alineaciones->whereNotNull('objetivo_estrategico_id')->count();
 
         // Catalogos para llenar los filtros.
         $entidades = Entidad::where('activo', 1)->orderBy('nombre')->get();
@@ -81,11 +73,6 @@ class TrazabilidadController extends Controller
             'ods',
             'pdns',
             'objetivos',
-            'kpiTotal',
-            'kpiConIndicador',
-            'kpiConODS',
-            'kpiConPDN',
-            'kpiConOE',
             'fEntidad',
             'fMeta',
             'fOds',

@@ -9,7 +9,7 @@ return new class extends Migration
     /**
      * Tabla para registrar acciones importantes del sistema.
      *
-     * En este proyecto académico la auditoría se enfoca en:
+     * La auditoría del sistema se enfoca en:
      * - usuario que realizó la acción
      * - módulo afectado
      * - tipo de acción: crear, actualizar, eliminar, etc.

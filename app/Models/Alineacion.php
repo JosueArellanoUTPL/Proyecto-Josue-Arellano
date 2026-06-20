@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Meta;
-use App\Models\Indicador;
 use App\Models\Ods;
-use App\Models\Pdn;
 use App\Models\ObjetivoEstrategico;
 
 class Alineacion extends Model
@@ -21,9 +19,7 @@ class Alineacion extends Model
     // Campos que se guardan al crear una alineacion.
     protected $fillable = [
         'meta_id',
-        'indicador_id',
         'ods_id',
-        'pdn_id',
         'objetivo_estrategico_id',
         'activo'
     ];
@@ -34,22 +30,16 @@ class Alineacion extends Model
         return $this->belongsTo(Meta::class);
     }
 
-    public function indicador()
-    {
-        // El indicador es opcional para hacer la alineacion mas especifica.
-        return $this->belongsTo(Indicador::class);
-    }
-
     public function ods()
     {
         // Relacion con ODS.
         return $this->belongsTo(Ods::class);
     }
 
-    public function pdn()
+    public function getPdnAttribute()
     {
-        // Relacion con PDN.
-        return $this->belongsTo(Pdn::class);
+        // Relación con el Plan Nacional de Desarrollo (PND).
+        return $this->meta?->plan?->pdn;
     }
 
     public function objetivoEstrategico()
@@ -68,7 +58,7 @@ class Alineacion extends Model
         }
 
         if ($this->pdn) {
-            $parts[] = 'PDN';
+            $parts[] = 'PND';
         }
 
         if ($this->objetivoEstrategico) {

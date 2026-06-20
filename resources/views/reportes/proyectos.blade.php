@@ -44,6 +44,7 @@
                                     <th>Proyecto</th>
                                     <th>Entidad</th>
                                     <th>Programa</th>
+                                    <th>Meta</th>
                                     <th>Avance</th>
                                     <th>Ultima fecha</th>
                                     <th>Registros</th>
@@ -60,6 +61,7 @@
                                         <td>{{ $proyecto->nombre }}</td>
                                         <td>{{ $proyecto->entidad->nombre ?? '-' }}</td>
                                         <td>{{ $proyecto->programa->nombre ?? '-' }}</td>
+                                        <td>{{ $proyecto->meta ? $proyecto->meta->codigo.' - '.$proyecto->meta->nombre : 'Sin asignar' }}</td>
                                         <td>{{ round($proyecto->progreso, 2) }}%</td>
                                         <td>{{ $proyecto->ultimoAvance?->fecha?->format('d/m/Y') ?? '-' }}</td>
                                         <td>{{ $proyecto->avances->count() }}</td>
@@ -67,7 +69,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="muted">No hay proyectos para los filtros seleccionados.</td>
+                                        <td colspan="8" class="muted">No hay proyectos para los filtros seleccionados.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

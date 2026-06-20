@@ -29,7 +29,7 @@
                             <th class="py-2">Código</th>
                             <th class="py-2">Nombre</th>
                             <th class="py-2">Plan</th>
-                            <th class="py-2">Objetivo</th>
+                            <th class="py-2">Indicadores</th>
                             <th class="py-2">Activo</th>
                             <th class="py-2 text-center w-56">Acciones</th>
                         </tr>
@@ -43,10 +43,9 @@
                                 <td class="py-2">{{ $meta->nombre }}</td>
                                 <td class="py-2">{{ $meta->plan->nombre ?? '-' }}</td>
                                 <td class="py-2">
-                                    @if($meta->valor_objetivo !== null)
-                                        {{ $meta->valor_objetivo }} {{ $meta->unidad }}
-                                    @else
-                                        -
+                                    {{ $meta->indicadores_count }}
+                                    @if($meta->indicadores_count === 0)
+                                        <span class="muted">(Pendiente)</span>
                                     @endif
                                 </td>
                                 <td class="py-2">{{ $meta->activo ? 'Sí' : 'No' }}</td>
@@ -60,12 +59,12 @@
 
                                         <form method="POST"
                                               action="{{ route('metas.destroy', $meta->id) }}"
-                                              onsubmit="return confirm('¿Seguro que deseas eliminar esta meta?');">
+                                              onsubmit="return confirm('¿Seguro que deseas desactivar esta meta?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
                                                     class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition">
-                                                Eliminar
+                                                Desactivar
                                             </button>
                                         </form>
                                     </div>

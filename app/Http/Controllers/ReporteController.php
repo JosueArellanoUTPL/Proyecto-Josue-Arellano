@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Alineacion;
 use App\Models\Entidad;
-use App\Models\Indicador;
 use App\Models\Meta;
-use App\Models\Plan;
-use App\Models\Programa;
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
 
@@ -15,57 +12,27 @@ class ReporteController extends Controller
 {
     public function index()
     {
-        // Pantalla inicial del modulo: solo muestra accesos a los reportes.
+        // Pantalla inicial con los accesos a cada reporte.
         return view('reportes.index');
-    }
-
-    public function institucional()
-    {
-        // Datos generales para el reporte institucional.
-        $metas = Meta::with('indicadores.ultimoAvance')->get();
-        $proyectos = Proyecto::with('ultimoAvance')->get();
-
-        // Promedios que se muestran como porcentajes principales.
-        $progresoMetas = $metas->count()
-            ? round($metas->avg(fn ($meta) => (float) $meta->progreso), 2)
-            : 0;
-
-        $progresoProyectos = $proyectos->count()
-            ? round($proyectos->avg(fn ($proyecto) => (float) $proyecto->progreso), 2)
-            : 0;
-
-        // Numeros pequenos tipo KPI del reporte.
-        $kpis = [
-            'entidades' => Entidad::count(),
-            'programas' => Programa::count(),
-            'proyectos' => Proyecto::count(),
-            'planes' => Plan::count(),
-            'metas' => Meta::count(),
-            'indicadores' => Indicador::count(),
-            'alineaciones' => Alineacion::count(),
-            'progreso_metas' => $progresoMetas,
-            'progreso_proyectos' => $progresoProyectos,
-        ];
-
-        // Se carga todo lo necesario para la tabla de resumen por entidad.
-        $entidades = Entidad::with([
-                'plans.metas.indicadores.ultimoAvance',
-                'programas',
-                'proyectos.ultimoAvance',
-            ])
-            ->orderBy('nombre')
-            ->get();
-
-        return view('reportes.institucional', compact('kpis', 'entidades'));
     }
 
     public function metas(Request $request)
     {
-        // Consulta base: metas con su plan, entidad e indicadores.
-        $query = Meta::with(['plan.entidad', 'indicadores.ultimoAvance'])
+        // Valida solamente los filtros visibles del reporte.
+        $request->validate([
+            'entidad_id' => ['nullable', 'exists:entidades,id'],
+            'estado' => ['nullable', 'in:completadas,en_progreso,pendientes'],
+        ]);
+
+        $query = Meta::where('activo', 1)
+            ->with([
+                'plan.entidad',
+                'indicadores' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
+            ])
+            ->withCount(['proyectos' => fn ($query) => $query->where('activo', 1)])
             ->orderBy('id', 'desc');
 
-        // Filtro por entidad, usando la entidad del plan.
+        // Filtra las metas usando la entidad que pertenece al plan.
         if ($request->filled('entidad_id')) {
             $query->whereHas('plan', function ($planQuery) use ($request) {
                 $planQuery->where('entidad_id', $request->entidad_id);
@@ -74,12 +41,14 @@ class ReporteController extends Controller
 
         $metas = $query->get();
 
-        // Este filtro se hace en coleccion porque "completada" es un atributo calculado.
+        // El estado es calculado por el modelo y por eso se filtra despues de consultar.
         if ($request->filled('estado')) {
             $metas = $metas->filter(function ($meta) use ($request) {
-                return $request->estado === 'completadas'
-                    ? $meta->completada
-                    : !$meta->completada;
+                return match ($request->estado) {
+                    'completadas' => $meta->completada,
+                    'pendientes' => $meta->indicadores->isEmpty(),
+                    default => $meta->indicadores->isNotEmpty() && !$meta->completada,
+                };
             });
         }
 
@@ -90,18 +59,21 @@ class ReporteController extends Controller
 
     public function proyectos(Request $request)
     {
-        // Consulta base: proyectos con entidad, programa, ultimo avance y evidencias.
-        $query = Proyecto::with([
-                'entidad',
-                'programa',
+        // Valida el unico filtro disponible en este reporte.
+        $request->validate([
+            'entidad_id' => ['nullable', 'exists:entidades,id'],
+        ]);
+
+        $query = Proyecto::where('activo', 1)->with([
+                'programa.entidad',
+                'meta.plan',
                 'ultimoAvance',
                 'avances.evidencias',
             ])
             ->orderBy('id', 'desc');
 
-        // Filtro simple por entidad.
         if ($request->filled('entidad_id')) {
-            $query->where('entidad_id', $request->entidad_id);
+            $query->whereHas('programa', fn ($programa) => $programa->where('entidad_id', $request->entidad_id));
         }
 
         $proyectos = $query->get();
@@ -112,12 +84,11 @@ class ReporteController extends Controller
 
     public function trazabilidad()
     {
-        // Reporte de relaciones: meta, indicador, ODS, PDN y objetivo estrategico.
+        // Carga las relaciones necesarias para imprimir la matriz completa.
         $alineaciones = Alineacion::with([
                 'meta.plan.entidad',
-                'indicador',
+                'meta.plan.pdn',
                 'ods',
-                'pdn',
                 'objetivoEstrategico',
             ])
             ->orderBy('id', 'desc')

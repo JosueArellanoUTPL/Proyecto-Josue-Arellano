@@ -52,22 +52,6 @@
                         </select>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label class="block mb-1">Valor objetivo (opcional)</label>
-                            <input type="number" step="0.01" name="valor_objetivo"
-                                   value="{{ old('valor_objetivo', $meta->valor_objetivo) }}"
-                                   class="w-full border rounded px-3 py-2">
-                        </div>
-
-                        <div>
-                            <label class="block mb-1">Unidad (opcional)</label>
-                            <input name="unidad"
-                                   value="{{ old('unidad', $meta->unidad) }}"
-                                   class="w-full border rounded px-3 py-2">
-                        </div>
-                    </div>
-
                     <div class="mb-4">
                         <label class="inline-flex items-center gap-2">
                             <input type="checkbox" name="activo" value="1"

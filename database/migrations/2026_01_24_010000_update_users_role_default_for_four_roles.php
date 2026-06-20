@@ -13,11 +13,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // SQLite se usa solo en pruebas y no acepta la palabra MODIFY de MySQL.
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         DB::statement("ALTER TABLE users MODIFY role VARCHAR(255) NOT NULL DEFAULT 'consulta'");
     }
 
     public function down(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         DB::statement("ALTER TABLE users MODIFY role VARCHAR(255) NOT NULL DEFAULT 'tecnico'");
     }
 };

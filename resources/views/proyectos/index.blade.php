@@ -26,9 +26,11 @@
                     <thead>
                         <tr class="text-left border-b">
                             <th class="py-2">ID</th>
+                            <th class="py-2">Código</th>
                             <th class="py-2">Nombre</th>
                             <th class="py-2">Entidad</th>
                             <th class="py-2">Programa</th>
+                            <th class="py-2">Meta que apoya</th>
                             <th class="py-2">Activo</th>
                             <th class="py-2 text-center w-56">Acciones</th>
                         </tr>
@@ -37,9 +39,13 @@
                         @forelse ($proyectos as $proyecto)
                             <tr class="border-b">
                                 <td class="py-2">{{ $proyecto->id }}</td>
+                                <td class="py-2">{{ $proyecto->codigo }}</td>
                                 <td class="py-2">{{ $proyecto->nombre }}</td>
                                 <td class="py-2">{{ $proyecto->entidad->nombre ?? '-' }}</td>
                                 <td class="py-2">{{ $proyecto->programa->nombre ?? '-' }}</td>
+                                <td class="py-2">
+                                    {{ $proyecto->meta ? $proyecto->meta->codigo.' - '.$proyecto->meta->nombre : 'Sin asignar' }}
+                                </td>
                                 <td class="py-2">{{ $proyecto->activo ? 'Sí' : 'No' }}</td>
 
                                 <td class="py-2">
@@ -51,12 +57,12 @@
 
                                         <form method="POST"
                                               action="{{ route('proyectos.destroy', $proyecto->id) }}"
-                                              onsubmit="return confirm('¿Seguro que deseas eliminar este proyecto?');">
+                                              onsubmit="return confirm('¿Seguro que deseas desactivar este proyecto?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
                                                     class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition">
-                                                Eliminar
+                                                Desactivar
                                             </button>
                                         </form>
                                     </div>
@@ -64,7 +70,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-4 text-center text-gray-500">
+                                <td colspan="8" class="py-4 text-center text-gray-500">
                                     No hay proyectos registrados.
                                 </td>
                             </tr>

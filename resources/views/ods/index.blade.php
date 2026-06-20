@@ -50,12 +50,12 @@
 
                                         <form method="POST"
                                               action="{{ route('ods.destroy', $item->id) }}"
-                                              onsubmit="return confirm('¿Seguro que deseas eliminar este ODS?');">
+                                              onsubmit="return confirm('¿Seguro que deseas desactivar este ODS?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
                                                     class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition">
-                                                Eliminar
+                                                Desactivar
                                             </button>
                                         </form>
                                     </div>

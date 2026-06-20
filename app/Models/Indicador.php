@@ -65,9 +65,9 @@ class Indicador extends Model
             return 0;
         }
 
-        // Evita division por cero si la linea base y la meta son iguales.
+        // Si base y meta son iguales, se completa cuando el valor reportado coincide.
         if ((float) $valorMeta === (float) $lineaBase) {
-            return 0;
+            return (float) $valorActual === (float) $valorMeta ? 100 : 0;
         }
 
         $porcentaje = (($valorActual - $lineaBase) / ($valorMeta - $lineaBase)) * 100;

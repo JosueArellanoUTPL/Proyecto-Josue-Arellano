@@ -3,11 +3,12 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\Alineacion;
+use App\Models\Entidad;
 use App\Models\User;
 use App\Models\Pdn;
 use App\Models\Plan;
 use App\Models\Meta;
-use App\Models\Indicador;
 use App\Models\Ods;
 use App\Models\ObjetivoEstrategico;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -35,7 +36,14 @@ class AlineacionCrudTest extends TestCase
             'activo' => true,
         ]);
 
-        // 3) Plan
+        // 3) Entidad responsable del plan.
+        $entidad = Entidad::create([
+            'codigo' => 'ENT-TEST',
+            'nombre' => 'Entidad de Prueba',
+            'activo' => true,
+        ]);
+
+        // 4) Plan
         $plan = Plan::create([
             'codigo' => 'PLAN-TEST',
             'nombre' => 'Plan de Prueba',
@@ -43,29 +51,16 @@ class AlineacionCrudTest extends TestCase
             'anio_inicio' => 2025,
             'anio_fin' => 2027,
             'pdn_id' => $pdn->id,
+            'entidad_id' => $entidad->id,
             'activo' => true,
         ]);
 
-        // 4) Meta
+        // 5) Meta
         $meta = Meta::create([
             'codigo' => 'META-TEST',
             'nombre' => 'Meta de Prueba',
             'descripcion' => 'Meta para pruebas',
             'plan_id' => $plan->id,
-            'valor_objetivo' => 70,
-            'unidad' => '%',
-            'activo' => true,
-        ]);
-
-        // 5) Indicador (opcional)
-        $indicador = Indicador::create([
-            'codigo' => 'IND-TEST',
-            'nombre' => 'Indicador de Prueba',
-            'descripcion' => 'Indicador para pruebas',
-            'meta_id' => $meta->id,
-            'linea_base' => 30,
-            'valor_meta' => 70,
-            'unidad' => '%',
             'activo' => true,
         ]);
 
@@ -87,9 +82,7 @@ class AlineacionCrudTest extends TestCase
         // 8) POST a alineaciones.store
         $response = $this->actingAs($admin)->post('/alineaciones', [
             'meta_id' => $meta->id,
-            'indicador_id' => $indicador->id,
             'ods_id' => $ods->id,
-            'pdn_id' => $pdn->id,
             'objetivo_estrategico_id' => $obj->id,
             'activo' => 1,
         ]);
@@ -100,10 +93,12 @@ class AlineacionCrudTest extends TestCase
         // 10) Verificar BD (tabla "alineaciones")
         $this->assertDatabaseHas('alineaciones', [
             'meta_id' => $meta->id,
-            'indicador_id' => $indicador->id,
             'ods_id' => $ods->id,
-            'pdn_id' => $pdn->id,
             'objetivo_estrategico_id' => $obj->id,
         ]);
+
+        // El PND se obtiene desde el plan de la meta y no se guarda duplicado.
+        $alineacion = Alineacion::with('meta.plan.pdn')->firstOrFail();
+        $this->assertSame($pdn->id, $alineacion->pdn->id);
     }
 }

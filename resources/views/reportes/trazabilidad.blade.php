@@ -10,7 +10,7 @@
             <div class="wrap report-page">
                 @include('reportes.partials.header', [
                     'title' => 'Reporte de Trazabilidad',
-                    'subtitle' => 'Relacion entre metas, indicadores e instrumentos estrategicos.'
+                    'subtitle' => 'Relacion entre metas e instrumentos estrategicos.'
                 ])
 
                 {{-- Tabla de alineaciones: sirve para demostrar trazabilidad estrategica. --}}
@@ -23,9 +23,8 @@
                                 <tr>
                                     <th>Meta</th>
                                     <th>Entidad</th>
-                                    <th>Indicador</th>
                                     <th>ODS</th>
-                                    <th>PDN</th>
+                                    <th>PND</th>
                                     <th>Objetivo Estrategico</th>
                                     <th>Estado</th>
                                 </tr>
@@ -35,7 +34,6 @@
                                     <tr>
                                         <td>{{ $alineacion->meta->codigo ?? '-' }} - {{ $alineacion->meta->nombre ?? '-' }}</td>
                                         <td>{{ $alineacion->meta->plan->entidad->nombre ?? '-' }}</td>
-                                        <td>{{ $alineacion->indicador->codigo ?? '-' }} {{ $alineacion->indicador->nombre ?? '' }}</td>
                                         <td>{{ $alineacion->ods->codigo ?? '-' }} {{ $alineacion->ods->nombre ?? '' }}</td>
                                         <td>{{ $alineacion->pdn->codigo ?? '-' }} {{ $alineacion->pdn->nombre ?? '' }}</td>
                                         <td>{{ $alineacion->objetivoEstrategico->nombre ?? '-' }}</td>
@@ -43,7 +41,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="muted">No hay registros de trazabilidad.</td>
+                                        <td colspan="6" class="muted">No hay registros de trazabilidad.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

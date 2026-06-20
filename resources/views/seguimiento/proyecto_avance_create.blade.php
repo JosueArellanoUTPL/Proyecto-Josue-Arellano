@@ -67,7 +67,7 @@
 
                             {{-- En creación se permite subir 1 evidencia.
                                  Si luego se desea agregar más, se hace desde el historial del avance. --}}
-                            <input type="file" name="evidencias[]" class="input">
+                            <input type="file" name="evidencias[]" class="input" accept=".pdf,.jpg,.jpeg,.png">
                             <div class="muted" style="margin-top:6px;">
                                 Se puede agregar más evidencias después desde el avance.
                                 Máx 5MB.

@@ -54,24 +54,27 @@
 
                     <div class="grid grid-cols-3 gap-4 mb-4">
                         <div>
-                            <label class="block mb-1">Línea base (opcional)</label>
+                            <label class="block mb-1">Línea base</label>
                             <input type="number" step="0.01" name="linea_base"
                                    value="{{ old('linea_base') }}"
+                                   required
                                    class="w-full border rounded px-3 py-2">
                         </div>
 
                         <div>
-                            <label class="block mb-1">Valor meta (opcional)</label>
+                            <label class="block mb-1">Valor meta</label>
                             <input type="number" step="0.01" name="valor_meta"
                                    value="{{ old('valor_meta') }}"
+                                   required
                                    class="w-full border rounded px-3 py-2">
                         </div>
 
                         <div>
-                            <label class="block mb-1">Unidad (opcional)</label>
+                            <label class="block mb-1">Unidad</label>
                             <input name="unidad"
                                    placeholder="Ej: %, USD, unidades"
                                    value="{{ old('unidad') }}"
+                                   required
                                    class="w-full border rounded px-3 py-2">
                         </div>
                     </div>

@@ -16,6 +16,7 @@ class Programa extends Model
 
     // Campos que se guardan desde el CRUD de programas.
     protected $fillable = [
+        'codigo',
         'entidad_id',
         'nombre',
         'descripcion',

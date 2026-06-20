@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            PND / PDN
+            Plan Nacional de Desarrollo
         </h2>
     </x-slot>
 
@@ -17,7 +17,7 @@
             <div class="mb-4">
                 <a href="{{ route('pdn.create') }}"
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-black font-semibold rounded shadow transition">
-                    + Nuevo PND/PDN
+                    + Nuevo PND
                 </a>
             </div>
 
@@ -50,12 +50,12 @@
 
                                         <form method="POST"
                                               action="{{ route('pdn.destroy', $item->id) }}"
-                                              onsubmit="return confirm('¿Seguro que deseas eliminar este registro?');">
+                                              onsubmit="return confirm('¿Seguro que deseas desactivar este PND?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
                                                     class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition">
-                                                Eliminar
+                                                Desactivar
                                             </button>
                                         </form>
                                     </div>
@@ -64,7 +64,7 @@
                         @empty
                             <tr>
                                 <td class="py-4 text-center text-gray-500" colspan="5">
-                                    No hay registros PND/PDN.
+                                    No hay registros PND.
                                 </td>
                             </tr>
                         @endforelse

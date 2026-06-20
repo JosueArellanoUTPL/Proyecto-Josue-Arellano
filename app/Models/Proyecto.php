@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Entidad;
 use App\Models\Programa;
+use App\Models\Meta;
 use App\Models\ProyectoAvance;
 
 class Proyecto extends Model
@@ -14,23 +14,30 @@ class Proyecto extends Model
 
     // Campos que se guardan al crear o editar proyectos.
     protected $fillable = [
+        'codigo',
         'nombre',
         'descripcion',
-        'entidad_id',
         'programa_id',
+        'meta_id',
         'activo'
     ];
-
-    public function entidad()
-    {
-        // El proyecto pertenece a una entidad.
-        return $this->belongsTo(Entidad::class);
-    }
 
     public function programa()
     {
         // El proyecto pertenece a un programa.
         return $this->belongsTo(Programa::class);
+    }
+
+    public function getEntidadAttribute()
+    {
+        // No se guarda otra vez: se toma desde el programa del proyecto.
+        return $this->programa?->entidad;
+    }
+
+    public function meta()
+    {
+        // La meta explica que resultado del plan apoya este proyecto.
+        return $this->belongsTo(Meta::class);
     }
 
     public function avances()

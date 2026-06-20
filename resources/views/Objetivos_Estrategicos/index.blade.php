@@ -26,6 +26,7 @@
                     <thead>
                         <tr class="text-left border-b">
                             <th class="py-2">ID</th>
+                            <th class="py-2">Código</th>
                             <th class="py-2">Nombre</th>
                             <th class="py-2">Activo</th>
                             <th class="py-2 text-center w-56">Acciones</th>
@@ -36,6 +37,7 @@
                         @forelse ($items as $item)
                             <tr class="border-b">
                                 <td class="py-2">{{ $item->id }}</td>
+                                <td class="py-2">{{ $item->codigo }}</td>
                                 <td class="py-2">{{ $item->nombre }}</td>
                                 <td class="py-2">{{ $item->activo ? 'Sí' : 'No' }}</td>
 
@@ -48,12 +50,12 @@
 
                                         <form method="POST"
                                               action="{{ route('objetivos-estrategicos.destroy', $item->id) }}"
-                                              onsubmit="return confirm('¿Seguro que deseas eliminar este objetivo estratégico?');">
+                                              onsubmit="return confirm('¿Seguro que deseas desactivar este objetivo estratégico?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
                                                     class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition">
-                                                Eliminar
+                                                Desactivar
                                             </button>
                                         </form>
                                     </div>
@@ -61,7 +63,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="py-4 text-center text-gray-500" colspan="4">
+                                <td class="py-4 text-center text-gray-500" colspan="5">
                                     No hay objetivos estratégicos registrados.
                                 </td>
                             </tr>

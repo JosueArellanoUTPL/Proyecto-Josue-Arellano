@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Entidad;
 use App\Models\Pdn;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -30,7 +31,14 @@ class PlanCrudTest extends TestCase
             'activo' => true,
         ]);
 
-        // 3) Enviar POST al store de plans
+        // 3) Crear la entidad responsable del plan.
+        $entidad = Entidad::create([
+            'codigo' => 'ENT-TEST',
+            'nombre' => 'Entidad de Prueba',
+            'activo' => true,
+        ]);
+
+        // 4) Enviar POST al store de plans
         $response = $this->actingAs($admin)->post('/plans', [
             'codigo' => 'PLAN-TEST',
             'nombre' => 'Plan de Prueba',
@@ -38,6 +46,7 @@ class PlanCrudTest extends TestCase
             'anio_inicio' => 2025,
             'anio_fin' => 2027,
             'pdn_id' => $pdn->id,
+            'entidad_id' => $entidad->id,
             'activo' => 1,
         ]);
 
@@ -48,6 +57,7 @@ class PlanCrudTest extends TestCase
         $this->assertDatabaseHas('plans', [
             'codigo' => 'PLAN-TEST',
             'pdn_id' => $pdn->id,
+            'entidad_id' => $entidad->id,
         ]);
     }
 }

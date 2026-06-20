@@ -97,12 +97,9 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
         Route::get('/seguimiento/trazabilidad', [TrazabilidadController::class, 'index'])
             ->name('seguimiento.trazabilidad');
 
-        // Reportes consultivos: sirven para imprimir o exportar como PDF desde el navegador.
+        // Reportes consultivos: se imprimen o guardan como PDF desde el navegador.
         Route::get('/reportes', [ReporteController::class, 'index'])
             ->name('reportes.index');
-
-        Route::get('/reportes/institucional', [ReporteController::class, 'institucional'])
-            ->name('reportes.institucional');
 
         Route::get('/reportes/metas', [ReporteController::class, 'metas'])
             ->name('reportes.metas');
@@ -171,19 +168,21 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
     */
     Route::middleware(['role:admin,planificacion'])->group(function () {
 
-        Route::resource('entidades', EntidadController::class);
-        Route::resource('programas', ProgramaController::class);
-        Route::resource('proyectos', ProyectoController::class);
+        Route::resource('entidades', EntidadController::class)->except(['show']);
+        Route::resource('programas', ProgramaController::class)->except(['show']);
+        // Proyectos no tiene pantalla show en el CRUD; el detalle vive en seguimiento.
+        Route::resource('proyectos', ProyectoController::class)->except(['show']);
 
-        Route::resource('objetivos-estrategicos', ObjetivoEstrategicoController::class);
-        Route::resource('ods', OdsController::class);
-        Route::resource('pdn', PdnController::class);
+        Route::resource('objetivos-estrategicos', ObjetivoEstrategicoController::class)->except(['show']);
+        Route::resource('ods', OdsController::class)->except(['show']);
+        Route::resource('pdn', PdnController::class)->except(['show']);
 
-        Route::resource('plans', PlanController::class);
-        Route::resource('metas', MetaController::class);
-        Route::resource('indicadores', IndicadorController::class);
+        Route::resource('plans', PlanController::class)->except(['show']);
+        Route::resource('metas', MetaController::class)->except(['show']);
+        Route::resource('indicadores', IndicadorController::class)->except(['show']);
 
         Route::resource('alineaciones', AlineacionController::class)
+            ->except(['show'])
             ->parameters(['alineaciones' => 'alineacion']);
     });
 
@@ -201,24 +200,6 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
             ->name('auditoria.index');
     });
 });
-
-/*
-|--------------------------------------------------------------------------
-| Rutas por rol (pruebas simples)
-|--------------------------------------------------------------------------
-| Estas rutas son solo para probar rapido si el middleware de roles funciona.
-*/
-Route::get('/admin', fn () => 'Panel Admin OK')
-    ->middleware(['auth', 'role:admin']);
-
-Route::get('/tecnico', fn () => 'Panel Tecnico OK')
-    ->middleware(['auth', 'role:tecnico']);
-
-Route::get('/consulta', fn () => 'Panel Consulta OK')
-    ->middleware(['auth', 'role:consulta']);
-
-Route::get('/planificacion', fn () => 'Panel Planificacion OK')
-    ->middleware(['auth', 'role:planificacion']);
 
 /*
 |--------------------------------------------------------------------------

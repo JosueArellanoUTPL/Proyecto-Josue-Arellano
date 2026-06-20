@@ -11,18 +11,11 @@
                 {{-- Pantalla principal de reportes: solo tiene accesos a cada reporte. --}}
                 <div class="title">Generacion de reportes</div>
                 <div class="muted" style="margin-top:6px;">
-                    Reportes basicos para consulta, seguimiento y respaldo academico del sistema.
+                    Reportes básicos para consulta, seguimiento y respaldo institucional.
                 </div>
 
                 {{-- Cada tarjeta entra a un reporte diferente. --}}
                 <div class="report-grid">
-                    <a href="{{ route('reportes.institucional') }}" class="card report-card">
-                        <div class="title">Reporte institucional</div>
-                        <div class="muted" style="margin-top:6px;">
-                            Resumen general de entidades, planes, metas, proyectos y avances.
-                        </div>
-                    </a>
-
                     <a href="{{ route('reportes.metas') }}" class="card report-card">
                         <div class="title">Reporte de metas</div>
                         <div class="muted" style="margin-top:6px;">
@@ -40,7 +33,7 @@
                     <a href="{{ route('reportes.trazabilidad') }}" class="card report-card">
                         <div class="title">Reporte de trazabilidad</div>
                         <div class="muted" style="margin-top:6px;">
-                            Relacion entre metas, indicadores, ODS, PDN y objetivos estrategicos.
+                            Relación entre metas, ODS, PND y objetivos estratégicos.
                         </div>
                     </a>
                 </div>

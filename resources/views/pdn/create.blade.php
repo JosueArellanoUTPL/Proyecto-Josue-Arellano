@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Crear PND/PDN
+            Crear PND
         </h2>
     </x-slot>
 
@@ -25,7 +25,7 @@
                     <div class="mb-4">
                         <label class="block mb-1">Código</label>
                         <input name="codigo"
-                               placeholder="Ej: PDN-01"
+                               placeholder="Ej: PND-01"
                                value="{{ old('codigo') }}"
                                class="w-full border rounded px-3 py-2">
                     </div>

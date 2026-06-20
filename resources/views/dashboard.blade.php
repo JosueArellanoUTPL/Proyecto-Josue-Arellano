@@ -74,6 +74,10 @@
                                 <span>En progreso</span>
                                 <strong>{{ $metasEnProgreso }}</strong>
                             </div>
+                            <div class="mini-stat">
+                                <span>Pendientes</span>
+                                <strong>{{ $metasPendientes }}</strong>
+                            </div>
                         </div>
                     </div>
 
@@ -128,7 +132,7 @@
                     </div>
                 </div>
 
-                {{-- Ranking por entidad y grafica mensual. --}}
+                {{-- Ranking por entidad y distribucion sencilla de metas. --}}
                 <div class="dashboard-grid-2">
                     <div class="card">
                         <div class="title">Avance por entidad</div>
@@ -157,23 +161,21 @@
                     </div>
 
                     <div class="card">
-                        <div class="title">Actividad mensual</div>
+                        <div class="title">Distribucion de metas</div>
                         <div class="muted" style="margin-top:6px;">
-                            Avances de proyectos registrados en los ultimos 6 meses.
+                            Cantidad de metas según su estado actual.
                         </div>
 
-                        <div class="month-chart">
-                            @foreach($actividadMensual as $mes)
-                                @php
-                                    // Altura visual de cada barra segun el mes con mayor actividad.
-                                    $height = $maxActividadMensual > 0
-                                        ? max(8, round(($mes['total'] / $maxActividadMensual) * 120))
-                                        : 8;
-                                @endphp
-                                <div class="month-bar">
-                                    <span>{{ $mes['total'] }}</span>
-                                    <div style="height:{{ $height }}px"></div>
-                                    <small>{{ $mes['label'] }}</small>
+                        <div class="bar-list">
+                            @foreach($distribucionMetas as $estado)
+                                <div class="bar-row">
+                                    <div class="bar-row-head">
+                                        <span>{{ $estado['label'] }}</span>
+                                        <strong>{{ $estado['total'] }} ({{ $estado['porcentaje'] }}%)</strong>
+                                    </div>
+                                    <div class="progress">
+                                        <div style="width:{{ $estado['porcentaje'] }}%; background:{{ $estado['color'] }}"></div>
+                                    </div>
                                 </div>
                             @endforeach
                         </div>

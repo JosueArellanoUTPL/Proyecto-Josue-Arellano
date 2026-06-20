@@ -27,7 +27,7 @@ class Plan extends Model
 
     public function pdn()
     {
-        // Un plan pertenece a un PDN.
+        // Un plan pertenece a un PND.
         return $this->belongsTo(Pdn::class);
     }
 

@@ -38,7 +38,12 @@ class Entidad extends Model
 
     public function proyectos()
     {
-        // Una entidad puede tener varios proyectos.
-        return $this->hasMany(Proyecto::class);
+        // Llega a los proyectos mediante los programas de la entidad.
+        return $this->hasManyThrough(
+            Proyecto::class,
+            Programa::class,
+            'entidad_id',
+            'programa_id'
+        );
     }
 }

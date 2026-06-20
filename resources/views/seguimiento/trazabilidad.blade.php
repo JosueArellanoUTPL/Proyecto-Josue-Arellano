@@ -14,41 +14,28 @@
                     <div>
                         <div class="title">Trazabilidad Estratégica</div>
                         <div class="muted" style="margin-top:6px;">
-                            Visualiza cómo las metas (y opcionalmente indicadores) se alinean con ODS, PDN y Objetivos Estratégicos.
+                            Visualiza cómo las metas se alinean con ODS, PND y objetivos estratégicos.
                         </div>
                     </div>
                     <a class="btn" href="{{ route('dashboard') }}">← Dashboard</a>
                 </div>
 
-                <div class="kpis">
-                    <div class="kpi" style="background:#f0f4fb">
-                        <div class="label">Total</div>
-                        <div class="value">{{ $kpiTotal }}</div>
-                    </div>
-                    <div class="kpi" style="background:#eef7f5">
-                        <div class="label">Con Indicador</div>
-                        <div class="value">{{ $kpiConIndicador }}</div>
-                    </div>
-                    <div class="kpi">
-                        <div class="label">Con ODS</div>
-                        <div class="value">{{ $kpiConODS }}</div>
-                    </div>
-                    <div class="kpi">
-                        <div class="label">Con PDN</div>
-                        <div class="value">{{ $kpiConPDN }}</div>
-                    </div>
-                    <div class="kpi">
-                        <div class="label">Con OE</div>
-                        <div class="value">{{ $kpiConOE }}</div>
-                    </div>
-                </div>
+                {{-- Barra compacta para filtrar sin ocupar gran parte de la pantalla. --}}
+                <form class="card trace-filters" method="GET" action="{{ route('seguimiento.trazabilidad') }}">
+                    <div class="trace-filters__top">
+                        <div>
+                            <div class="title">Filtros</div>
+                            <div class="muted">Busca relaciones sin modificar información.</div>
+                        </div>
 
-                <div class="grid2">
-                    <form class="card" method="GET" action="{{ route('seguimiento.trazabilidad') }}">
-                        <div class="title">Filtros</div>
-                        <div class="muted" style="margin-top:6px;">Se filtra la matriz sin modificar datos.</div>
+                        <div class="trace-filters__legend" aria-label="Leyenda de instrumentos">
+                            <span class="chip"><span class="dot blue"></span>ODS</span>
+                            <span class="chip"><span class="dot green"></span>PND</span>
+                            <span class="chip"><span class="dot orange"></span>OE</span>
+                        </div>
+                    </div>
 
-                        <div style="display:grid; gap:12px; margin-top:12px;">
+                    <div class="trace-filters__fields">
                             <div>
                                 <label class="label">Entidad</label>
                                 <select class="input" name="entidad_id">
@@ -86,7 +73,7 @@
                             </div>
 
                             <div>
-                                <label class="label">PDN</label>
+                                <label class="label">PND</label>
                                 <select class="input" name="pdn_id">
                                     <option value="">(Cualquiera)</option>
                                     @foreach($pdns as $p)
@@ -116,31 +103,13 @@
                                     <option value="0" @selected((string)$fSoloActivas === '0')>Todas</option>
                                 </select>
                             </div>
-                        </div>
 
-                        <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+                        <div class="trace-filters__actions">
                             <button class="btn" type="submit">Aplicar filtros</button>
                             <a class="btn" href="{{ route('seguimiento.trazabilidad') }}">Limpiar</a>
                         </div>
-                    </form>
-
-                    <div class="card">
-                        <div class="title">Leyenda</div>
-                        <div class="muted" style="margin-top:6px;">
-                            Cada registro representa una relación de trazabilidad (Meta/Indicador → Instrumentos).
-                        </div>
-
-                        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                            <span class="chip"><span class="dot blue"></span>ODS</span>
-                            <span class="chip"><span class="dot green"></span>PDN</span>
-                            <span class="chip"><span class="dot orange"></span>OE</span>
-                        </div>
-
-                        <div class="muted" style="margin-top:12px;">
-                            El seguimiento operativo se observa en metas/indicadores y proyectos. Esta pantalla consolida el vínculo estratégico.
-                        </div>
                     </div>
-                </div>
+                </form>
 
                 <div class="card" style="margin-top:14px;">
                     <div class="title">Registros</div>
@@ -160,17 +129,14 @@
                                             Entidad: {{ $a->meta->plan->entidad->nombre ?? '—' }} ·
                                             Plan: {{ $a->meta->plan->codigo ?? '' }}
                                         </div>
-                                        <div class="small" style="margin-top:4px;">
-                                            Indicador: {{ $a->indicador->codigo ?? '-' }} {{ $a->indicador->nombre ?? '' }}
-                                        </div>
                                     </div>
 
                                     <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
                                         @if($a->ods_id)
                                             <span class="chip"><span class="dot blue"></span>ODS</span>
                                         @endif
-                                        @if($a->pdn_id)
-                                            <span class="chip"><span class="dot green"></span>PDN</span>
+                                        @if($a->pdn)
+                                            <span class="chip"><span class="dot green"></span>PND</span>
                                         @endif
                                         @if($a->objetivo_estrategico_id)
                                             <span class="chip"><span class="dot orange"></span>OE</span>
@@ -184,7 +150,7 @@
 
                                 <div style="margin-top:10px; display:grid; gap:6px;">
                                     <div class="small"><span class="strong">ODS:</span> {{ $a->ods->codigo ?? '-' }} {{ $a->ods->nombre ?? '' }}</div>
-                                    <div class="small"><span class="strong">PDN:</span> {{ $a->pdn->codigo ?? '-' }} {{ $a->pdn->nombre ?? '' }}</div>
+                                    <div class="small"><span class="strong">PND:</span> {{ $a->pdn->codigo ?? '-' }} {{ $a->pdn->nombre ?? '' }}</div>
                                     <div class="small"><span class="strong">OE:</span> {{ $a->objetivoEstrategico->nombre ?? '-' }}</div>
                                 </div>
 

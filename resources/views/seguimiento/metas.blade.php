@@ -36,52 +36,56 @@
                     </div>
                 </div>
 
-                <div class="grid-main">
+                {{-- Los indicadores quedan arriba y corresponden a la entidad filtrada. --}}
+                <div class="kpis seguimiento-kpis">
+                    <div class="kpi">
+                        <div class="label">Metas</div>
+                        <div class="value">{{ $resumen['total'] }}</div>
+                    </div>
+                    <div class="kpi" style="background:#eef7f5">
+                        <div class="label">Completadas</div>
+                        <div class="value">{{ $resumen['completadas'] }}</div>
+                    </div>
+                    <div class="kpi" style="background:#fff6ee">
+                        <div class="label">En progreso</div>
+                        <div class="value">{{ $resumen['en_progreso'] }}</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="label">Pendientes de indicador</div>
+                        <div class="value">{{ $resumen['pendientes'] }}</div>
+                    </div>
+                    <div class="kpi" style="background:#f0f4fb">
+                        <div class="label">Avance promedio</div>
+                        <div class="value">{{ $resumen['progreso_global'] }}%</div>
+                    </div>
+                </div>
 
-                    {{-- Resumen --}}
-                    <div class="card">
-                        <div class="title">Resumen general</div>
-
-                        @php
-                            $total = $metas->count();
-                            $completas = $metas->filter(fn($m) => $m->completada)->count();
-                            $enProgreso = $total - $completas;
-                            $pct = $total > 0 ? round(($completas / $total) * 100, 0) : 0;
-                        @endphp
-
-                        <div class="kpis">
-                            <div class="kpi">
-                                <div class="label">Metas</div>
-                                <div class="value">{{ $total }}</div>
-                            </div>
-                            <div class="kpi" style="background:#eef7f5">
-                                <div class="label">Completadas</div>
-                                <div class="value">{{ $completas }}</div>
-                            </div>
-                            <div class="kpi" style="background:#fff6ee">
-                                <div class="label">En progreso</div>
-                                <div class="value">{{ $enProgreso }}</div>
-                            </div>
-                            <div class="kpi" style="background:#f0f4fb">
-                                <div class="label">% Cumplimiento</div>
-                                <div class="value">{{ $pct }}%</div>
-                            </div>
-                        </div>
-
-                        <div style="margin-top:18px">
-                            <div class="muted">Progreso global</div>
-                            <div class="progress">
-                                <div style="width:{{ $pct }}%; background:var(--green)"></div>
-                            </div>
-                        </div>
+                {{-- El formulario se envia al cambiar la entidad. --}}
+                <form method="GET" action="{{ route('seguimiento.metas') }}" class="card seguimiento-filter">
+                    <div>
+                        <label class="label" for="entidad_id">Filtrar por entidad</label>
+                        <select class="input" id="entidad_id" name="entidad_id" onchange="this.form.submit()">
+                            <option value="">Todas las entidades</option>
+                            @foreach ($entidades as $entidad)
+                                <option value="{{ $entidad->id }}" @selected((string) $entidadSeleccionada === (string) $entidad->id)>
+                                    {{ $entidad->codigo }} - {{ $entidad->nombre }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
-                    {{-- Metas --}}
-                    <div class="metas-grid">
+                    <noscript>
+                        <button type="submit" class="btn">Aplicar filtro</button>
+                    </noscript>
+                </form>
+
+                {{-- Aqui solo aparecen las metas de la entidad seleccionada. --}}
+                <div class="metas-grid seguimiento-metas-grid">
                         @forelse($metas as $meta)
                             @php
                                 $progreso = max(0, min(100, (float)$meta->progreso));
                                 $done = (bool)$meta->completada;
+                                $pending = $meta->indicadores->isEmpty();
                             @endphp
 
                             <a href="{{ route('seguimiento.meta.show', $meta->id) }}"
@@ -98,9 +102,9 @@
                                     </div>
 
                                     {{-- Badge tipo botón fijo --}}
-                                    <span class="status-btn {{ $done ? 'done' : 'progressing' }}">
+                                    <span class="status-btn {{ $pending ? 'pending' : ($done ? 'done' : 'progressing') }}">
                                         <span class="pill-dot"></span>
-                                        {{ $done ? 'Completada' : 'En progreso' }}
+                                        {{ $meta->estado_seguimiento }}
                                     </span>
                                 </div>
 
@@ -111,7 +115,7 @@
                                     </div>
                                     <div class="progress">
                                         <div style="width:{{ $progreso }}%;
-                                            background:{{ $done ? 'var(--green)' : 'var(--orange)' }}">
+                                            background:{{ $pending ? '#cbd5e1' : ($done ? 'var(--green)' : 'var(--orange)') }}">
                                         </div>
                                     </div>
                                 </div>
@@ -120,6 +124,9 @@
                                     <span class="muted">
                                         Indicadores: <strong>{{ $meta->indicadores->count() }}</strong>
                                     </span>
+                                    <span class="muted">
+                                        Proyectos: <strong>{{ $meta->proyectos->count() }}</strong>
+                                    </span>
                                     <span class="link">Ver detalle →</span>
                                 </div>
                             </a>
@@ -127,12 +134,10 @@
                             <div class="card">
                                 <div class="title">Sin metas</div>
                                 <div class="muted" style="margin-top:6px;">
-                                    No hay metas registradas para seguimiento.
+                                    No hay metas registradas para la entidad seleccionada.
                                 </div>
                             </div>
                         @endforelse
-                    </div>
-
                 </div>
             </div>
         </div>

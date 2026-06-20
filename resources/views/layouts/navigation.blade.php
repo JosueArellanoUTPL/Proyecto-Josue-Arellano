@@ -16,36 +16,28 @@
             Dashboard
         </a>
 
-        {{-- Estos accesos son de consulta y seguimiento para los roles permitidos. --}}
-        <div class="sidebar-section">Seguimiento</div>
-
-        <a href="{{ route('seguimiento.metas') }}"
-           class="side-link {{ request()->routeIs('seguimiento.metas', 'seguimiento.meta.show') ? 'active' : '' }}">
-            Metas
-        </a>
-
-        <a href="{{ route('seguimiento.organizacion') }}"
-           class="side-link {{ request()->routeIs('seguimiento.organizacion*') ? 'active' : '' }}">
-            Organizacion
-        </a>
-
-        <a href="{{ route('seguimiento.trazabilidad') }}"
-           class="side-link {{ request()->routeIs('seguimiento.trazabilidad') ? 'active' : '' }}">
-            Trazabilidad
-        </a>
-
-        <a href="{{ route('reportes.index') }}"
-           class="side-link {{ request()->routeIs('reportes.*') ? 'active' : '' }}">
-            Reportes
-        </a>
-
         {{-- Responsable de planificacion y admin ven estos modulos CRUD. --}}
         @if(auth()->user()->canManagePlanning())
-            <div class="sidebar-section">Planificacion</div>
+            <div class="sidebar-section">Planificación institucional</div>
 
             <a href="{{ route('entidades.index') }}"
                class="side-link {{ request()->routeIs('entidades.*') ? 'active' : '' }}">
                 Entidades
+            </a>
+
+            <a href="{{ route('plans.index') }}"
+               class="side-link {{ request()->routeIs('plans.*') ? 'active' : '' }}">
+                Planes
+            </a>
+
+            <a href="{{ route('metas.index') }}"
+               class="side-link {{ request()->routeIs('metas.*') ? 'active' : '' }}">
+                Metas
+            </a>
+
+            <a href="{{ route('indicadores.index') }}"
+               class="side-link {{ request()->routeIs('indicadores.*') ? 'active' : '' }}">
+                Indicadores
             </a>
 
             <a href="{{ route('programas.index') }}"
@@ -58,31 +50,16 @@
                 Proyectos
             </a>
 
-            <a href="{{ route('plans.index') }}"
-               class="side-link {{ request()->routeIs('plans.*') ? 'active' : '' }}">
-                Planes
-            </a>
-
-            <a href="{{ route('metas.index') }}"
-               class="side-link {{ request()->routeIs('metas.*') ? 'active' : '' }}">
-                Metas CRUD
-            </a>
-
-            <a href="{{ route('indicadores.index') }}"
-               class="side-link {{ request()->routeIs('indicadores.*') ? 'active' : '' }}">
-                Indicadores
-            </a>
+            <div class="sidebar-section">Alineación estratégica</div>
 
             <a href="{{ route('alineaciones.index') }}"
                class="side-link {{ request()->routeIs('alineaciones.*') ? 'active' : '' }}">
                 Alineaciones
             </a>
 
-            <div class="sidebar-section">Catalogos</div>
-
             <a href="{{ route('pdn.index') }}"
                class="side-link {{ request()->routeIs('pdn.*') ? 'active' : '' }}">
-                PND / PDN
+                PND
             </a>
 
             <a href="{{ route('ods.index') }}"
@@ -95,6 +72,29 @@
                 Objetivos
             </a>
         @endif
+
+        {{-- Consulta operativa: aquí se revisan resultados, no se mantienen catálogos. --}}
+        <div class="sidebar-section">Seguimiento y consulta</div>
+
+        <a href="{{ route('seguimiento.metas') }}"
+           class="side-link {{ request()->routeIs('seguimiento.metas', 'seguimiento.meta.show') ? 'active' : '' }}">
+            Seguimiento de metas
+        </a>
+
+        <a href="{{ route('seguimiento.organizacion') }}"
+           class="side-link {{ request()->routeIs('seguimiento.organizacion*', 'seguimiento.programa.show', 'seguimiento.proyecto.show') ? 'active' : '' }}">
+            Organizacion
+        </a>
+
+        <a href="{{ route('seguimiento.trazabilidad') }}"
+           class="side-link {{ request()->routeIs('seguimiento.trazabilidad') ? 'active' : '' }}">
+            Trazabilidad
+        </a>
+
+        <a href="{{ route('reportes.index') }}"
+           class="side-link {{ request()->routeIs('reportes.*') ? 'active' : '' }}">
+            Reportes
+        </a>
 
         {{-- Solo admin ve seguridad. --}}
         @if(auth()->user()->isAdmin())

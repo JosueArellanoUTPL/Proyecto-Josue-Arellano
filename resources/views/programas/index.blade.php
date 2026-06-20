@@ -26,6 +26,7 @@
                     <thead>
                         <tr class="text-left border-b">
                             <th class="py-2">ID</th>
+                            <th class="py-2">Código</th>
                             <th class="py-2">Entidad</th>
                             <th class="py-2">Nombre</th>
                             <th class="py-2">Activo</th>
@@ -37,6 +38,7 @@
                         @forelse ($programas as $programa)
                             <tr class="border-b">
                                 <td class="py-2">{{ $programa->id }}</td>
+                                <td class="py-2">{{ $programa->codigo }}</td>
                                 <td class="py-2">
                                     {{ $programa->entidad->nombre ?? '—' }}
                                 </td>
@@ -52,12 +54,12 @@
 
                                         <form method="POST"
                                               action="{{ route('programas.destroy', $programa->id) }}"
-                                              onsubmit="return confirm('¿Seguro que deseas eliminar este programa?');">
+                                              onsubmit="return confirm('¿Seguro que deseas desactivar este programa?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
                                                     class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition">
-                                                Eliminar
+                                                Desactivar
                                             </button>
                                         </form>
                                     </div>
@@ -65,7 +67,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="py-4 text-center text-gray-500" colspan="5">
+                                <td class="py-4 text-center text-gray-500" colspan="6">
                                     No hay programas registrados.
                                 </td>
                             </tr>

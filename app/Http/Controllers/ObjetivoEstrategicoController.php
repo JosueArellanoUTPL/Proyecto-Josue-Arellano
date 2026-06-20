@@ -24,6 +24,7 @@ class ObjetivoEstrategicoController extends Controller
     {
         // Valida nombre, descripcion y estado.
         $data = $request->validate([
+            'codigo' => 'required|string|max:20|unique:objetivo_estrategicos,codigo',
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'activo' => 'required|boolean',
@@ -49,6 +50,7 @@ class ObjetivoEstrategicoController extends Controller
     {
         // Valida antes de actualizar.
         $data = $request->validate([
+            'codigo' => 'required|string|max:20|unique:objetivo_estrategicos,codigo,'.$objetivos_estrategico->id,
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'activo' => 'required|boolean',
@@ -64,11 +66,11 @@ class ObjetivoEstrategicoController extends Controller
 
     public function destroy(ObjetivoEstrategico $objetivos_estrategico)
     {
-        // Elimina el objetivo estrategico.
-        $objetivos_estrategico->delete();
+        // Se desactiva para conservar las alineaciones históricas.
+        $objetivos_estrategico->update(['activo' => false]);
 
         return redirect()
             ->route('objetivos-estrategicos.index')
-            ->with('success', 'Objetivo estrategico eliminado correctamente.');
+            ->with('success', 'Objetivo estratégico desactivado correctamente.');
     }
 }

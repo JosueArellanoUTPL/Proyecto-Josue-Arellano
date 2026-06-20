@@ -63,12 +63,12 @@
 
                                         <form method="POST"
                                               action="{{ route('indicadores.destroy', $ind->id) }}"
-                                              onsubmit="return confirm('¿Seguro que deseas eliminar este indicador?');">
+                                              onsubmit="return confirm('¿Seguro que deseas desactivar este indicador?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
                                                     class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition">
-                                                Eliminar
+                                                Desactivar
                                             </button>
                                         </form>
                                     </div>

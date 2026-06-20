@@ -36,6 +36,7 @@
                     // Progreso calculado desde el modelo Meta.
                     $p = max(0, min(100, (float)$meta->progreso));
                     $done = (bool)$meta->completada;
+                    $pending = $meta->indicadores->isEmpty();
                 @endphp
 
                 {{-- Barra general de progreso de la meta. --}}
@@ -47,12 +48,31 @@
                                 Calculado automaticamente con el promedio de avance de los indicadores.
                             </div>
                         </div>
-                        <strong>{{ round($p) }}%</strong>
+                        <strong>{{ $pending ? 'Pendiente de indicadores' : round($p).'%' }}</strong>
                     </div>
 
-                    <div class="progress">
-                        <div style="width:{{ $p }}%; background:{{ $done ? 'var(--green)' : 'var(--orange)' }}"></div>
-                    </div>
+                    @if(!$pending)
+                        <div class="progress">
+                            <div style="width:{{ $p }}%; background:{{ $done ? 'var(--green)' : 'var(--orange)' }}"></div>
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Proyectos que ayudan directamente al cumplimiento de esta meta. --}}
+                <div class="title" style="margin-top:22px;">Proyectos relacionados</div>
+                <div class="grid-ind">
+                    @forelse($meta->proyectos as $proyecto)
+                        <a class="card" href="{{ route('seguimiento.proyecto.show', $proyecto) }}">
+                            <div class="font-semibold">{{ $proyecto->nombre }}</div>
+                            <div class="muted" style="margin-top:6px;">
+                                Avance actual: {{ round($proyecto->progreso, 2) }}%
+                            </div>
+                        </a>
+                    @empty
+                        <div class="card">
+                            <div class="muted">Esta meta todavía no tiene proyectos relacionados.</div>
+                        </div>
+                    @endforelse
                 </div>
 
                 {{-- Lista de indicadores de esta meta. --}}

@@ -25,6 +25,12 @@
                     @method('PUT')
 
                     <div class="mb-4">
+                        <label class="block mb-1 font-semibold">Código</label>
+                        <input name="codigo" value="{{ old('codigo', $item->codigo) }}"
+                               class="w-full border rounded px-3 py-2" required>
+                    </div>
+
+                    <div class="mb-4">
                         <label class="block mb-1 font-semibold">Nombre</label>
                         <input name="nombre"
                                value="{{ old('nombre', $item->nombre) }}"

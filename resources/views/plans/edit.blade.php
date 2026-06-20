@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label class="block mb-1">PND / PDN</label>
+                        <label class="block mb-1">Plan Nacional de Desarrollo (PND)</label>
                         <select name="pdn_id" class="w-full border rounded px-3 py-2">
                             @foreach ($pdns as $pdn)
                                 <option value="{{ $pdn->id }}"

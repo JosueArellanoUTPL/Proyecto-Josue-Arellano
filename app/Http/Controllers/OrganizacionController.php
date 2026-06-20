@@ -9,7 +9,7 @@ class OrganizacionController extends Controller
     public function index()
     {
         // Carga entidades con todo lo necesario para calcular KPIs.
-        $entidades = Entidad::with([
+        $entidades = Entidad::where('activo', 1)->with([
                 'plans.metas.indicadores.ultimoAvance',
                 'programas',
                 'proyectos'
@@ -20,7 +20,8 @@ class OrganizacionController extends Controller
         // Calcula tarjetas de planes, metas, programas, proyectos y progreso.
         $entidadesConKpi = $entidades->map(function ($e) {
             // Todas las metas de todos los planes de esta entidad.
-            $metas = $e->plans->flatMap->metas;
+            $planes = $e->plans->where('activo', true);
+            $metas = $planes->flatMap(fn ($plan) => $plan->metas->where('activo', true));
 
             // Promedio de avance basado en metas.
             $promedio = $metas->count()
@@ -28,10 +29,10 @@ class OrganizacionController extends Controller
                 : 0;
 
             // Valores que se muestran como tarjetas en la vista.
-            $e->kpi_planes = $e->plans->count();
+            $e->kpi_planes = $planes->count();
             $e->kpi_metas = $metas->count();
-            $e->kpi_programas = $e->programas->count();
-            $e->kpi_proyectos = $e->proyectos->count();
+            $e->kpi_programas = $e->programas->where('activo', true)->count();
+            $e->kpi_proyectos = $e->proyectos->where('activo', true)->count();
 
             // Progreso limitado entre 0 y 100.
             $e->kpi_progreso = max(0, min(100, $promedio));
@@ -50,12 +51,15 @@ class OrganizacionController extends Controller
         $entidad->load([
             'programas',
             'proyectos.programa',
+            'proyectos.meta',
             'plans.pdn',
             'plans.metas.indicadores.ultimoAvance'
         ]);
 
         // Todas las metas de todos los planes de la entidad.
-        $metas = $entidad->plans->flatMap->metas;
+        $metas = $entidad->plans
+            ->where('activo', true)
+            ->flatMap(fn ($plan) => $plan->metas->where('activo', true));
 
         // Progreso promedio de la entidad.
         $progresoEntidad = $metas->count()

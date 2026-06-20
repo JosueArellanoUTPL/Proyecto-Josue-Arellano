@@ -108,7 +108,7 @@
                               enctype="multipart/form-data"
                               style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
                             @csrf
-                            <input class="input" style="max-width:360px;" type="file" name="evidencia" required>
+                            <input class="input" style="max-width:360px;" type="file" name="evidencia" accept=".pdf,.jpg,.jpeg,.png" required>
                             <button class="btn" type="submit">+ Evidencia</button>
                         </form>
 

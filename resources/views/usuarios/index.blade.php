@@ -29,6 +29,7 @@
                         <th class="py-2">Nombre</th>
                         <th class="py-2">Email</th>
                         <th class="py-2">Rol</th>
+                        <th class="py-2">Estado</th>
                         <th class="py-2 text-center w-56">Acciones</th>
                     </tr>
                     </thead>
@@ -40,6 +41,7 @@
                             <td class="py-2">{{ $user->name }}</td>
                             <td class="py-2">{{ $user->email }}</td>
                             <td class="py-2">{{ $user->roleLabel() }}</td>
+                            <td class="py-2">{{ $user->activo ? 'Activo' : 'Inactivo' }}</td>
 
                             <td class="py-2">
                                 <div class="flex justify-center gap-2">
@@ -50,12 +52,12 @@
 
                                     <form method="POST"
                                           action="{{ route('usuarios.destroy', $user->id) }}"
-                                          onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
+                                          onsubmit="return confirm('¿Seguro que deseas desactivar este usuario?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
                                                 class="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded transition">
-                                            Eliminar
+                                            Desactivar
                                         </button>
                                     </form>
                                 </div>
@@ -63,7 +65,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td class="py-4 text-center text-gray-500" colspan="5">
+                            <td class="py-4 text-center text-gray-500" colspan="6">
                                 No hay usuarios registrados.
                             </td>
                         </tr>

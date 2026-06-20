@@ -24,7 +24,7 @@ class OdsController extends Controller
     {
         // Valida codigo, nombre y estado activo.
         $data = $request->validate([
-            'codigo' => 'required|string|max:10',
+            'codigo' => 'required|string|max:10|unique:ods,codigo',
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'activo' => 'required|boolean',
@@ -47,7 +47,7 @@ class OdsController extends Controller
     {
         // Valida antes de actualizar.
         $data = $request->validate([
-            'codigo' => 'required|string|max:10',
+            'codigo' => 'required|string|max:10|unique:ods,codigo,'.$od->id,
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'activo' => 'required|boolean',
@@ -62,10 +62,10 @@ class OdsController extends Controller
 
     public function destroy(Ods $od)
     {
-        // Elimina el ODS.
-        $od->delete();
+        // Se desactiva para conservar las alineaciones históricas.
+        $od->update(['activo' => false]);
 
         return redirect()->route('ods.index')
-            ->with('success', 'ODS eliminado correctamente.');
+            ->with('success', 'ODS desactivado correctamente.');
     }
 }

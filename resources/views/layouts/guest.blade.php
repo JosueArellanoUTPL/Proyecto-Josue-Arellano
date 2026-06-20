@@ -20,7 +20,7 @@
                 <a href="/" class="auth-logo">
                     <x-application-logo class="w-20 h-20" />
                 </a>
-                <div class="auth-title">SIPeIP Academico</div>
+                <div class="auth-title">Sistema de Planificación</div>
                 <div class="auth-subtitle">Planificacion, seguimiento y reportes</div>
             </div>
 

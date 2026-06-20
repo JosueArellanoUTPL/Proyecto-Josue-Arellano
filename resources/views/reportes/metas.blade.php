@@ -34,6 +34,7 @@
                                 <option value="">Todos</option>
                                 <option value="completadas" @selected(request('estado') === 'completadas')>Completadas</option>
                                 <option value="en_progreso" @selected(request('estado') === 'en_progreso')>En progreso</option>
+                                <option value="pendientes" @selected(request('estado') === 'pendientes')>Pendientes de indicadores</option>
                             </select>
                         </div>
                     </div>
@@ -57,6 +58,7 @@
                                     <th>Entidad</th>
                                     <th>Plan</th>
                                     <th>Indicadores</th>
+                                    <th>Proyectos</th>
                                     <th>Avance</th>
                                     <th>Estado</th>
                                 </tr>
@@ -69,12 +71,13 @@
                                         <td>{{ $meta->plan->entidad->nombre ?? '-' }}</td>
                                         <td>{{ $meta->plan->codigo ?? '-' }}</td>
                                         <td>{{ $meta->indicadores->count() }}</td>
-                                        <td>{{ round($meta->progreso, 2) }}%</td>
-                                        <td>{{ $meta->completada ? 'Completada' : 'En progreso' }}</td>
+                                        <td>{{ $meta->proyectos_count }}</td>
+                                        <td>{{ $meta->indicadores->isEmpty() ? '-' : round($meta->progreso, 2).'%' }}</td>
+                                        <td>{{ $meta->estado_seguimiento }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="muted">No hay metas para los filtros seleccionados.</td>
+                                        <td colspan="8" class="muted">No hay metas para los filtros seleccionados.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
