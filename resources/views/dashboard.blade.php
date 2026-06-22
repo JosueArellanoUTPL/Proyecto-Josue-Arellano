@@ -64,7 +64,7 @@
                             </div>
                         </div>
 
-                        <div class="dashboard-mini-grid">
+                        <div class="dashboard-mini-grid dashboard-mini-grid-3">
                             <div class="mini-stat">
                                 <span>Completadas</span>
                                 <strong>{{ $metasCompletadas }}</strong>
@@ -107,18 +107,22 @@
                         </div>
                     </div>
 
-                    <div class="card">
-                        <div class="title">Alineacion estrategica</div>
-                        <div class="muted" style="margin-top:6px;">
-                            Porcentaje de metas vinculadas a instrumentos estrategicos.
+                    <div class="card dashboard-score">
+                        <div>
+                            <div class="title">Alineacion estrategica</div>
+                            <div class="muted" style="margin-top:6px;">
+                                Metas vinculadas a instrumentos estrategicos.
+                            </div>
                         </div>
 
-                        <div class="big-number">{{ $porcentajeAlineacion }}%</div>
-                        <div class="progress">
-                            <div style="width:{{ $porcentajeAlineacion }}%; background:var(--green)"></div>
+                        <div class="donut" style="--value: {{ $porcentajeAlineacion }};">
+                            <div>
+                                <strong>{{ $porcentajeAlineacion }}%</strong>
+                                <span>alineacion</span>
+                            </div>
                         </div>
 
-                        <div class="dashboard-mini-grid" style="margin-top:14px;">
+                        <div class="dashboard-mini-grid">
                             <div class="mini-stat">
                                 <span>Alineadas</span>
                                 <strong>{{ $metasAlineadas }}</strong>

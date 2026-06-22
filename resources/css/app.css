@@ -751,12 +751,13 @@
 
     @media (min-width: 1024px) {
         .dashboard-grid-2 {
-            grid-template-columns: 1.15fr .85fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
 
     .dashboard-score {
         display: grid;
+        grid-template-rows: auto 1fr auto;
         gap: 16px;
     }
 
@@ -800,6 +801,11 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 10px;
+        min-height: 90px;
+    }
+
+    .dashboard-mini-grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .mini-stat {
@@ -807,6 +813,7 @@
         background: #fafafa;
         border-radius: 12px;
         padding: 10px;
+        min-width: 0;
     }
 
     .mini-stat span {
