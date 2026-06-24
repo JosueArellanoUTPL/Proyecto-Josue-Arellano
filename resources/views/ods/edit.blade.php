@@ -21,7 +21,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('ods.update', $item->id) }}">
+                <form method="POST" action="{{ route('ods.update', $ods->id) }}">
                     {{-- Formulario de datos. --}}
                     @csrf
                     @method('PUT')
@@ -29,14 +29,14 @@
                     <div class="mb-4">
                         <label class="block mb-1 font-semibold">Código</label>
                         <input name="codigo"
-                               value="{{ old('codigo', $item->codigo) }}"
+                               value="{{ old('codigo', $ods->codigo) }}"
                                class="w-full border rounded px-3 py-2">
                     </div>
 
                     <div class="mb-4">
                         <label class="block mb-1 font-semibold">Nombre</label>
                         <input name="nombre"
-                               value="{{ old('nombre', $item->nombre) }}"
+                               value="{{ old('nombre', $ods->nombre) }}"
                                class="w-full border rounded px-3 py-2">
                     </div>
 
@@ -44,13 +44,13 @@
                         <label class="block mb-1 font-semibold">Descripción</label>
                         <textarea name="descripcion"
                                   rows="3"
-                                  class="w-full border rounded px-3 py-2">{{ old('descripcion', $item->descripcion) }}</textarea>
+                                  class="w-full border rounded px-3 py-2">{{ old('descripcion', $ods->descripcion) }}</textarea>
                     </div>
 
                     <div class="mb-4">
                         <label class="inline-flex items-center gap-2">
                             <input type="checkbox" name="activo" value="1"
-                                   {{ old('activo', $item->activo) ? 'checked' : '' }}>
+                                   {{ old('activo', $ods->activo) ? 'checked' : '' }}>
                             <span>Activo</span>
                         </label>
                     </div>

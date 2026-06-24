@@ -20,7 +20,7 @@
                     <a class="btn" href="{{ route('seguimiento.organizacion') }}">← Volver</a>
                 </div>
 
-                @php $p = max(0, min(100, (int)$progresoEntidad)); @endphp
+                @php $porcentajeEntidad = max(0, min(100, (int)$progresoEntidad)); @endphp
 
                 <div class="card" style="margin-top:16px;">
                     <div class="row">
@@ -30,13 +30,13 @@
                                 Promedio calculado con el progreso de metas asociadas a los planes de esta entidad.
                             </div>
                         </div>
-                        <div class="badge {{ $p >= 100 ? 'green' : 'orange' }}">
-                            {{ $p }}%
+                        <div class="badge {{ $porcentajeEntidad >= 100 ? 'green' : 'orange' }}">
+                            {{ $porcentajeEntidad }}%
                         </div>
                     </div>
 
                     <div class="progress">
-                        <div style="width:{{ $p }}%; background:{{ $p >= 100 ? 'var(--green)' : 'var(--orange)' }}"></div>
+                        <div style="width:{{ $porcentajeEntidad }}%; background:{{ $porcentajeEntidad >= 100 ? 'var(--green)' : 'var(--orange)' }}"></div>
                     </div>
                 </div>
 
@@ -73,17 +73,17 @@
                         <div class="muted" style="margin-top:6px;">Proyectos asociados.</div>
 
                         <div class="list">
-                            @forelse($entidad->proyectos as $pry)
-                                <a href="{{ route('seguimiento.proyecto.show', $pry->id) }}" style="text-decoration:none;">
+                            @forelse($entidad->proyectos as $proyecto)
+                                <a href="{{ route('seguimiento.proyecto.show', $proyecto->id) }}" style="text-decoration:none;">
                                     <div class="row click-card">
                                         <div>
-                                            <strong style="color:var(--text)">{{ $pry->nombre }}</strong>
+                                            <strong style="color:var(--text)">{{ $proyecto->nombre }}</strong>
                                             <div class="muted" style="margin-top:4px;">
-                                                Programa: {{ $pry->programa->nombre ?? '-' }}
+                                                Programa: {{ $proyecto->programa->nombre ?? '-' }}
                                             </div>
                                         </div>
-                                        <span class="badge {{ $pry->activo ? 'green' : 'orange' }}">
-                                            {{ $pry->activo ? 'Activo' : 'Inactivo' }}
+                                        <span class="badge {{ $proyecto->activo ? 'green' : 'orange' }}">
+                                            {{ $proyecto->activo ? 'Activo' : 'Inactivo' }}
                                         </span>
                                     </div>
                                 </a>
@@ -99,7 +99,7 @@
                         <div class="muted" style="margin-top:6px;">Metas asociadas a los planes de esta entidad.</div>
 
                         <div class="list">
-                            @forelse($entidad->plans as $plan)
+                            @forelse($entidad->planes as $plan)
                                 <div style="padding:12px; border-radius:14px; border:1px solid var(--border-soft); background:#fafafa;">
                                     <div class="row">
                                         <strong>{{ $plan->codigo }} — {{ $plan->nombre }}</strong>
@@ -115,20 +115,20 @@
                                     </div>
 
                                     <div style="margin-top:10px; display:grid; gap:8px;">
-                                        @foreach($metasPlan->take(3) as $m)
+                                        @foreach($metasPlan->take(3) as $meta)
                                             @php
-                                                $mp = max(0, min(100, (float)$m->progreso));
-                                                $md = (bool)$m->completada;
+                                                $progresoMeta = max(0, min(100, (float)$meta->progreso));
+                                                $metaCompletada = (bool)$meta->completada;
                                             @endphp
-                                            <a href="{{ route('seguimiento.meta.show', $m->id) }}" style="text-decoration:none;">
+                                            <a href="{{ route('seguimiento.meta.show', $meta->id) }}" style="text-decoration:none;">
                                                 <div class="row">
-                                                    <span class="muted">{{ $m->codigo }} — {{ $m->nombre }}</span>
-                                                    <span class="badge {{ $md ? 'green' : 'orange' }}">
-                                                        {{ round($mp) }}%
+                                                    <span class="muted">{{ $meta->codigo }} — {{ $meta->nombre }}</span>
+                                                    <span class="badge {{ $metaCompletada ? 'green' : 'orange' }}">
+                                                        {{ round($progresoMeta) }}%
                                                     </span>
                                                 </div>
                                                 <div class="progress" style="margin-top:6px;">
-                                                    <div style="width:{{ $mp }}%; background:{{ $md ? 'var(--green)' : 'var(--orange)' }}"></div>
+                                                    <div style="width:{{ $progresoMeta }}%; background:{{ $metaCompletada ? 'var(--green)' : 'var(--orange)' }}"></div>
                                                 </div>
                                             </a>
                                         @endforeach

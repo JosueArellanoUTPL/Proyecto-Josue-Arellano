@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('descripcion')->nullable();
 
             // Relacion con plan.
-            $table->foreignId('plan_id')->constrained('plans')->cascadeOnDelete();
+            $table->foreignId('plan_id')->constrained('planes')->cascadeOnDelete();
 
             // Campos historicos retirados en una migracion posterior.
             $table->decimal('valor_objetivo', 15, 2)->nullable();

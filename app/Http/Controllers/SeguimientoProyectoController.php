@@ -14,8 +14,8 @@ class SeguimientoProyectoController extends Controller
             'meta.plan',
 
             // Historial de avances.
-            'avances' => function ($q) {
-                $q->with(['user', 'evidencias'])
+            'avances' => function ($consulta) {
+                $consulta->with(['user', 'evidencias'])
                     ->orderBy('fecha', 'desc')
                     ->orderBy('id', 'desc');
             },

@@ -42,19 +42,17 @@ class EntidadController extends Controller
     }
 
     // Mostrar formulario para editar entidad.
-    public function edit(Entidad $entidade)
+    public function edit(Entidad $entidad)
     {
-        $entidad = $entidade;
-
         return view('entidades.edit', compact('entidad'));
     }
 
     // Actualizar entidad.
-    public function update(Request $request, Entidad $entidade)
+    public function update(Request $request, Entidad $entidad)
     {
         // Validacion de entidad.
         $validated = $request->validate([
-            'codigo' => ['required', 'string', 'max:20', 'unique:entidades,codigo,'.$entidade->id],
+            'codigo' => ['required', 'string', 'max:20', 'unique:entidades,codigo,'.$entidad->id],
             'nombre' => ['required', 'string', 'max:150'],
             'descripcion' => ['nullable', 'string'],
             'activo' => ['nullable'],
@@ -62,17 +60,17 @@ class EntidadController extends Controller
 
         $validated['activo'] = $request->has('activo');
 
-        $entidade->update($validated);
+        $entidad->update($validated);
 
         return redirect()->route('entidades.index')
             ->with('success', 'Entidad actualizada correctamente.');
     }
 
     // Desactivar entidad.
-    public function destroy(Entidad $entidade)
+    public function destroy(Entidad $entidad)
     {
         // Desactivacion para conservar relaciones.
-        $entidade->update(['activo' => false]);
+        $entidad->update(['activo' => false]);
 
         return redirect()->route('entidades.index')
             ->with('success', 'Entidad desactivada correctamente.');

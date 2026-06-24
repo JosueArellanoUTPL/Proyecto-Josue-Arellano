@@ -72,7 +72,7 @@ class AlineacionController extends Controller
         $data = $request->validate([
             'meta_id' => ['required', 'exists:metas,id'],
             'ods_id' => ['nullable', 'exists:ods,id'],
-            'objetivo_estrategico_id' => ['nullable', 'exists:objetivo_estrategicos,id'],
+            'objetivo_estrategico_id' => ['nullable', 'exists:objetivos_estrategicos,id'],
 
             'activo' => ['nullable'],
         ]);
@@ -115,7 +115,7 @@ class AlineacionController extends Controller
         $data = $request->validate([
             'meta_id' => ['required', 'exists:metas,id'],
             'ods_id' => ['nullable', 'exists:ods,id'],
-            'objetivo_estrategico_id' => ['nullable', 'exists:objetivo_estrategicos,id'],
+            'objetivo_estrategico_id' => ['nullable', 'exists:objetivos_estrategicos,id'],
 
             'activo' => ['nullable'],
         ]);

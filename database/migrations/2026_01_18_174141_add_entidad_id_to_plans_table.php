@@ -9,7 +9,7 @@ return new class extends Migration
     // Aplicar cambios.
     public function up(): void
     {
-        Schema::table('plans', function (Blueprint $table) {
+        Schema::table('planes', function (Blueprint $table) {
             $table->foreignId('entidad_id')
                 ->nullable()
                 ->after('pdn_id')
@@ -21,7 +21,7 @@ return new class extends Migration
     // Revertir cambios.
     public function down(): void
     {
-        Schema::table('plans', function (Blueprint $table) {
+        Schema::table('planes', function (Blueprint $table) {
             $table->dropConstrainedForeignId('entidad_id');
         });
     }

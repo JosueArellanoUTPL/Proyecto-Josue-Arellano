@@ -19,9 +19,9 @@ class MetaController extends Controller
     // Mostrar formulario para crear meta.
     public function create()
     {
-        $plans = Plan::where('activo', true)->orderBy('id', 'desc')->get();
+        $planes = Plan::where('activo', true)->orderBy('id', 'desc')->get();
 
-        return view('metas.create', compact('plans'));
+        return view('metas.create', compact('planes'));
     }
 
     // Guardar meta.
@@ -32,7 +32,7 @@ class MetaController extends Controller
             'codigo' => 'required|string|max:30|unique:metas,codigo',
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
-            'plan_id' => 'required|exists:plans,id',
+            'plan_id' => 'required|exists:planes,id',
             'activo' => 'required|boolean',
         ]);
 
@@ -45,9 +45,9 @@ class MetaController extends Controller
     // Mostrar formulario para editar meta.
     public function edit(Meta $meta)
     {
-        $plans = Plan::where('activo', true)->orWhere('id', $meta->plan_id)->orderBy('id', 'desc')->get();
+        $planes = Plan::where('activo', true)->orWhere('id', $meta->plan_id)->orderBy('id', 'desc')->get();
 
-        return view('metas.edit', compact('meta', 'plans'));
+        return view('metas.edit', compact('meta', 'planes'));
     }
 
     // Actualizar meta.
@@ -58,7 +58,7 @@ class MetaController extends Controller
             'codigo' => 'required|string|max:30|unique:metas,codigo,'.$meta->id,
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
-            'plan_id' => 'required|exists:plans,id',
+            'plan_id' => 'required|exists:planes,id',
             'activo' => 'required|boolean',
         ]);
 

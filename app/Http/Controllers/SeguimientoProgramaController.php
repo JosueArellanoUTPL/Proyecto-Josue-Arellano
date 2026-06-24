@@ -11,8 +11,8 @@ class SeguimientoProgramaController extends Controller
     {
         $programa->load([
             'entidad',
-            'proyectos' => function ($q) {
-                $q->with(['ultimoAvance'])
+            'proyectos' => function ($consulta) {
+                $consulta->with(['ultimoAvance'])
                     ->orderBy('id', 'desc');
             },
         ]);
@@ -24,11 +24,11 @@ class SeguimientoProgramaController extends Controller
 
         // Calculo del avance del programa.
         if ($kpiProyectos > 0) {
-            $avg = $programa->proyectos->avg(function ($pry) {
-                return (float) ($pry->progreso ?? 0);
+            $promedio = $programa->proyectos->avg(function ($proyecto) {
+                return (float) ($proyecto->progreso ?? 0);
             });
 
-            $progresoPrograma = (int) round($avg);
+            $progresoPrograma = (int) round($promedio);
         } else {
             $progresoPrograma = 0;
         }

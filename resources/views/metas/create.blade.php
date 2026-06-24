@@ -47,7 +47,7 @@
                         <label class="block mb-1">Plan</label>
                         <select name="plan_id" class="w-full border rounded px-3 py-2">
                             <option value="">Seleccione</option>
-                            @foreach ($plans as $plan)
+                            @foreach ($planes as $plan)
                                 <option value="{{ $plan->id }}" {{ old('plan_id') == $plan->id ? 'selected' : '' }}>
                                     {{ $plan->codigo }} - {{ $plan->nombre }}
                                 </option>

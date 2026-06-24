@@ -12,9 +12,9 @@ class UserController extends Controller
     // Listar usuarios.
     public function index()
     {
-        $users = User::orderBy('id', 'desc')->paginate(10);
+        $usuarios = User::orderBy('id', 'desc')->paginate(10);
 
-        return view('usuarios.index', compact('users'));
+        return view('usuarios.index', compact('usuarios'));
     }
 
     // Mostrar formulario para crear usuario.
@@ -49,7 +49,7 @@ class UserController extends Controller
     // Mostrar formulario para editar usuario.
     public function edit(User $usuario)
     {
-        return view('usuarios.edit', ['user' => $usuario]);
+        return view('usuarios.edit', compact('usuario'));
     }
 
     // Actualizar usuario.

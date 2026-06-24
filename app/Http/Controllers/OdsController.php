@@ -10,9 +10,9 @@ class OdsController extends Controller
     // Listar ODS.
     public function index()
     {
-        $items = Ods::orderBy('id', 'desc')->get();
+        $objetivosOds = Ods::orderBy('id', 'desc')->get();
 
-        return view('ods.index', compact('items'));
+        return view('ods.index', compact('objetivosOds'));
     }
 
     // Mostrar formulario para crear ODS.
@@ -39,33 +39,33 @@ class OdsController extends Controller
     }
 
     // Mostrar formulario para editar ODS.
-    public function edit(Ods $od)
+    public function edit(Ods $ods)
     {
-        return view('ods.edit', ['item' => $od]);
+        return view('ods.edit', compact('ods'));
     }
 
     // Actualizar ODS.
-    public function update(Request $request, Ods $od)
+    public function update(Request $request, Ods $ods)
     {
         // Validacion de ODS.
         $data = $request->validate([
-            'codigo' => 'required|string|max:10|unique:ods,codigo,'.$od->id,
+            'codigo' => 'required|string|max:10|unique:ods,codigo,'.$ods->id,
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'activo' => 'required|boolean',
         ]);
 
-        $od->update($data);
+        $ods->update($data);
 
         return redirect()->route('ods.index')
             ->with('success', 'ODS actualizado correctamente.');
     }
 
     // Desactivar ODS.
-    public function destroy(Ods $od)
+    public function destroy(Ods $ods)
     {
         // Desactivacion para conservar alineaciones.
-        $od->update(['activo' => false]);
+        $ods->update(['activo' => false]);
 
         return redirect()->route('ods.index')
             ->with('success', 'ODS desactivado correctamente.');

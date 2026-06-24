@@ -32,7 +32,7 @@
                     @endif
                 </div>
 
-                @php $p = max(0, min(100, (int)$progresoPrograma)); @endphp
+                @php $porcentajePrograma = max(0, min(100, (int)$progresoPrograma)); @endphp
 
                 <div class="card" style="margin-top:16px;">
                     <div class="row" style="align-items:center;">
@@ -42,11 +42,11 @@
                                 Calculado como promedio del avance de sus proyectos.
                             </div>
                         </div>
-                        <span class="badge {{ $p >= 100 ? 'green' : 'orange' }}">{{ $p }}%</span>
+                        <span class="badge {{ $porcentajePrograma >= 100 ? 'green' : 'orange' }}">{{ $porcentajePrograma }}%</span>
                     </div>
 
                     <div class="progress">
-                        <div style="width:{{ $p }}%; background:{{ $p >= 100 ? 'var(--green)' : 'var(--orange)' }}"></div>
+                        <div style="width:{{ $porcentajePrograma }}%; background:{{ $porcentajePrograma >= 100 ? 'var(--green)' : 'var(--orange)' }}"></div>
                     </div>
 
                     <div class="kpis">
@@ -70,28 +70,28 @@
                     <div class="muted" style="margin-top:6px;">Cada proyecto muestra su avance actual y permite ver el historial con evidencias.</div>
 
                     <div class="list">
-                        @forelse($programa->proyectos as $pry)
+                        @forelse($programa->proyectos as $proyecto)
                             @php
-                                $pp = max(0, min(100, (int) round($pry->progreso ?? 0)));
-                                $pdone = $pp >= 100;
+                                $progresoProyecto = max(0, min(100, (int) round($proyecto->progreso ?? 0)));
+                                $proyectoCompletado = $progresoProyecto >= 100;
                             @endphp
 
-                            <a href="{{ route('seguimiento.proyecto.show', $pry->id) }}" style="text-decoration:none;">
+                            <a href="{{ route('seguimiento.proyecto.show', $proyecto->id) }}" style="text-decoration:none;">
                                 <div class="click-card">
                                     <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
                                         <div>
-                                            <strong style="color:var(--text)">{{ $pry->nombre }}</strong>
+                                            <strong style="color:var(--text)">{{ $proyecto->nombre }}</strong>
                                             <div class="muted" style="margin-top:4px;">
-                                                {{ $pry->descripcion ? \Illuminate\Support\Str::limit($pry->descripcion, 80) : 'Sin descripción.' }}
+                                                {{ $proyecto->descripcion ? \Illuminate\Support\Str::limit($proyecto->descripcion, 80) : 'Sin descripción.' }}
                                             </div>
                                         </div>
 
                                         <div style="display:flex; gap:8px; align-items:center;">
-                                            <span class="badge {{ $pry->activo ? 'green' : 'orange' }}">
-                                                {{ $pry->activo ? 'Activo' : 'Inactivo' }}
+                                            <span class="badge {{ $proyecto->activo ? 'green' : 'orange' }}">
+                                                {{ $proyecto->activo ? 'Activo' : 'Inactivo' }}
                                             </span>
-                                            <span class="badge {{ $pdone ? 'green' : 'orange' }}">
-                                                {{ $pp }}%
+                                            <span class="badge {{ $proyectoCompletado ? 'green' : 'orange' }}">
+                                                {{ $progresoProyecto }}%
                                             </span>
                                         </div>
                                     </div>
@@ -99,10 +99,10 @@
                                     <div class="mini">
                                         <div class="row2">
                                             <span class="muted">Avance actual</span>
-                                            <span class="pct">{{ $pp }}%</span>
+                                            <span class="pct">{{ $progresoProyecto }}%</span>
                                         </div>
                                         <div class="progress">
-                                            <div style="width:{{ $pp }}%; background:{{ $pdone ? 'var(--green)' : 'var(--orange)' }}"></div>
+                                            <div style="width:{{ $progresoProyecto }}%; background:{{ $proyectoCompletado ? 'var(--green)' : 'var(--orange)' }}"></div>
                                         </div>
                                     </div>
                                 </div>

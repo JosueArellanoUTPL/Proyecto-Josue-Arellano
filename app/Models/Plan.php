@@ -9,6 +9,9 @@ class Plan extends Model
 {
     use HasFactory;
 
+    // Nombre de la tabla.
+    protected $table = 'planes';
+
     // Campos permitidos.
     protected $fillable = [
         'codigo',

@@ -11,7 +11,7 @@ return new class extends Migration
         $this->fillCodes('entidades', 'ENT');
         $this->fillCodes('programas', 'PRG');
         $this->fillCodes('proyectos', 'PRY');
-        $this->fillCodes('objetivo_estrategicos', 'OE');
+        $this->fillCodes('objetivos_estrategicos', 'OE');
     }
 
     public function down(): void

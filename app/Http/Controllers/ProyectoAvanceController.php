@@ -163,8 +163,8 @@ class ProyectoAvanceController extends Controller
         $proyectoId = $avance->proyecto_id;
 
         // Eliminacion de evidencias.
-        foreach ($avance->evidencias as $ev) {
-            Storage::disk('public')->delete($ev->path);
+        foreach ($avance->evidencias as $evidencia) {
+            Storage::disk('public')->delete($evidencia->path);
         }
 
         $avance->delete();

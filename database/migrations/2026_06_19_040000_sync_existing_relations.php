@@ -22,8 +22,8 @@ return new class extends Migration
         // Todas las alineaciones históricas usan el PND del plan de su meta.
         DB::table('alineaciones')
             ->join('metas', 'metas.id', '=', 'alineaciones.meta_id')
-            ->join('plans', 'plans.id', '=', 'metas.plan_id')
-            ->select('alineaciones.id', 'plans.pdn_id')
+            ->join('planes', 'planes.id', '=', 'metas.plan_id')
+            ->select('alineaciones.id', 'planes.pdn_id')
             ->get()
             ->each(function ($row) {
                 DB::table('alineaciones')->where('id', $row->id)->update([

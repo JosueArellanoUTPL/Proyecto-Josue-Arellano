@@ -12,7 +12,7 @@ class AuthAccessTest extends TestCase
     public function test_acceso_sin_login_redirige_a_login()
     {
         // Rutas protegidas por auth (elige una que tengas segura)
-        $response = $this->get('/plans');
+        $response = $this->get('/planes');
 
         // En Breeze normalmente redirige a /login
         $response->assertRedirect('/login');

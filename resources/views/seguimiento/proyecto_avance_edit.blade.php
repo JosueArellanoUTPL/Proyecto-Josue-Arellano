@@ -29,8 +29,8 @@
 
                 {{-- Progreso actual. --}}
                 @php
-                    $p = max(0, min(100, (int)round($avance->porcentaje_avance)));
-                    $done = $p >= 100;
+                    $porcentajeAvance = max(0, min(100, (int)round($avance->porcentaje_avance)));
+                    $avanceCompletado = $porcentajeAvance >= 100;
                 @endphp
 
                 <div class="card" style="margin-top:16px;">
@@ -39,11 +39,11 @@
                             <div class="title">Porcentaje del avance</div>
                             <div class="muted" style="margin-top:6px;">Este porcentaje impacta el progreso actual del proyecto.</div>
                         </div>
-                        <span class="badge {{ $done ? 'green' : 'orange' }}">{{ $p }}%</span>
+                        <span class="badge {{ $avanceCompletado ? 'green' : 'orange' }}">{{ $porcentajeAvance }}%</span>
                     </div>
 
                     <div class="progress">
-                        <div style="width:{{ $p }}%; background:{{ $done ? 'var(--green)' : 'var(--orange)' }}"></div>
+                        <div style="width:{{ $porcentajeAvance }}%; background:{{ $avanceCompletado ? 'var(--green)' : 'var(--orange)' }}"></div>
                     </div>
                 </div>
 
@@ -60,8 +60,8 @@
                             <div style="margin-top:12px; padding:12px; border-radius:14px; border:1px solid #f3b4b4; background:#fff5f5;">
                                 <div class="title">Revisar campos</div>
                                 <ul class="muted" style="margin-top:8px; list-style:disc; padding-left:18px;">
-                                    @foreach($errors->all() as $e)
-                                        <li>{{ $e }}</li>
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -114,27 +114,27 @@
                         {{-- Archivos cargados. --}}
                         @if($avance->evidencias->count())
                             <div class="evid-grid">
-                                @foreach($avance->evidencias as $ev)
+                                @foreach($avance->evidencias as $evidencia)
                                     @php
-                                        $url = asset('storage/' . $ev->path);
-                                        $isImg = $ev->mime_type && str_starts_with($ev->mime_type, 'image/');
-                                        $label = $ev->original_name ?? 'Archivo';
+                                        $urlEvidencia = asset('storage/' . $evidencia->path);
+                                        $esImagen = $evidencia->mime_type && str_starts_with($evidencia->mime_type, 'image/');
+                                        $nombreEvidencia = $evidencia->original_name ?? 'Archivo';
                                     @endphp
 
                                     <div class="thumb">
-                                        <a href="{{ $url }}" target="_blank" style="text-decoration:none; width:100%; height:100%;">
-                                            @if($isImg)
-                                                <img src="{{ $url }}" alt="{{ $label }}">
+                                        <a href="{{ $urlEvidencia }}" target="_blank" style="text-decoration:none; width:100%; height:100%;">
+                                            @if($esImagen)
+                                                <img src="{{ $urlEvidencia }}" alt="{{ $nombreEvidencia }}">
                                             @else
                                                 <div class="filebox" style="height:100%;">
                                                     <div class="fileicon">📄</div>
-                                                    <div class="fname">{{ \Illuminate\Support\Str::limit($label, 22) }}</div>
+                                                    <div class="fname">{{ \Illuminate\Support\Str::limit($nombreEvidencia, 22) }}</div>
                                                 </div>
                                             @endif
                                         </a>
 
                                         <form method="POST"
-                                              action="{{ route('proyectos.avance.evidencia.delete', $ev->id) }}"
+                                              action="{{ route('proyectos.avance.evidencia.delete', $evidencia->id) }}"
                                               onsubmit="return confirm('¿Eliminar esta evidencia?');">
                                             @csrf
                                             @method('DELETE')

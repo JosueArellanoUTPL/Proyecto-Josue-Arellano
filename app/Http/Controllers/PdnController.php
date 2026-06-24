@@ -10,9 +10,9 @@ class PdnController extends Controller
     // Listar PDN.
     public function index()
     {
-        $items = Pdn::orderBy('id', 'desc')->get();
+        $planesNacionales = Pdn::orderBy('id', 'desc')->get();
 
-        return view('pdn.index', compact('items'));
+        return view('pdn.index', compact('planesNacionales'));
     }
 
     // Mostrar formulario para crear PDN.
@@ -41,7 +41,7 @@ class PdnController extends Controller
     // Mostrar formulario para editar PDN.
     public function edit(Pdn $pdn)
     {
-        return view('pdn.edit', ['item' => $pdn]);
+        return view('pdn.edit', compact('pdn'));
     }
 
     // Actualizar PDN.

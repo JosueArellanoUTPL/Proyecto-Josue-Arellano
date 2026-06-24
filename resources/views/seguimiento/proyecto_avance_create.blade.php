@@ -25,8 +25,8 @@
                     <div class="card" style="margin-top:16px; border-color:#f3b4b4; background:#fff5f5;">
                         <div class="title">Revisar campos</div>
                         <ul class="muted" style="margin-top:8px; list-style:disc; padding-left:18px;">
-                            @foreach($errors->all() as $e)
-                                <li>{{ $e }}</li>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                     </div>

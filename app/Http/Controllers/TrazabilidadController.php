@@ -16,14 +16,14 @@ class TrazabilidadController extends Controller
     public function index(Request $request)
     {
         // Filtros de trazabilidad.
-        $fEntidad = $request->query('entidad_id');
-        $fMeta = $request->query('meta_id');
-        $fOds = $request->query('ods_id');
-        $fPdn = $request->query('pdn_id');
-        $fObjetivo = $request->query('objetivo_estrategico_id');
-        $fSoloActivas = $request->query('solo_activas', '1');
+        $entidadId = $request->query('entidad_id');
+        $metaId = $request->query('meta_id');
+        $odsId = $request->query('ods_id');
+        $pdnId = $request->query('pdn_id');
+        $objetivoId = $request->query('objetivo_estrategico_id');
+        $soloActivas = $request->query('solo_activas', '1');
 
-        $q = Alineacion::query()
+        $consulta = Alineacion::query()
             ->with([
                 'meta.plan.entidad',
                 'meta.plan.pdn',
@@ -31,31 +31,31 @@ class TrazabilidadController extends Controller
                 'objetivoEstrategico',
             ]);
 
-        if ($fSoloActivas === '1') {
-            $q->where('activo', 1);
+        if ($soloActivas === '1') {
+            $consulta->where('activo', 1);
         }
 
-        if (! empty($fMeta)) {
-            $q->where('meta_id', $fMeta);
+        if (! empty($metaId)) {
+            $consulta->where('meta_id', $metaId);
         }
 
-        if (! empty($fOds)) {
-            $q->where('ods_id', $fOds);
+        if (! empty($odsId)) {
+            $consulta->where('ods_id', $odsId);
         }
-        if (! empty($fPdn)) {
-            $q->whereHas('meta.plan', fn ($plan) => $plan->where('pdn_id', $fPdn));
+        if (! empty($pdnId)) {
+            $consulta->whereHas('meta.plan', fn ($plan) => $plan->where('pdn_id', $pdnId));
         }
-        if (! empty($fObjetivo)) {
-            $q->where('objetivo_estrategico_id', $fObjetivo);
+        if (! empty($objetivoId)) {
+            $consulta->where('objetivo_estrategico_id', $objetivoId);
         }
 
-        if (! empty($fEntidad)) {
-            $q->whereHas('meta.plan', function ($qq) use ($fEntidad) {
-                $qq->where('entidad_id', $fEntidad);
+        if (! empty($entidadId)) {
+            $consulta->whereHas('meta.plan', function ($plan) use ($entidadId) {
+                $plan->where('entidad_id', $entidadId);
             });
         }
 
-        $alineaciones = $q->orderBy('id', 'desc')->get();
+        $alineaciones = $consulta->orderBy('id', 'desc')->get();
 
         $entidades = Entidad::where('activo', 1)->orderBy('nombre')->get();
         $metas = Meta::where('activo', 1)->orderBy('codigo')->get();
@@ -70,12 +70,12 @@ class TrazabilidadController extends Controller
             'ods',
             'pdns',
             'objetivos',
-            'fEntidad',
-            'fMeta',
-            'fOds',
-            'fPdn',
-            'fObjetivo',
-            'fSoloActivas'
+            'entidadId',
+            'metaId',
+            'odsId',
+            'pdnId',
+            'objetivoId',
+            'soloActivas'
         ));
     }
 }

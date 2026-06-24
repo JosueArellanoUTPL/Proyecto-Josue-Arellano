@@ -21,7 +21,7 @@ class Entidad extends Model
     ];
 
     // Relacion con los planes.
-    public function plans()
+    public function planes()
     {
         return $this->hasMany(Plan::class);
     }

@@ -15,53 +15,53 @@
                 </div>
 
                 <div class="entity-grid">
-                    @forelse($entidades as $e)
+                    @forelse($entidades as $entidad)
                         @php
-                            $p = (int)$e->kpi_progreso;
-                            $done = $p >= 100;
+                            $progresoEntidad = (int)$entidad->kpi_progreso;
+                            $entidadCompletada = $progresoEntidad >= 100;
                         @endphp
 
-                        <a href="{{ route('seguimiento.organizacion.entidad', $e->id) }}" class="card" style="text-decoration:none;">
+                        <a href="{{ route('seguimiento.organizacion.entidad', $entidad->id) }}" class="card" style="text-decoration:none;">
                             <div class="flex justify-between items-start gap-3">
                                 <div>
-                                    <div class="title">{{ $e->nombre }}</div>
+                                    <div class="title">{{ $entidad->nombre }}</div>
                                     <div class="muted" style="margin-top:6px;">
-                                        {{ $e->descripcion ?? 'Sin descripción.' }}
+                                        {{ $entidad->descripcion ?? 'Sin descripción.' }}
                                     </div>
                                 </div>
 
-                                <span class="status-btn {{ $done ? 'done' : 'progressing' }}">
+                                <span class="status-btn {{ $entidadCompletada ? 'done' : 'progressing' }}">
                                     <span class="pill-dot"></span>
-                                    {{ $done ? 'Cumplida' : 'En progreso' }}
+                                    {{ $entidadCompletada ? 'Cumplida' : 'En progreso' }}
                                 </span>
                             </div>
 
                             <div class="kpis">
                                 <div class="kpi" style="background:#f0f4fb">
                                     <div class="label">Planes</div>
-                                    <div class="value">{{ $e->kpi_planes }}</div>
+                                    <div class="value">{{ $entidad->kpi_planes }}</div>
                                 </div>
                                 <div class="kpi" style="background:#eef7f5">
                                     <div class="label">Metas</div>
-                                    <div class="value">{{ $e->kpi_metas }}</div>
+                                    <div class="value">{{ $entidad->kpi_metas }}</div>
                                 </div>
                                 <div class="kpi">
                                     <div class="label">Programas</div>
-                                    <div class="value">{{ $e->kpi_programas }}</div>
+                                    <div class="value">{{ $entidad->kpi_programas }}</div>
                                 </div>
                                 <div class="kpi">
                                     <div class="label">Proyectos</div>
-                                    <div class="value">{{ $e->kpi_proyectos }}</div>
+                                    <div class="value">{{ $entidad->kpi_proyectos }}</div>
                                 </div>
                             </div>
 
                             <div style="margin-top:14px;">
                                 <div class="flex justify-between text-sm">
                                     <span class="muted">Avance promedio</span>
-                                    <strong>{{ $p }}%</strong>
+                                    <strong>{{ $progresoEntidad }}%</strong>
                                 </div>
                                 <div class="progress">
-                                    <div style="width:{{ $p }}%; background:{{ $done ? 'var(--green)' : 'var(--orange)' }}"></div>
+                                    <div style="width:{{ $progresoEntidad }}%; background:{{ $entidadCompletada ? 'var(--green)' : 'var(--orange)' }}"></div>
                                 </div>
                             </div>
 

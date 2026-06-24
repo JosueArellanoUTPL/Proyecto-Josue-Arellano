@@ -27,11 +27,6 @@
                             <div class="muted">Busca relaciones sin modificar información.</div>
                         </div>
 
-                        <div class="trace-filters__legend" aria-label="Leyenda de instrumentos">
-                            <span class="chip"><span class="dot blue"></span>ODS</span>
-                            <span class="chip"><span class="dot green"></span>PND</span>
-                            <span class="chip"><span class="dot orange"></span>OE</span>
-                        </div>
                     </div>
 
                     <div class="trace-filters__fields">
@@ -39,9 +34,9 @@
                                 <label class="label">Entidad</label>
                                 <select class="input" name="entidad_id">
                                     <option value="">(Todas)</option>
-                                    @foreach($entidades as $e)
-                                        <option value="{{ $e->id }}" @selected((string)$fEntidad === (string)$e->id)>
-                                            {{ $e->codigo ?? '' }}{{ isset($e->codigo) ? ' - ' : '' }}{{ $e->nombre }}
+                                    @foreach($entidades as $entidad)
+                                        <option value="{{ $entidad->id }}" @selected((string)$entidadId === (string)$entidad->id)>
+                                            {{ $entidad->codigo ?? '' }}{{ isset($entidad->codigo) ? ' - ' : '' }}{{ $entidad->nombre }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -51,9 +46,9 @@
                                 <label class="label">Meta</label>
                                 <select class="input" name="meta_id">
                                     <option value="">(Todas)</option>
-                                    @foreach($metas as $m)
-                                        <option value="{{ $m->id }}" @selected((string)$fMeta === (string)$m->id)>
-                                            {{ $m->codigo }} - {{ $m->nombre }}
+                                    @foreach($metas as $meta)
+                                        <option value="{{ $meta->id }}" @selected((string)$metaId === (string)$meta->id)>
+                                            {{ $meta->codigo }} - {{ $meta->nombre }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -63,9 +58,9 @@
                                 <label class="label">ODS</label>
                                 <select class="input" name="ods_id">
                                     <option value="">(Cualquiera)</option>
-                                    @foreach($ods as $o)
-                                        <option value="{{ $o->id }}" @selected((string)$fOds === (string)$o->id)>
-                                            {{ $o->codigo }} - {{ $o->nombre }}
+                                    @foreach($ods as $objetivoOds)
+                                        <option value="{{ $objetivoOds->id }}" @selected((string)$odsId === (string)$objetivoOds->id)>
+                                            {{ $objetivoOds->codigo }} - {{ $objetivoOds->nombre }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -75,9 +70,9 @@
                                 <label class="label">PND</label>
                                 <select class="input" name="pdn_id">
                                     <option value="">(Cualquiera)</option>
-                                    @foreach($pdns as $p)
-                                        <option value="{{ $p->id }}" @selected((string)$fPdn === (string)$p->id)>
-                                            {{ $p->codigo }} - {{ $p->nombre }}
+                                    @foreach($pdns as $pdn)
+                                        <option value="{{ $pdn->id }}" @selected((string)$pdnId === (string)$pdn->id)>
+                                            {{ $pdn->codigo }} - {{ $pdn->nombre }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -87,9 +82,9 @@
                                 <label class="label">Objetivo Estratégico</label>
                                 <select class="input" name="objetivo_estrategico_id">
                                     <option value="">(Cualquiera)</option>
-                                    @foreach($objetivos as $obj)
-                                        <option value="{{ $obj->id }}" @selected((string)$fObjetivo === (string)$obj->id)>
-                                            {{ $obj->nombre }}
+                                    @foreach($objetivos as $objetivo)
+                                        <option value="{{ $objetivo->id }}" @selected((string)$objetivoId === (string)$objetivo->id)>
+                                            {{ $objetivo->nombre }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -98,13 +93,13 @@
                             <div>
                                 <label class="label">Mostrar</label>
                                 <select class="input" name="solo_activas">
-                                    <option value="1" @selected((string)$fSoloActivas === '1')>Solo activas</option>
-                                    <option value="0" @selected((string)$fSoloActivas === '0')>Todas</option>
+                                    <option value="1" @selected((string)$soloActivas === '1')>Solo activas</option>
+                                    <option value="0" @selected((string)$soloActivas === '0')>Todas</option>
                                 </select>
                             </div>
 
                         <div class="trace-filters__actions">
-                            <button class="btn" type="submit">Aplicar filtros</button>
+                            <button class="btn trace-filters__apply" type="submit">Aplicar filtros</button>
                             <a class="btn" href="{{ route('seguimiento.trazabilidad') }}">Limpiar</a>
                         </div>
                     </div>
@@ -117,44 +112,60 @@
                     </div>
 
                     <div class="list">
-                        @forelse($alineaciones as $a)
+                        @forelse($alineaciones as $alineacion)
                             <div class="item">
                                 <div class="row">
                                     <div>
                                         <div class="strong">
-                                            {{ $a->meta->codigo ?? 'META' }} — {{ $a->meta->nombre ?? '-' }}
+                                            {{ $alineacion->meta->codigo ?? 'META' }} — {{ $alineacion->meta->nombre ?? '-' }}
                                         </div>
                                         <div class="small" style="margin-top:4px;">
-                                            Entidad: {{ $a->meta->plan->entidad->nombre ?? '—' }} ·
-                                            Plan: {{ $a->meta->plan->codigo ?? '' }}
+                                            Entidad: {{ $alineacion->meta->plan->entidad->nombre ?? '—' }} ·
+                                            Plan: {{ $alineacion->meta->plan->codigo ?? '' }}
                                         </div>
                                     </div>
 
-                                    <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
-                                        @if($a->ods_id)
-                                            <span class="chip"><span class="dot blue"></span>ODS</span>
-                                        @endif
-                                        @if($a->pdn)
-                                            <span class="chip"><span class="dot green"></span>PND</span>
-                                        @endif
-                                        @if($a->objetivo_estrategico_id)
-                                            <span class="chip"><span class="dot orange"></span>OE</span>
-                                        @endif
-
-                                        <span class="chip">
-                                            {{ $a->activo ? 'Activa' : 'Inactiva' }}
-                                        </span>
-                                    </div>
+                                    {{-- Estado de la alineacion. --}}
+                                    <span class="trace-status {{ $alineacion->activo ? 'is-active' : 'is-inactive' }}">
+                                        {{ $alineacion->activo ? 'Activa' : 'Inactiva' }}
+                                    </span>
                                 </div>
 
-                                <div style="margin-top:10px; display:grid; gap:6px;">
-                                    <div class="small"><span class="strong">ODS:</span> {{ $a->ods->codigo ?? '-' }} {{ $a->ods->nombre ?? '' }}</div>
-                                    <div class="small"><span class="strong">PND:</span> {{ $a->pdn->codigo ?? '-' }} {{ $a->pdn->nombre ?? '' }}</div>
-                                    <div class="small"><span class="strong">OE:</span> {{ $a->objetivoEstrategico->nombre ?? '-' }}</div>
+                                {{-- Instrumentos relacionados. --}}
+                                <div class="trace-instruments">
+                                    <div class="trace-instrument">
+                                        <span>ODS</span>
+                                        @if($alineacion->ods)
+                                            <strong>{{ $alineacion->ods->codigo }}</strong>
+                                            <div>{{ $alineacion->ods->nombre }}</div>
+                                        @else
+                                            <div class="muted">Sin vinculacion</div>
+                                        @endif
+                                    </div>
+
+                                    <div class="trace-instrument">
+                                        <span>PND</span>
+                                        @if($alineacion->pdn)
+                                            <strong>{{ $alineacion->pdn->codigo }}</strong>
+                                            <div>{{ $alineacion->pdn->nombre }}</div>
+                                        @else
+                                            <div class="muted">Sin vinculacion</div>
+                                        @endif
+                                    </div>
+
+                                    <div class="trace-instrument">
+                                        <span>Objetivo estrategico</span>
+                                        @if($alineacion->objetivoEstrategico)
+                                            <strong>{{ $alineacion->objetivoEstrategico->codigo }}</strong>
+                                            <div>{{ $alineacion->objetivoEstrategico->nombre }}</div>
+                                        @else
+                                            <div class="muted">Sin vinculacion</div>
+                                        @endif
+                                    </div>
                                 </div>
 
                                 <div style="margin-top:10px;">
-                                    <a class="btn" href="{{ route('seguimiento.meta.show', $a->meta_id) }}">Ver meta →</a>
+                                    <a class="btn" href="{{ route('seguimiento.meta.show', $alineacion->meta_id) }}">Ver meta →</a>
                                 </div>
                             </div>
                         @empty

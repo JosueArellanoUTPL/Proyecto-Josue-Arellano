@@ -2,7 +2,7 @@
     {{-- Seccion de encabezado. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Planes
+            Objetivos Estratégicos
         </h2>
     </x-slot>
 
@@ -17,9 +17,9 @@
             @endif
 
             <div class="mb-4">
-                <a href="{{ route('plans.create') }}"
+                <a href="{{ route('objetivos-estrategicos.create') }}"
                    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-black font-semibold rounded shadow transition">
-                    + Nuevo Plan
+                    + Nuevo Objetivo Estratégico
                 </a>
             </div>
 
@@ -31,35 +31,29 @@
                             <th class="py-2">ID</th>
                             <th class="py-2">Código</th>
                             <th class="py-2">Nombre</th>
-                            <th class="py-2">Entidad</th>
-                            <th class="py-2">PND</th>
-                            <th class="py-2">Periodo</th>
                             <th class="py-2">Activo</th>
                             <th class="py-2 text-center w-56">Acciones</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @forelse ($plans as $plan)
+                        @forelse ($objetivos as $objetivo)
                             <tr class="border-b">
-                                <td class="py-2">{{ $plan->id }}</td>
-                                <td class="py-2">{{ $plan->codigo }}</td>
-                                <td class="py-2">{{ $plan->nombre }}</td>
-                                <td class="py-2">{{ $plan->entidad->nombre ?? '-' }}</td>
-                                <td class="py-2">{{ $plan->pdn->nombre ?? '-' }}</td>
-                                <td class="py-2">{{ $plan->anio_inicio }} - {{ $plan->anio_fin }}</td>
-                                <td class="py-2">{{ $plan->activo ? 'Sí' : 'No' }}</td>
+                                <td class="py-2">{{ $objetivo->id }}</td>
+                                <td class="py-2">{{ $objetivo->codigo }}</td>
+                                <td class="py-2">{{ $objetivo->nombre }}</td>
+                                <td class="py-2">{{ $objetivo->activo ? 'Sí' : 'No' }}</td>
 
                                 <td class="py-2">
                                     <div class="flex justify-center gap-2">
-                                        <a href="{{ route('plans.edit', $plan->id) }}"
+                                        <a href="{{ route('objetivos-estrategicos.edit', $objetivo->id) }}"
                                            class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-black rounded transition">
                                             Editar
                                         </a>
 
                                         <form method="POST"
-                                              action="{{ route('plans.destroy', $plan->id) }}"
-                                              onsubmit="return confirm('¿Seguro que deseas desactivar este plan?');">
+                                              action="{{ route('objetivos-estrategicos.destroy', $objetivo->id) }}"
+                                              onsubmit="return confirm('¿Seguro que deseas desactivar este objetivo estratégico?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -72,8 +66,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="py-4 text-center text-gray-500">
-                                    No hay planes registrados.
+                                <td class="py-4 text-center text-gray-500" colspan="5">
+                                    No hay objetivos estratégicos registrados.
                                 </td>
                             </tr>
                         @endforelse
@@ -84,4 +78,3 @@
         </div>
     </div>
 </x-app-layout>
-

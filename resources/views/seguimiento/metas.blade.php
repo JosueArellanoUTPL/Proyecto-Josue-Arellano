@@ -83,8 +83,8 @@
                         @forelse($metas as $meta)
                             @php
                                 $progreso = max(0, min(100, (float)$meta->progreso));
-                                $done = (bool)$meta->completada;
-                                $pending = $meta->indicadores->isEmpty();
+                                $metaCompletada = (bool)$meta->completada;
+                                $sinIndicadores = $meta->indicadores->isEmpty();
                             @endphp
 
                             <a href="{{ route('seguimiento.meta.show', $meta->id) }}"
@@ -100,7 +100,7 @@
                                         </div>
                                     </div>
 
-                                    <span class="status-btn {{ $pending ? 'pending' : ($done ? 'done' : 'progressing') }}">
+                                    <span class="status-btn {{ $sinIndicadores ? 'pending' : ($metaCompletada ? 'done' : 'progressing') }}">
                                         <span class="pill-dot"></span>
                                         {{ $meta->estado_seguimiento }}
                                     </span>
@@ -113,7 +113,7 @@
                                     </div>
                                     <div class="progress">
                                         <div style="width:{{ $progreso }}%;
-                                            background:{{ $pending ? '#cbd5e1' : ($done ? 'var(--green)' : 'var(--orange)') }}">
+                                            background:{{ $sinIndicadores ? '#cbd5e1' : ($metaCompletada ? 'var(--green)' : 'var(--orange)') }}">
                                         </div>
                                     </div>
                                 </div>

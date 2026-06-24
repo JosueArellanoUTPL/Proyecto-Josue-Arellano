@@ -21,15 +21,15 @@
                 </div>
 
                 {{-- Filtros. --}}
-                <form method="GET" action="{{ route('auditoria.index') }}" class="card" style="margin-top:16px;">
-                    <div class="grid2">
+                <form method="GET" action="{{ route('auditoria.index') }}" class="card trace-filters audit-filters">
+                    <div class="trace-filters__fields audit-filters__fields">
                         <div>
                             <label class="label">Usuario</label>
                             <select name="user_id" class="input">
                                 <option value="">Todos</option>
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}" @selected((string)request('user_id') === (string)$user->id)>
-                                        {{ $user->name }} - {{ $user->email }}
+                                @foreach($usuarios as $usuario)
+                                    <option value="{{ $usuario->id }}" @selected((string)request('user_id') === (string)$usuario->id)>
+                                        {{ $usuario->name }} - {{ $usuario->email }}
                                     </option>
                                 @endforeach
                             </select>
@@ -39,9 +39,9 @@
                             <label class="label">Modulo</label>
                             <select name="module" class="input">
                                 <option value="">Todos</option>
-                                @foreach($modules as $module)
-                                    <option value="{{ $module }}" @selected(request('module') === $module)>
-                                        {{ $module }}
+                                @foreach($modulos as $modulo)
+                                    <option value="{{ $modulo }}" @selected(request('module') === $modulo)>
+                                        {{ $modulo }}
                                     </option>
                                 @endforeach
                             </select>
@@ -51,9 +51,9 @@
                             <label class="label">Accion</label>
                             <select name="action" class="input">
                                 <option value="">Todas</option>
-                                @foreach($actions as $action)
-                                    <option value="{{ $action }}" @selected(request('action') === $action)>
-                                        {{ ucfirst($action) }}
+                                @foreach($acciones as $accion)
+                                    <option value="{{ $accion }}" @selected(request('action') === $accion)>
+                                        {{ ucfirst($accion) }}
                                     </option>
                                 @endforeach
                             </select>
@@ -68,11 +68,10 @@
                             <label class="label">Hasta</label>
                             <input type="date" name="to" class="input" value="{{ request('to') }}">
                         </div>
-                    </div>
-
-                    <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
-                        <button type="submit" class="btn">Filtrar</button>
-                        <a href="{{ route('auditoria.index') }}" class="btn">Limpiar</a>
+                        <div class="trace-filters__actions audit-filters__actions">
+                            <button type="submit" class="btn">Filtrar</button>
+                            <a href="{{ route('auditoria.index') }}" class="btn">Limpiar</a>
+                        </div>
                     </div>
                 </form>
 
@@ -80,7 +79,7 @@
                 <div class="card" style="margin-top:16px;">
                     <div class="title">Historial</div>
                     <div class="muted" style="margin-top:6px;">
-                        Total mostrado: {{ $logs->count() }} de {{ $logs->total() }} registros.
+                        Total mostrado: {{ $registrosAuditoria->count() }} de {{ $registrosAuditoria->total() }} registros.
                     </div>
 
                     <div class="overflow-x-auto" style="margin-top:14px;">
@@ -96,24 +95,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($logs as $log)
+                                @forelse($registrosAuditoria as $registro)
                                     <tr class="border-b align-top">
                                         <td class="py-2 whitespace-nowrap">
-                                            {{ $log->created_at->format('d/m/Y H:i') }}
+                                            {{ $registro->created_at->format('d/m/Y H:i') }}
                                         </td>
                                         <td class="py-2">
-                                            <strong>{{ $log->user->name ?? 'Usuario eliminado' }}</strong>
-                                            <div class="muted">{{ $log->user->email ?? '' }}</div>
+                                            <strong>{{ $registro->user->name ?? 'Usuario eliminado' }}</strong>
+                                            <div class="muted">{{ $registro->user->email ?? '' }}</div>
                                         </td>
-                                        <td class="py-2">{{ $log->module ?? '-' }}</td>
+                                        <td class="py-2">{{ $registro->module ?? '-' }}</td>
                                         <td class="py-2">
-                                            <span class="chip">{{ ucfirst($log->action) }}</span>
+                                            <span class="chip">{{ ucfirst($registro->action) }}</span>
                                         </td>
                                         <td class="py-2">
-                                            <div>{{ $log->route_name ?? '-' }}</div>
-                                            <div class="muted">{{ $log->method }}</div>
+                                            <div>{{ $registro->route_name ?? '-' }}</div>
+                                            <div class="muted">{{ $registro->method }}</div>
                                         </td>
-                                        <td class="py-2">{{ $log->ip_address ?? '-' }}</td>
+                                        <td class="py-2">{{ $registro->ip_address ?? '-' }}</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -127,7 +126,7 @@
                     </div>
 
                     <div style="margin-top:16px;">
-                        {{ $logs->links() }}
+                        {{ $registrosAuditoria->links() }}
                     </div>
                 </div>
             </div>

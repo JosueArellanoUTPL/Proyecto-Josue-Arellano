@@ -12,7 +12,7 @@ return new class extends Migration
     // Aplicar cambios.
     public function up(): void
     {
-        Schema::create('plans', function (Blueprint $table) {
+        Schema::create('planes', function (Blueprint $table) {
             $table->id();
             $table->string('codigo', 30);
             $table->string('nombre', 200);
@@ -31,6 +31,6 @@ return new class extends Migration
     // Revertir cambios.
     public function down(): void
     {
-        Schema::dropIfExists('plans');
+        Schema::dropIfExists('planes');
     }
 };

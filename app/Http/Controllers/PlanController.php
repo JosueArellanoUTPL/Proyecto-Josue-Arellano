@@ -12,11 +12,11 @@ class PlanController extends Controller
     // Listar planes.
     public function index()
     {
-        $plans = Plan::with(['pdn', 'entidad'])
+        $planes = Plan::with(['pdn', 'entidad'])
             ->orderBy('id', 'desc')
             ->get();
 
-        return view('plans.index', compact('plans'));
+        return view('planes.index', compact('planes'));
     }
 
     // Mostrar formulario para crear plan.
@@ -25,7 +25,7 @@ class PlanController extends Controller
         $pdns = Pdn::where('activo', true)->orderBy('id', 'desc')->get();
         $entidades = Entidad::where('activo', true)->orderBy('id', 'desc')->get();
 
-        return view('plans.create', compact('pdns', 'entidades'));
+        return view('planes.create', compact('pdns', 'entidades'));
     }
 
     // Guardar plan.
@@ -33,7 +33,7 @@ class PlanController extends Controller
     {
         // Validacion de plan.
         $data = $request->validate([
-            'codigo' => 'required|string|max:30|unique:plans,codigo',
+            'codigo' => 'required|string|max:30|unique:planes,codigo',
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'anio_inicio' => 'required|integer',
@@ -45,7 +45,7 @@ class PlanController extends Controller
 
         Plan::create($data);
 
-        return redirect()->route('plans.index')
+        return redirect()->route('planes.index')
             ->with('success', 'Plan creado correctamente.');
     }
 
@@ -55,7 +55,7 @@ class PlanController extends Controller
         $pdns = Pdn::where('activo', true)->orWhere('id', $plan->pdn_id)->orderBy('id', 'desc')->get();
         $entidades = Entidad::where('activo', true)->orWhere('id', $plan->entidad_id)->orderBy('id', 'desc')->get();
 
-        return view('plans.edit', compact('plan', 'pdns', 'entidades'));
+        return view('planes.edit', compact('plan', 'pdns', 'entidades'));
     }
 
     // Actualizar plan.
@@ -63,7 +63,7 @@ class PlanController extends Controller
     {
         // Validacion de plan.
         $data = $request->validate([
-            'codigo' => 'required|string|max:30|unique:plans,codigo,'.$plan->id,
+            'codigo' => 'required|string|max:30|unique:planes,codigo,'.$plan->id,
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'anio_inicio' => 'required|integer',
@@ -83,7 +83,7 @@ class PlanController extends Controller
 
         $plan->update($data);
 
-        return redirect()->route('plans.index')
+        return redirect()->route('planes.index')
             ->with('success', 'Plan actualizado correctamente.');
     }
 
@@ -93,7 +93,7 @@ class PlanController extends Controller
         // Desactivacion para conservar relaciones.
         $plan->update(['activo' => false]);
 
-        return redirect()->route('plans.index')
+        return redirect()->route('planes.index')
             ->with('success', 'Plan desactivado correctamente.');
     }
 }

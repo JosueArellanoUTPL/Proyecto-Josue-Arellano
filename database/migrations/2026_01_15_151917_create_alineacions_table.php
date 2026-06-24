@@ -23,7 +23,7 @@ return new class extends Migration
             // Instrumentos estrategicos.
             $table->foreignId('ods_id')->nullable()->constrained('ods')->nullOnDelete();
             $table->foreignId('pdn_id')->nullable()->constrained('pdns')->nullOnDelete();
-            $table->foreignId('objetivo_estrategico_id')->nullable()->constrained('objetivo_estrategicos')->nullOnDelete();
+            $table->foreignId('objetivo_estrategico_id')->nullable()->constrained('objetivos_estrategicos')->nullOnDelete();
 
             $table->boolean('activo')->default(true);
             $table->timestamps();

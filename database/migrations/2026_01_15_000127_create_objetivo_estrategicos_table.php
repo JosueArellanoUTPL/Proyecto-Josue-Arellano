@@ -12,7 +12,7 @@ return new class extends Migration
     // Aplicar cambios.
     public function up(): void
     {
-        Schema::create('objetivo_estrategicos', function (Blueprint $table) {
+        Schema::create('objetivos_estrategicos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 200);
             $table->text('descripcion')->nullable();
@@ -27,6 +27,6 @@ return new class extends Migration
     // Revertir cambios.
     public function down(): void
     {
-        Schema::dropIfExists('objetivo_estrategicos');
+        Schema::dropIfExists('objetivos_estrategicos');
     }
 };

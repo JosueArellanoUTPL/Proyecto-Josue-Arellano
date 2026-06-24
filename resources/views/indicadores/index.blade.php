@@ -40,32 +40,32 @@
                     </thead>
 
                     <tbody>
-                        @forelse ($indicadores as $ind)
+                        @forelse ($indicadores as $indicador)
                             <tr class="border-b">
-                                <td class="py-2">{{ $ind->id }}</td>
-                                <td class="py-2">{{ $ind->codigo }}</td>
-                                <td class="py-2">{{ $ind->nombre }}</td>
-                                <td class="py-2">{{ $ind->meta->nombre ?? '-' }}</td>
+                                <td class="py-2">{{ $indicador->id }}</td>
+                                <td class="py-2">{{ $indicador->codigo }}</td>
+                                <td class="py-2">{{ $indicador->nombre }}</td>
+                                <td class="py-2">{{ $indicador->meta->nombre ?? '-' }}</td>
 
                                 <td class="py-2">
-                                    {{ $ind->linea_base !== null ? $ind->linea_base . ' ' . $ind->unidad : '-' }}
+                                    {{ $indicador->linea_base !== null ? $indicador->linea_base . ' ' . $indicador->unidad : '-' }}
                                 </td>
 
                                 <td class="py-2">
-                                    {{ $ind->valor_meta !== null ? $ind->valor_meta . ' ' . $ind->unidad : '-' }}
+                                    {{ $indicador->valor_meta !== null ? $indicador->valor_meta . ' ' . $indicador->unidad : '-' }}
                                 </td>
 
-                                <td class="py-2">{{ $ind->activo ? 'Sí' : 'No' }}</td>
+                                <td class="py-2">{{ $indicador->activo ? 'Sí' : 'No' }}</td>
 
                                 <td class="py-2">
                                     <div class="flex justify-center gap-2">
-                                        <a href="{{ route('indicadores.edit', $ind->id) }}"
+                                        <a href="{{ route('indicadores.edit', $indicador->id) }}"
                                            class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-black rounded transition">
                                             Editar
                                         </a>
 
                                         <form method="POST"
-                                              action="{{ route('indicadores.destroy', $ind->id) }}"
+                                              action="{{ route('indicadores.destroy', $indicador->id) }}"
                                               onsubmit="return confirm('¿Seguro que deseas desactivar este indicador?');">
                                             @csrf
                                             @method('DELETE')

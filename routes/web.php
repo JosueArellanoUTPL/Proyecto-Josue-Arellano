@@ -129,17 +129,27 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
     // CRUD de planificacion.
     Route::middleware(['role:admin,planificacion'])->group(function () {
 
-        Route::resource('entidades', EntidadController::class)->except(['show']);
+        Route::resource('entidades', EntidadController::class)
+            ->except(['show'])
+            ->parameters(['entidades' => 'entidad']);
         Route::resource('programas', ProgramaController::class)->except(['show']);
         Route::resource('proyectos', ProyectoController::class)->except(['show']);
 
-        Route::resource('objetivos-estrategicos', ObjetivoEstrategicoController::class)->except(['show']);
-        Route::resource('ods', OdsController::class)->except(['show']);
+        Route::resource('objetivos-estrategicos', ObjetivoEstrategicoController::class)
+            ->except(['show'])
+            ->parameters(['objetivos-estrategicos' => 'objetivo']);
+        Route::resource('ods', OdsController::class)
+            ->except(['show'])
+            ->parameters(['ods' => 'ods']);
         Route::resource('pdn', PdnController::class)->except(['show']);
 
-        Route::resource('plans', PlanController::class)->except(['show']);
+        Route::resource('planes', PlanController::class)
+            ->except(['show'])
+            ->parameters(['planes' => 'plan']);
         Route::resource('metas', MetaController::class)->except(['show']);
-        Route::resource('indicadores', IndicadorController::class)->except(['show']);
+        Route::resource('indicadores', IndicadorController::class)
+            ->except(['show'])
+            ->parameters(['indicadores' => 'indicador']);
 
         Route::resource('alineaciones', AlineacionController::class)
             ->except(['show'])
@@ -149,7 +159,9 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
     // Administracion y auditoria.
     Route::middleware(['role:admin'])->group(function () {
 
-        Route::resource('usuarios', UserController::class)->except(['show']);
+        Route::resource('usuarios', UserController::class)
+            ->except(['show'])
+            ->parameters(['usuarios' => 'usuario']);
 
         Route::get('/auditoria', [AuditLogController::class, 'index'])
             ->name('auditoria.index');

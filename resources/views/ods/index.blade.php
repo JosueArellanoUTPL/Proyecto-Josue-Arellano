@@ -37,22 +37,22 @@
                     </thead>
 
                     <tbody>
-                        @forelse ($items as $item)
+                        @forelse ($objetivosOds as $ods)
                             <tr class="border-b">
-                                <td class="py-2">{{ $item->id }}</td>
-                                <td class="py-2">{{ $item->codigo }}</td>
-                                <td class="py-2">{{ $item->nombre }}</td>
-                                <td class="py-2">{{ $item->activo ? 'Sí' : 'No' }}</td>
+                                <td class="py-2">{{ $ods->id }}</td>
+                                <td class="py-2">{{ $ods->codigo }}</td>
+                                <td class="py-2">{{ $ods->nombre }}</td>
+                                <td class="py-2">{{ $ods->activo ? 'Sí' : 'No' }}</td>
 
                                 <td class="py-2">
                                     <div class="flex justify-center gap-2">
-                                        <a href="{{ route('ods.edit', $item->id) }}"
+                                        <a href="{{ route('ods.edit', $ods->id) }}"
                                            class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-black rounded transition">
                                             Editar
                                         </a>
 
                                         <form method="POST"
-                                              action="{{ route('ods.destroy', $item->id) }}"
+                                              action="{{ route('ods.destroy', $ods->id) }}"
                                               onsubmit="return confirm('¿Seguro que deseas desactivar este ODS?');">
                                             @csrf
                                             @method('DELETE')

@@ -46,23 +46,19 @@ class IndicadorController extends Controller
     }
 
     // Mostrar formulario para editar indicador.
-    public function edit(Indicador $indicadore)
+    public function edit(Indicador $indicador)
     {
-        $indicador = $indicadore;
-
         $metas = Meta::where('activo', true)->orWhere('id', $indicador->meta_id)->orderBy('id', 'desc')->get();
 
         return view('indicadores.edit', compact('indicador', 'metas'));
     }
 
     // Actualizar indicador.
-    public function update(Request $request, Indicador $indicadore)
+    public function update(Request $request, Indicador $indicador)
     {
-        $indicador = $indicadore;
-
         // Validacion de indicador.
         $data = $request->validate([
-            'codigo' => 'required|string|max:30|unique:indicadores,codigo,'.$indicadore->id,
+            'codigo' => 'required|string|max:30|unique:indicadores,codigo,'.$indicador->id,
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'meta_id' => 'required|exists:metas,id',
@@ -79,10 +75,9 @@ class IndicadorController extends Controller
     }
 
     // Desactivar indicador.
-    public function destroy(Indicador $indicadore)
+    public function destroy(Indicador $indicador)
     {
         // Desactivacion para conservar avances.
-        $indicador = $indicadore;
         $indicador->update(['activo' => false]);
 
         return redirect()->route('indicadores.index')

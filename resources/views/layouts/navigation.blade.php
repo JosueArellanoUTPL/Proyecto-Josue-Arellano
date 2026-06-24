@@ -25,8 +25,8 @@
                 Entidades
             </a>
 
-            <a href="{{ route('plans.index') }}"
-               class="side-link {{ request()->routeIs('plans.*') ? 'active' : '' }}">
+            <a href="{{ route('planes.index') }}"
+               class="side-link {{ request()->routeIs('planes.*') ? 'active' : '' }}">
                 Planes
             </a>
 

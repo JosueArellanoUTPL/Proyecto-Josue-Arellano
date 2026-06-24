@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Crear Plan
+            Editar Plan
         </h2>
     </x-slot>
 
@@ -20,42 +20,43 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('plans.store') }}">
+                <form method="POST" action="{{ route('planes.update', $plan->id) }}">
                     {{-- Formulario de datos. --}}
                     @csrf
+                    @method('PUT')
 
                     <div class="mb-4">
                         <label class="block mb-1">Código</label>
                         <input name="codigo"
-                               value="{{ old('codigo') }}"
+                               value="{{ old('codigo', $plan->codigo) }}"
                                class="w-full border rounded px-3 py-2">
                     </div>
 
                     <div class="mb-4">
                         <label class="block mb-1">Nombre</label>
                         <input name="nombre"
-                               value="{{ old('nombre') }}"
+                               value="{{ old('nombre', $plan->nombre) }}"
                                class="w-full border rounded px-3 py-2">
                     </div>
 
                     <div class="mb-4">
                         <label class="block mb-1">Descripción</label>
                         <textarea name="descripcion" rows="3"
-                                  class="w-full border rounded px-3 py-2">{{ old('descripcion') }}</textarea>
+                                  class="w-full border rounded px-3 py-2">{{ old('descripcion', $plan->descripcion) }}</textarea>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <label class="block mb-1">Año inicio</label>
                             <input type="number" name="anio_inicio"
-                                   value="{{ old('anio_inicio') }}"
+                                   value="{{ old('anio_inicio', $plan->anio_inicio) }}"
                                    class="w-full border rounded px-3 py-2">
                         </div>
 
                         <div>
                             <label class="block mb-1">Año fin</label>
                             <input type="number" name="anio_fin"
-                                   value="{{ old('anio_fin') }}"
+                                   value="{{ old('anio_fin', $plan->anio_fin) }}"
                                    class="w-full border rounded px-3 py-2">
                         </div>
                     </div>
@@ -67,7 +68,7 @@
                             <option value="">Seleccione</option>
                             @foreach ($entidades as $entidad)
                                 <option value="{{ $entidad->id }}"
-                                    {{ old('entidad_id') == $entidad->id ? 'selected' : '' }}>
+                                    {{ old('entidad_id', $plan->entidad_id) == $entidad->id ? 'selected' : '' }}>
                                     {{ $entidad->nombre }}
                                 </option>
                             @endforeach
@@ -77,10 +78,9 @@
                     <div class="mb-4">
                         <label class="block mb-1">Plan Nacional de Desarrollo (PND)</label>
                         <select name="pdn_id" class="w-full border rounded px-3 py-2">
-                            <option value="">Seleccione</option>
                             @foreach ($pdns as $pdn)
                                 <option value="{{ $pdn->id }}"
-                                    {{ old('pdn_id') == $pdn->id ? 'selected' : '' }}>
+                                    {{ old('pdn_id', $plan->pdn_id) == $pdn->id ? 'selected' : '' }}>
                                     {{ $pdn->codigo }} - {{ $pdn->nombre }}
                                 </option>
                             @endforeach
@@ -89,7 +89,8 @@
 
                     <div class="mb-4">
                         <label class="inline-flex items-center gap-2">
-                            <input type="checkbox" name="activo" value="1" checked>
+                            <input type="checkbox" name="activo" value="1"
+                                   {{ old('activo', $plan->activo) ? 'checked' : '' }}>
                             <span>Activo</span>
                         </label>
                     </div>
@@ -97,12 +98,12 @@
                     <div class="flex gap-3 mt-6">
                         <button type="submit"
                                 class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-black font-semibold rounded transition">
-                            Guardar
+                            Actualizar
                         </button>
 
-                        <a href="{{ route('plans.index') }}"
+                        <a href="{{ route('planes.index') }}"
                            class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-black font-semibold rounded transition">
-                            Cancelar
+                            Volver
                         </a>
                     </div>
                 </form>

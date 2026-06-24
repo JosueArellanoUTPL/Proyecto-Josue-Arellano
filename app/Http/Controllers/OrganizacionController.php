@@ -10,7 +10,7 @@ class OrganizacionController extends Controller
     public function index()
     {
         $entidades = Entidad::where('activo', 1)->with([
-            'plans.metas.indicadores.ultimoAvance',
+            'planes.metas.indicadores.ultimoAvance',
             'programas',
             'proyectos',
         ])
@@ -18,22 +18,22 @@ class OrganizacionController extends Controller
             ->get();
 
         // Calculo del resumen por entidad.
-        $entidadesConKpi = $entidades->map(function ($e) {
-            $planes = $e->plans->where('activo', true);
+        $entidadesConKpi = $entidades->map(function ($entidad) {
+            $planes = $entidad->planes->where('activo', true);
             $metas = $planes->flatMap(fn ($plan) => $plan->metas->where('activo', true));
 
             $promedio = $metas->count()
-                ? round($metas->avg(fn ($m) => $m->progreso), 0)
+                ? round($metas->avg(fn ($meta) => $meta->progreso), 0)
                 : 0;
 
-            $e->kpi_planes = $planes->count();
-            $e->kpi_metas = $metas->count();
-            $e->kpi_programas = $e->programas->where('activo', true)->count();
-            $e->kpi_proyectos = $e->proyectos->where('activo', true)->count();
+            $entidad->kpi_planes = $planes->count();
+            $entidad->kpi_metas = $metas->count();
+            $entidad->kpi_programas = $entidad->programas->where('activo', true)->count();
+            $entidad->kpi_proyectos = $entidad->proyectos->where('activo', true)->count();
 
-            $e->kpi_progreso = max(0, min(100, $promedio));
+            $entidad->kpi_progreso = max(0, min(100, $promedio));
 
-            return $e;
+            return $entidad;
         });
 
         return view('seguimiento.organizacion', [
@@ -48,17 +48,17 @@ class OrganizacionController extends Controller
             'programas',
             'proyectos.programa',
             'proyectos.meta',
-            'plans.pdn',
-            'plans.metas.indicadores.ultimoAvance',
+            'planes.pdn',
+            'planes.metas.indicadores.ultimoAvance',
         ]);
 
-        $metas = $entidad->plans
+        $metas = $entidad->planes
             ->where('activo', true)
             ->flatMap(fn ($plan) => $plan->metas->where('activo', true));
 
         // Calculo del avance de la entidad.
         $progresoEntidad = $metas->count()
-            ? round($metas->avg(fn ($m) => $m->progreso), 0)
+            ? round($metas->avg(fn ($meta) => $meta->progreso), 0)
             : 0;
 
         $progresoEntidad = max(0, min(100, $progresoEntidad));

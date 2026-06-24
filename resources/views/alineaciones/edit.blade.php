@@ -52,11 +52,11 @@
                             <label class="label">Meta (obligatorio)</label>
                             <select id="meta_id" name="meta_id" class="input">
                                 <option value="">Seleccione</option>
-                                @foreach ($metas as $m)
-                                    <option value="{{ $m->id }}"
-                                        data-entidad="{{ $m->plan?->entidad_id }}"
-                                        {{ old('meta_id', $alineacion->meta_id) == $m->id ? 'selected' : '' }}>
-                                        {{ $m->codigo }} - {{ $m->nombre }} (PND: {{ $m->plan?->pdn?->codigo ?? 'Sin asignar' }})
+                                @foreach ($metas as $meta)
+                                    <option value="{{ $meta->id }}"
+                                        data-entidad="{{ $meta->plan?->entidad_id }}"
+                                        {{ old('meta_id', $alineacion->meta_id) == $meta->id ? 'selected' : '' }}>
+                                        {{ $meta->codigo }} - {{ $meta->nombre }} (PND: {{ $meta->plan?->pdn?->codigo ?? 'Sin asignar' }})
                                     </option>
                                 @endforeach
                             </select>
@@ -73,9 +73,9 @@
                                     <label class="label">ODS</label>
                                     <select name="ods_id" class="input">
                                         <option value="">(Ninguno)</option>
-                                        @foreach ($ods as $o)
-                                            <option value="{{ $o->id }}" {{ old('ods_id', $alineacion->ods_id) == $o->id ? 'selected' : '' }}>
-                                                {{ $o->codigo }} - {{ $o->nombre }}
+                                        @foreach ($ods as $objetivoOds)
+                                            <option value="{{ $objetivoOds->id }}" {{ old('ods_id', $alineacion->ods_id) == $objetivoOds->id ? 'selected' : '' }}>
+                                                {{ $objetivoOds->codigo }} - {{ $objetivoOds->nombre }}
                                             </option>
                                         @endforeach
                                     </select>

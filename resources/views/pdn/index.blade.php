@@ -37,22 +37,22 @@
                     </thead>
 
                     <tbody>
-                        @forelse ($items as $item)
+                        @forelse ($planesNacionales as $pdn)
                             <tr class="border-b">
-                                <td class="py-2">{{ $item->id }}</td>
-                                <td class="py-2">{{ $item->codigo }}</td>
-                                <td class="py-2">{{ $item->nombre }}</td>
-                                <td class="py-2">{{ $item->activo ? 'Sí' : 'No' }}</td>
+                                <td class="py-2">{{ $pdn->id }}</td>
+                                <td class="py-2">{{ $pdn->codigo }}</td>
+                                <td class="py-2">{{ $pdn->nombre }}</td>
+                                <td class="py-2">{{ $pdn->activo ? 'Sí' : 'No' }}</td>
 
                                 <td class="py-2">
                                     <div class="flex justify-center gap-2">
-                                        <a href="{{ route('pdn.edit', $item->id) }}"
+                                        <a href="{{ route('pdn.edit', $pdn->id) }}"
                                            class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-black rounded transition">
                                             Editar
                                         </a>
 
                                         <form method="POST"
-                                              action="{{ route('pdn.destroy', $item->id) }}"
+                                              action="{{ route('pdn.destroy', $pdn->id) }}"
                                               onsubmit="return confirm('¿Seguro que deseas desactivar este PND?');">
                                             @csrf
                                             @method('DELETE')

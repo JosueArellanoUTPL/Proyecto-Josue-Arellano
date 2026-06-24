@@ -198,23 +198,23 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-                        @forelse($actividadReciente as $a)
+                        @forelse($actividadReciente as $actividad)
                             @php
                                 // Normalizo el porcentaje para pintar la barra de cada tarjeta.
-                                $pp = max(0, min(100, (int)round((float)$a->porcentaje_avance)));
-                                $pdone = $pp >= 100;
+                                $porcentajeActividad = max(0, min(100, (int)round((float)$actividad->porcentaje_avance)));
+                                $actividadCompletada = $porcentajeActividad >= 100;
                             @endphp
 
                             <div class="kpi">
                                 <div class="label">
-                                    {{ $a->proyecto->nombre ?? 'Proyecto' }}
+                                    {{ $actividad->proyecto->nombre ?? 'Proyecto' }}
                                 </div>
-                                <div class="value">{{ $pp }}%</div>
+                                <div class="value">{{ $porcentajeActividad }}%</div>
                                 <div class="muted" style="margin-top:4px;">
-                                    {{ $a->fecha?->format('d/m/Y') ?? '-' }}
+                                    {{ $actividad->fecha?->format('d/m/Y') ?? '-' }}
                                 </div>
                                 <div class="progress">
-                                    <div style="width:{{ $pp }}%; background:{{ $pdone ? 'var(--green)' : 'var(--orange)' }}"></div>
+                                    <div style="width:{{ $porcentajeActividad }}%; background:{{ $actividadCompletada ? 'var(--green)' : 'var(--orange)' }}"></div>
                                 </div>
                             </div>
                         @empty

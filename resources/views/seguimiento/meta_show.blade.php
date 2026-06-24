@@ -35,9 +35,9 @@
 
                 @php
                     // Progreso calculado desde el modelo Meta.
-                    $p = max(0, min(100, (float)$meta->progreso));
-                    $done = (bool)$meta->completada;
-                    $pending = $meta->indicadores->isEmpty();
+                    $progresoMeta = max(0, min(100, (float)$meta->progreso));
+                    $metaCompletada = (bool)$meta->completada;
+                    $sinIndicadores = $meta->indicadores->isEmpty();
                 @endphp
 
                 {{-- Progreso de la meta. --}}
@@ -49,12 +49,12 @@
                                 Calculado automaticamente con el promedio de avance de los indicadores.
                             </div>
                         </div>
-                        <strong>{{ $pending ? 'Pendiente de indicadores' : round($p).'%' }}</strong>
+                        <strong>{{ $sinIndicadores ? 'Pendiente de indicadores' : round($progresoMeta).'%' }}</strong>
                     </div>
 
-                    @if(!$pending)
+                    @if(!$sinIndicadores)
                         <div class="progress">
-                            <div style="width:{{ $p }}%; background:{{ $done ? 'var(--green)' : 'var(--orange)' }}"></div>
+                            <div style="width:{{ $progresoMeta }}%; background:{{ $metaCompletada ? 'var(--green)' : 'var(--orange)' }}"></div>
                         </div>
                     @endif
                 </div>
@@ -83,29 +83,29 @@
                 </div>
 
                 <div class="grid-ind">
-                    @forelse($meta->indicadores as $ind)
+                    @forelse($meta->indicadores as $indicador)
                         @php
                             // Datos de avance de cada indicador.
-                            $ip = max(0, min(100, (float)$ind->progreso));
-                            $idone = (bool)$ind->completado;
-                            $last = $ind->ultimoAvance;
+                            $progresoIndicador = max(0, min(100, (float)$indicador->progreso));
+                            $indicadorCompletado = (bool)$indicador->completado;
+                            $ultimoAvance = $indicador->ultimoAvance;
                         @endphp
 
                         <div class="card">
                             <div class="flex justify-between items-start gap-3">
                                 <div>
-                                    <div class="muted">{{ $ind->codigo }}</div>
-                                    <div class="font-semibold mt-1">{{ $ind->nombre }}</div>
+                                    <div class="muted">{{ $indicador->codigo }}</div>
+                                    <div class="font-semibold mt-1">{{ $indicador->nombre }}</div>
                                     <div class="muted" style="margin-top:6px;">
-                                        {{ $ind->descripcion ?? 'Sin descripcion.' }}
+                                        {{ $indicador->descripcion ?? 'Sin descripcion.' }}
                                     </div>
                                 </div>
 
-                                <strong>{{ round($ip) }}%</strong>
+                                <strong>{{ round($progresoIndicador) }}%</strong>
                             </div>
 
                             <div class="progress">
-                                <div style="width:{{ $ip }}%; background:{{ $idone ? 'var(--green)' : 'var(--orange)' }}"></div>
+                                <div style="width:{{ $progresoIndicador }}%; background:{{ $indicadorCompletado ? 'var(--green)' : 'var(--orange)' }}"></div>
                             </div>
 
                             {{-- Ultimo avance. --}}
@@ -113,10 +113,10 @@
                                 Ultimo avance:
                             </div>
 
-                            @if($last)
+                            @if($ultimoAvance)
                                 <div class="flex gap-4 items-center mt-2 text-sm">
-                                    @if($last->evidencia_path)
-                                        <a class="link" href="{{ asset('storage/'.$last->evidencia_path) }}" target="_blank">
+                                    @if($ultimoAvance->evidencia_path)
+                                        <a class="link" href="{{ asset('storage/'.$ultimoAvance->evidencia_path) }}" target="_blank">
                                             Ver evidencia
                                         </a>
                                     @else
@@ -124,13 +124,13 @@
                                     @endif
 
                                     {{-- Permisos del avance. --}}
-                                    @if(auth()->id() === $last->user_id || auth()->user()->isAdmin())
-                                        <a class="link" href="{{ route('indicadores.avance.edit', $last->id) }}">
+                                    @if(auth()->id() === $ultimoAvance->user_id || auth()->user()->isAdmin())
+                                        <a class="link" href="{{ route('indicadores.avance.edit', $ultimoAvance->id) }}">
                                             Editar
                                         </a>
 
                                         <form method="POST"
-                                              action="{{ route('indicadores.avance.destroy', $last->id) }}"
+                                              action="{{ route('indicadores.avance.destroy', $ultimoAvance->id) }}"
                                               onsubmit="return confirm('Eliminar este avance?');">
                                             @csrf
                                             @method('DELETE')
@@ -145,7 +145,7 @@
                             {{-- Permiso de seguimiento. --}}
                             @if(auth()->user()->canRegisterSeguimiento())
                                 <div class="mt-4">
-                                    <a class="btn" href="{{ route('indicadores.avance.create', $ind->id) }}">
+                                    <a class="btn" href="{{ route('indicadores.avance.create', $indicador->id) }}">
                                         Registrar avance
                                     </a>
                                 </div>

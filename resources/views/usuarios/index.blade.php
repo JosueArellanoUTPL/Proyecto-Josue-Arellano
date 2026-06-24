@@ -38,23 +38,23 @@
                     </thead>
 
                     <tbody>
-                    @forelse ($users as $user)
+                    @forelse ($usuarios as $usuario)
                         <tr class="border-b">
-                            <td class="py-2">{{ $user->id }}</td>
-                            <td class="py-2">{{ $user->name }}</td>
-                            <td class="py-2">{{ $user->email }}</td>
-                            <td class="py-2">{{ $user->roleLabel() }}</td>
-                            <td class="py-2">{{ $user->activo ? 'Activo' : 'Inactivo' }}</td>
+                            <td class="py-2">{{ $usuario->id }}</td>
+                            <td class="py-2">{{ $usuario->name }}</td>
+                            <td class="py-2">{{ $usuario->email }}</td>
+                            <td class="py-2">{{ $usuario->roleLabel() }}</td>
+                            <td class="py-2">{{ $usuario->activo ? 'Activo' : 'Inactivo' }}</td>
 
                             <td class="py-2">
                                 <div class="flex justify-center gap-2">
-                                    <a href="{{ route('usuarios.edit', $user->id) }}"
+                                    <a href="{{ route('usuarios.edit', $usuario->id) }}"
                                        class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-black rounded transition">
                                         Editar
                                     </a>
 
                                     <form method="POST"
-                                          action="{{ route('usuarios.destroy', $user->id) }}"
+                                          action="{{ route('usuarios.destroy', $usuario->id) }}"
                                           onsubmit="return confirm('¿Seguro que deseas desactivar este usuario?');">
                                         @csrf
                                         @method('DELETE')
@@ -77,7 +77,7 @@
                 </table>
 
                 <div class="mt-4">
-                    {{ $users->links() }}
+                    {{ $usuarios->links() }}
                 </div>
             </div>
 

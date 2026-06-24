@@ -70,11 +70,11 @@ class DashboardController extends Controller
         $proyectosEnProgreso = max(0, $proyectos->count() - $proyectosCompletados);
 
         // Avance de las 3 primeras entidades.
-        $avancePorEntidad = Entidad::where('activo', 1)->with(['plans.metas.indicadores.ultimoAvance'])
+        $avancePorEntidad = Entidad::where('activo', 1)->with(['planes.metas.indicadores.ultimoAvance'])
             ->orderBy('nombre')
             ->get()
             ->map(function ($entidad) {
-                $metasEntidad = $entidad->plans
+                $metasEntidad = $entidad->planes
                     ->where('activo', true)
                     ->flatMap(fn ($plan) => $plan->metas->where('activo', true));
                 $metasMedibles = $metasEntidad->filter(fn ($meta) => $meta->indicadores->where('activo', true)->isNotEmpty());

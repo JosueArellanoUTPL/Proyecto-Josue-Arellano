@@ -38,17 +38,17 @@
 
                 @php
                     // Progreso actual del proyecto, limitado entre 0 y 100.
-                    $p = max(0, min(100, (int)$progresoProyecto));
+                    $porcentajeProyecto = max(0, min(100, (int)$progresoProyecto));
                 @endphp
 
                 {{-- Progreso actual. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="row" style="align-items:center;">
                         <div class="title">Avance actual</div>
-                        <span class="badge {{ $p >= 100 ? 'green' : 'orange' }}">{{ $p }}%</span>
+                        <span class="badge {{ $porcentajeProyecto >= 100 ? 'green' : 'orange' }}">{{ $porcentajeProyecto }}%</span>
                     </div>
                     <div class="progress">
-                        <div style="width:{{ $p }}%; background:{{ $p >= 100 ? 'var(--green)' : 'var(--orange)' }}"></div>
+                        <div style="width:{{ $porcentajeProyecto }}%; background:{{ $porcentajeProyecto >= 100 ? 'var(--green)' : 'var(--orange)' }}"></div>
                     </div>
                 </div>
 
@@ -57,19 +57,19 @@
                     <div class="title">Historial de avances</div>
 
                     <div class="project-history-grid">
-                        @foreach($proyecto->avances as $a)
+                        @foreach($proyecto->avances as $avance)
                             <div class="card" style="background:#fafafa;">
                                 <div class="row">
                                     <div>
-                                        <strong>{{ $a->porcentaje_avance }}%</strong>
-                                        <span class="muted">- {{ $a->fecha->format('d/m/Y') }}</span>
+                                        <strong>{{ $avance->porcentaje_avance }}%</strong>
+                                        <span class="muted">- {{ $avance->fecha->format('d/m/Y') }}</span>
                                     </div>
 
                                     {{-- Permisos del avance. --}}
-                                    @if(auth()->user()->isAdmin() || auth()->id() === $a->user_id)
+                                    @if(auth()->user()->isAdmin() || auth()->id() === $avance->user_id)
                                         <div style="display:flex; gap:10px;">
-                                            <a class="btn" href="{{ route('proyectos.avance.edit', $a->id) }}">Editar</a>
-                                            <form method="POST" action="{{ route('proyectos.avance.destroy', $a->id) }}">
+                                            <a class="btn" href="{{ route('proyectos.avance.edit', $avance->id) }}">Editar</a>
+                                            <form method="POST" action="{{ route('proyectos.avance.destroy', $avance->id) }}">
                                                 @csrf @method('DELETE')
                                                 <button class="btn" onclick="return confirm('Eliminar avance?')">Eliminar</button>
                                             </form>
@@ -79,17 +79,17 @@
 
                                 {{-- Evidencias. --}}
                                 <div class="evid-grid">
-                                    @foreach($a->evidencias as $ev)
+                                    @foreach($avance->evidencias as $evidencia)
                                         <div class="thumb">
-                                            @if($ev->isImage())
-                                                <img src="{{ asset('storage/'.$ev->path) }}" alt="{{ $ev->original_name ?? 'Evidencia' }}">
+                                            @if($evidencia->isImage())
+                                                <img src="{{ asset('storage/'.$evidencia->path) }}" alt="{{ $evidencia->original_name ?? 'Evidencia' }}">
                                             @else
-                                                <a class="link" href="{{ asset('storage/'.$ev->path) }}" target="_blank">
-                                                    {{ $ev->original_name ?? 'Ver PDF' }}
+                                                <a class="link" href="{{ asset('storage/'.$evidencia->path) }}" target="_blank">
+                                                    {{ $evidencia->original_name ?? 'Ver PDF' }}
                                                 </a>
                                             @endif
-                                            @if(auth()->user()->isAdmin() || auth()->id() === $a->user_id)
-                                                <form method="POST" action="{{ route('proyectos.avance.evidencia.delete', $ev->id) }}">
+                                            @if(auth()->user()->isAdmin() || auth()->id() === $avance->user_id)
+                                                <form method="POST" action="{{ route('proyectos.avance.evidencia.delete', $evidencia->id) }}">
                                                     @csrf @method('DELETE')
                                                     <button class="remove">x</button>
                                                 </form>
@@ -99,9 +99,9 @@
                                 </div>
 
                                 {{-- Nueva evidencia. --}}
-                                @if(auth()->user()->isAdmin() || auth()->id() === $a->user_id)
+                                @if(auth()->user()->isAdmin() || auth()->id() === $avance->user_id)
                                     <form method="POST" enctype="multipart/form-data"
-                                          action="{{ route('proyectos.avance.evidencia.add', $a->id) }}"
+                                          action="{{ route('proyectos.avance.evidencia.add', $avance->id) }}"
                                           style="margin-top:10px;">
                                         @csrf
                                         <input type="file" name="evidencia" accept=".pdf,.jpg,.jpeg,.png" required>

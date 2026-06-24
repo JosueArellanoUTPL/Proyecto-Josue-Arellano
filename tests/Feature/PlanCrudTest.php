@@ -38,8 +38,8 @@ class PlanCrudTest extends TestCase
             'activo' => true,
         ]);
 
-        // 4) Enviar POST al store de plans
-        $response = $this->actingAs($admin)->post('/plans', [
+        // Enviar datos para crear el plan.
+        $response = $this->actingAs($admin)->post('/planes', [
             'codigo' => 'PLAN-TEST',
             'nombre' => 'Plan de Prueba',
             'descripcion' => 'Plan creado desde prueba',
@@ -51,10 +51,10 @@ class PlanCrudTest extends TestCase
         ]);
 
         // 4) Esperamos redirección (normalmente a index)
-        $response->assertRedirect('/plans');
+        $response->assertRedirect('/planes');
 
         // 5) Verificar que se guardó en BD
-        $this->assertDatabaseHas('plans', [
+        $this->assertDatabaseHas('planes', [
             'codigo' => 'PLAN-TEST',
             'pdn_id' => $pdn->id,
             'entidad_id' => $entidad->id,

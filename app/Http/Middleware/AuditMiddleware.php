@@ -71,7 +71,7 @@ class AuditMiddleware
             'entidades.destroy',
             'programas.destroy',
             'proyectos.destroy',
-            'plans.destroy',
+            'planes.destroy',
             'metas.destroy',
             'indicadores.destroy',
             'ods.destroy',
