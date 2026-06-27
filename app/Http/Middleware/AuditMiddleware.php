@@ -79,7 +79,6 @@ class AuditMiddleware
             'objetivos-estrategicos.destroy',
             'alineaciones.destroy',
             'usuarios.destroy',
-            'profile.destroy',
         ];
 
         if ($method === 'DELETE' && in_array($request->route()?->getName(), $deactivationRoutes, true)) {

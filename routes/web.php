@@ -43,9 +43,6 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
 
-    Route::delete('/profile', [ProfileController::class, 'destroy'])
-        ->name('profile.destroy');
-
     // Consulta para los cuatro roles.
     Route::middleware(['role:'.implode(',', User::roleKeys())])->group(function () {
 

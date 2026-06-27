@@ -15,10 +15,10 @@
         {{-- Portada publica. --}}
         <main class="landing-page">
             <header class="landing-nav">
-                <a href="{{ url('/') }}" class="landing-brand">
+                <div class="landing-brand">
                     <x-application-logo class="landing-logo" />
                     <span>Sistema de Planificación</span>
-                </a>
+                </div>
 
                 <div class="landing-actions">
                     @auth
