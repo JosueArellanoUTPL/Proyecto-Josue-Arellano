@@ -38,16 +38,7 @@
 
                 <div style="height:14px"></div>
 
-                @if ($errors->any())
-                    <div class="error">
-                        <strong>Revisa los campos:</strong>
-                        <ul style="margin-left:18px; margin-top:6px; list-style:disc;">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                <x-form-errors />
 
                 <form method="POST"
                       action="{{ route('indicadores.avance.store', $indicador->id) }}"

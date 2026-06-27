@@ -29,14 +29,7 @@ class ProgramaController extends Controller
     // Guardar programa.
     public function store(Request $request)
     {
-        // Validacion de programa.
-        $validated = $request->validate([
-            'codigo' => ['required', 'string', 'max:30', 'unique:programas,codigo'],
-            'entidad_id' => ['required', 'exists:entidades,id'],
-            'nombre' => ['required', 'string', 'max:150'],
-            'descripcion' => ['nullable', 'string'],
-            'activo' => ['nullable'],
-        ]);
+        $validated = $this->validarPrograma($request);
 
         // Estado activo.
         $validated['activo'] = $request->has('activo');
@@ -61,14 +54,7 @@ class ProgramaController extends Controller
     // Actualizar programa.
     public function update(Request $request, Programa $programa)
     {
-        // Validacion de programa.
-        $validated = $request->validate([
-            'codigo' => ['required', 'string', 'max:30', 'unique:programas,codigo,'.$programa->id],
-            'entidad_id' => ['required', 'exists:entidades,id'],
-            'nombre' => ['required', 'string', 'max:150'],
-            'descripcion' => ['nullable', 'string'],
-            'activo' => ['nullable'],
-        ]);
+        $validated = $this->validarPrograma($request, $programa->id);
 
         $validated['activo'] = $request->has('activo');
 
@@ -93,5 +79,17 @@ class ProgramaController extends Controller
 
         return redirect()->route('programas.index')
             ->with('success', 'Programa desactivado correctamente.');
+    }
+
+    // Validacion de programa.
+    private function validarPrograma(Request $request, ?int $programaId = null): array
+    {
+        return $request->validate([
+            'codigo' => ['required', 'string', 'max:30', 'unique:programas,codigo'.($programaId ? ','.$programaId : '')],
+            'entidad_id' => ['required', 'exists:entidades,id'],
+            'nombre' => ['required', 'string', 'max:150'],
+            'descripcion' => ['nullable', 'string'],
+            'activo' => ['nullable'],
+        ]);
     }
 }

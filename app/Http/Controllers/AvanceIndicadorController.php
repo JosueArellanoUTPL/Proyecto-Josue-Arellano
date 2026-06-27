@@ -22,12 +22,7 @@ class AvanceIndicadorController extends Controller
     public function store(Request $request, Indicador $indicador)
     {
         // Validacion del avance.
-        $data = $request->validate([
-            'fecha' => ['required', 'date'],
-            'valor_reportado' => ['required', 'numeric'],
-            'comentario' => ['nullable', 'string'],
-            'evidencia' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
-        ]);
+        $data = $this->validarAvance($request);
 
         // Carga de evidencia.
         $path = null;
@@ -52,10 +47,7 @@ class AvanceIndicadorController extends Controller
     // Mostrar formulario para editar avance.
     public function edit(IndicadorAvance $avance)
     {
-        // Validacion de propietario.
-        if ($avance->user_id !== Auth::id() && ! Auth::user()->isAdmin()) {
-            abort(403);
-        }
+        $this->validarPropietario($avance);
 
         $avance->load('indicador.meta.plan');
 
@@ -65,17 +57,9 @@ class AvanceIndicadorController extends Controller
     // Actualizar avance de indicador.
     public function update(Request $request, IndicadorAvance $avance)
     {
-        // Validacion de propietario.
-        if ($avance->user_id !== Auth::id() && ! Auth::user()->isAdmin()) {
-            abort(403);
-        }
+        $this->validarPropietario($avance);
 
-        $data = $request->validate([
-            'fecha' => ['required', 'date'],
-            'valor_reportado' => ['required', 'numeric'],
-            'comentario' => ['nullable', 'string'],
-            'evidencia' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
-        ]);
+        $data = $this->validarAvance($request);
 
         // Reemplazo de evidencia.
         if ($request->hasFile('evidencia')) {
@@ -99,10 +83,7 @@ class AvanceIndicadorController extends Controller
     // Eliminar avance de indicador.
     public function destroy(IndicadorAvance $avance)
     {
-        // Validacion de propietario.
-        if ($avance->user_id !== Auth::id() && ! Auth::user()->isAdmin()) {
-            abort(403);
-        }
+        $this->validarPropietario($avance);
 
         // Eliminacion de evidencia.
         if ($avance->evidencia_path) {
@@ -115,5 +96,24 @@ class AvanceIndicadorController extends Controller
         return redirect()
             ->route('seguimiento.meta.show', $metaId)
             ->with('success', 'Avance eliminado correctamente.');
+    }
+
+    // Validacion del avance.
+    private function validarAvance(Request $request): array
+    {
+        return $request->validate([
+            'fecha' => ['required', 'date'],
+            'valor_reportado' => ['required', 'numeric'],
+            'comentario' => ['nullable', 'string'],
+            'evidencia' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
+        ]);
+    }
+
+    // Validacion de propietario.
+    private function validarPropietario(IndicadorAvance $avance): void
+    {
+        if ($avance->user_id !== Auth::id() && ! Auth::user()->isAdmin()) {
+            abort(403);
+        }
     }
 }

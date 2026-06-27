@@ -8,6 +8,7 @@ use App\Models\Meta;
 use App\Models\ObjetivoEstrategico;
 use App\Models\Ods;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class AlineacionController extends Controller
 {
@@ -68,23 +69,7 @@ class AlineacionController extends Controller
     // Guardar alineacion.
     public function store(Request $request)
     {
-        // Validacion de alineacion.
-        $data = $request->validate([
-            'meta_id' => ['required', 'exists:metas,id'],
-            'ods_id' => ['nullable', 'exists:ods,id'],
-            'objetivo_estrategico_id' => ['nullable', 'exists:objetivos_estrategicos,id'],
-
-            'activo' => ['nullable'],
-        ]);
-
-        // Estado activo.
-        $data['activo'] = $request->has('activo');
-
-        if (empty($data['ods_id']) && empty($data['objetivo_estrategico_id'])) {
-            return back()
-                ->withErrors(['ods_id' => 'Selecciona al menos un ODS o un objetivo estratégico. El PND se toma del plan.'])
-                ->withInput();
-        }
+        $data = $this->validarAlineacion($request);
 
         Alineacion::create($data);
 
@@ -111,28 +96,34 @@ class AlineacionController extends Controller
     // Actualizar alineacion.
     public function update(Request $request, Alineacion $alineacion)
     {
-        // Validacion de alineacion.
-        $data = $request->validate([
-            'meta_id' => ['required', 'exists:metas,id'],
-            'ods_id' => ['nullable', 'exists:ods,id'],
-            'objetivo_estrategico_id' => ['nullable', 'exists:objetivos_estrategicos,id'],
-
-            'activo' => ['nullable'],
-        ]);
-
-        $data['activo'] = $request->has('activo');
-
-        if (empty($data['ods_id']) && empty($data['objetivo_estrategico_id'])) {
-            return back()
-                ->withErrors(['ods_id' => 'Selecciona al menos un ODS o un objetivo estratégico. El PND se toma del plan.'])
-                ->withInput();
-        }
+        $data = $this->validarAlineacion($request);
 
         $alineacion->update($data);
 
         return redirect()
             ->route('alineaciones.index')
             ->with('success', 'Alineacion actualizada correctamente.');
+    }
+
+    // Validacion de alineacion.
+    private function validarAlineacion(Request $request): array
+    {
+        $data = $request->validate([
+            'meta_id' => ['required', 'exists:metas,id'],
+            'ods_id' => ['nullable', 'exists:ods,id'],
+            'objetivo_estrategico_id' => ['nullable', 'exists:objetivos_estrategicos,id'],
+            'activo' => ['nullable'],
+        ]);
+
+        if (empty($data['ods_id']) && empty($data['objetivo_estrategico_id'])) {
+            throw ValidationException::withMessages([
+                'ods_id' => 'Selecciona al menos un ODS o un objetivo estratégico. El PND se toma del plan.',
+            ]);
+        }
+
+        $data['activo'] = $request->has('activo');
+
+        return $data;
     }
 
     // Eliminar alineacion.

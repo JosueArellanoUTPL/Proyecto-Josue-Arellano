@@ -27,14 +27,7 @@ class MetaController extends Controller
     // Guardar meta.
     public function store(Request $request)
     {
-        // Validacion de meta.
-        $data = $request->validate([
-            'codigo' => 'required|string|max:30|unique:metas,codigo',
-            'nombre' => 'required|string|max:200',
-            'descripcion' => 'nullable|string',
-            'plan_id' => 'required|exists:planes,id',
-            'activo' => 'required|boolean',
-        ]);
+        $data = $this->validarMeta($request);
 
         Meta::create($data);
 
@@ -53,14 +46,7 @@ class MetaController extends Controller
     // Actualizar meta.
     public function update(Request $request, Meta $meta)
     {
-        // Validacion de meta.
-        $data = $request->validate([
-            'codigo' => 'required|string|max:30|unique:metas,codigo,'.$meta->id,
-            'nombre' => 'required|string|max:200',
-            'descripcion' => 'nullable|string',
-            'plan_id' => 'required|exists:planes,id',
-            'activo' => 'required|boolean',
-        ]);
+        $data = $this->validarMeta($request, $meta->id);
 
         // Restriccion de entidad para proyectos relacionados.
         $nuevoPlan = Plan::findOrFail($data['plan_id']);
@@ -85,5 +71,17 @@ class MetaController extends Controller
 
         return redirect()->route('metas.index')
             ->with('success', 'Meta desactivada correctamente.');
+    }
+
+    // Validacion de meta.
+    private function validarMeta(Request $request, ?int $metaId = null): array
+    {
+        return $request->validate([
+            'codigo' => 'required|string|max:30|unique:metas,codigo'.($metaId ? ','.$metaId : ''),
+            'nombre' => 'required|string|max:200',
+            'descripcion' => 'nullable|string',
+            'plan_id' => 'required|exists:planes,id',
+            'activo' => 'required|boolean',
+        ]);
     }
 }

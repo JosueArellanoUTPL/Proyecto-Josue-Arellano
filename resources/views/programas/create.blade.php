@@ -9,16 +9,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
 
             <div class="bg-white shadow rounded p-6" style="background:#ffffff; border:1px solid #d9dee6;">
-                {{-- Mensajes de validacion. --}}
-                @if ($errors->any())
-                    <div class="mb-4 p-3 bg-red-100 border border-red-300 rounded">
-                        <ul class="list-disc ml-5">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                <x-form-errors />
 
                 <form method="POST" action="{{ route('programas.store') }}">
                     {{-- Formulario de datos. --}}

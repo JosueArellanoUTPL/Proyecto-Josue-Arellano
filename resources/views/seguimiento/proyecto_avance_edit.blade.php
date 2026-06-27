@@ -56,16 +56,7 @@
                         <div class="title">Datos del avance</div>
                         <div class="muted" style="margin-top:6px;">Se actualiza fecha, porcentaje y comentario.</div>
 
-                        @if ($errors->any())
-                            <div style="margin-top:12px; padding:12px; border-radius:14px; border:1px solid #f3b4b4; background:#fff5f5;">
-                                <div class="title">Revisar campos</div>
-                                <ul class="muted" style="margin-top:8px; list-style:disc; padding-left:18px;">
-                                    @foreach($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
+                        <x-form-errors />
 
                         <div style="margin-top:14px; display:grid; gap:12px;">
                             <div>

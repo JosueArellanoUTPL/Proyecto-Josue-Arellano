@@ -27,17 +27,7 @@ class IndicadorController extends Controller
     // Guardar indicador.
     public function store(Request $request)
     {
-        // Validacion de indicador.
-        $data = $request->validate([
-            'codigo' => 'required|string|max:30|unique:indicadores,codigo',
-            'nombre' => 'required|string|max:200',
-            'descripcion' => 'nullable|string',
-            'meta_id' => 'required|exists:metas,id',
-            'linea_base' => 'required|numeric',
-            'valor_meta' => 'required|numeric',
-            'unidad' => 'required|string|max:50',
-            'activo' => 'required|boolean',
-        ]);
+        $data = $this->validarIndicador($request);
 
         Indicador::create($data);
 
@@ -56,17 +46,7 @@ class IndicadorController extends Controller
     // Actualizar indicador.
     public function update(Request $request, Indicador $indicador)
     {
-        // Validacion de indicador.
-        $data = $request->validate([
-            'codigo' => 'required|string|max:30|unique:indicadores,codigo,'.$indicador->id,
-            'nombre' => 'required|string|max:200',
-            'descripcion' => 'nullable|string',
-            'meta_id' => 'required|exists:metas,id',
-            'linea_base' => 'required|numeric',
-            'valor_meta' => 'required|numeric',
-            'unidad' => 'required|string|max:50',
-            'activo' => 'required|boolean',
-        ]);
+        $data = $this->validarIndicador($request, $indicador->id);
 
         $indicador->update($data);
 
@@ -82,5 +62,20 @@ class IndicadorController extends Controller
 
         return redirect()->route('indicadores.index')
             ->with('success', 'Indicador desactivado correctamente.');
+    }
+
+    // Validacion de indicador.
+    private function validarIndicador(Request $request, ?int $indicadorId = null): array
+    {
+        return $request->validate([
+            'codigo' => 'required|string|max:30|unique:indicadores,codigo'.($indicadorId ? ','.$indicadorId : ''),
+            'nombre' => 'required|string|max:200',
+            'descripcion' => 'nullable|string',
+            'meta_id' => 'required|exists:metas,id',
+            'linea_base' => 'required|numeric',
+            'valor_meta' => 'required|numeric',
+            'unidad' => 'required|string|max:50',
+            'activo' => 'required|boolean',
+        ]);
     }
 }

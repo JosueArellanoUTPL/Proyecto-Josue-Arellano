@@ -9,11 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
 
-                @if (session('success'))
-                    <div class="card" style="border-color:#bfe3da; background:#f3fbf9; margin-bottom:14px;">
-                        <div class="muted">{{ session('success') }}</div>
-                    </div>
-                @endif
+                <x-success-message />
 
                 <div class="row">
                     <div>

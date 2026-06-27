@@ -9,12 +9,7 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            {{-- Mensaje de resultado. --}}
-            @if (session('success'))
-                <div class="mb-4 p-3 bg-green-100 border border-green-300 rounded text-green-800">
-                    {{ session('success') }}
-                </div>
-            @endif
+            <x-success-message />
 
             <div class="mb-4">
                 <a href="{{ route('metas.create') }}"

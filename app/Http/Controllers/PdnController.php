@@ -24,13 +24,7 @@ class PdnController extends Controller
     // Guardar PDN.
     public function store(Request $request)
     {
-        // Validacion de PND.
-        $data = $request->validate([
-            'codigo' => 'required|string|max:20|unique:pdns,codigo',
-            'nombre' => 'required|string|max:200',
-            'descripcion' => 'nullable|string',
-            'activo' => 'required|boolean',
-        ]);
+        $data = $this->validarPdn($request);
 
         Pdn::create($data);
 
@@ -47,13 +41,7 @@ class PdnController extends Controller
     // Actualizar PDN.
     public function update(Request $request, Pdn $pdn)
     {
-        // Validacion de PND.
-        $data = $request->validate([
-            'codigo' => 'required|string|max:20|unique:pdns,codigo,'.$pdn->id,
-            'nombre' => 'required|string|max:200',
-            'descripcion' => 'nullable|string',
-            'activo' => 'required|boolean',
-        ]);
+        $data = $this->validarPdn($request, $pdn->id);
 
         $pdn->update($data);
 
@@ -69,5 +57,16 @@ class PdnController extends Controller
 
         return redirect()->route('pdn.index')
             ->with('success', 'PND desactivado correctamente.');
+    }
+
+    // Validacion de PND.
+    private function validarPdn(Request $request, ?int $pdnId = null): array
+    {
+        return $request->validate([
+            'codigo' => 'required|string|max:20|unique:pdns,codigo'.($pdnId ? ','.$pdnId : ''),
+            'nombre' => 'required|string|max:200',
+            'descripcion' => 'nullable|string',
+            'activo' => 'required|boolean',
+        ]);
     }
 }

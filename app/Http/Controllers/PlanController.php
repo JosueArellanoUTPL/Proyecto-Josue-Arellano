@@ -31,17 +31,7 @@ class PlanController extends Controller
     // Guardar plan.
     public function store(Request $request)
     {
-        // Validacion de plan.
-        $data = $request->validate([
-            'codigo' => 'required|string|max:30|unique:planes,codigo',
-            'nombre' => 'required|string|max:200',
-            'descripcion' => 'nullable|string',
-            'anio_inicio' => 'required|integer',
-            'anio_fin' => 'required|integer|gte:anio_inicio',
-            'pdn_id' => 'required|exists:pdns,id',
-            'entidad_id' => 'required|exists:entidades,id',
-            'activo' => 'required|boolean',
-        ]);
+        $data = $this->validarPlan($request);
 
         Plan::create($data);
 
@@ -61,17 +51,7 @@ class PlanController extends Controller
     // Actualizar plan.
     public function update(Request $request, Plan $plan)
     {
-        // Validacion de plan.
-        $data = $request->validate([
-            'codigo' => 'required|string|max:30|unique:planes,codigo,'.$plan->id,
-            'nombre' => 'required|string|max:200',
-            'descripcion' => 'nullable|string',
-            'anio_inicio' => 'required|integer',
-            'anio_fin' => 'required|integer|gte:anio_inicio',
-            'pdn_id' => 'required|exists:pdns,id',
-            'entidad_id' => 'required|exists:entidades,id',
-            'activo' => 'required|boolean',
-        ]);
+        $data = $this->validarPlan($request, $plan->id);
 
         // Restriccion de entidad para proyectos relacionados.
         $tieneProyectos = $plan->metas()->whereHas('proyectos')->exists();
@@ -95,5 +75,20 @@ class PlanController extends Controller
 
         return redirect()->route('planes.index')
             ->with('success', 'Plan desactivado correctamente.');
+    }
+
+    // Validacion de plan.
+    private function validarPlan(Request $request, ?int $planId = null): array
+    {
+        return $request->validate([
+            'codigo' => 'required|string|max:30|unique:planes,codigo'.($planId ? ','.$planId : ''),
+            'nombre' => 'required|string|max:200',
+            'descripcion' => 'nullable|string',
+            'anio_inicio' => 'required|integer',
+            'anio_fin' => 'required|integer|gte:anio_inicio',
+            'pdn_id' => 'required|exists:pdns,id',
+            'entidad_id' => 'required|exists:entidades,id',
+            'activo' => 'required|boolean',
+        ]);
     }
 }

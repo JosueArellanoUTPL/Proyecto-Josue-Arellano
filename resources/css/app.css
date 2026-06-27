@@ -311,7 +311,6 @@
     }
 
     .trace-filters__top,
-    .trace-filters__legend,
     .trace-filters__actions {
         display: flex;
         align-items: center;
@@ -762,27 +761,37 @@
     }
 
     /* Validaciones y ayuda. */
-    .err,
-    .error {
+    .err {
         font-size: 13px;
         color: #b91c1c;
     }
 
-    .error {
-        border: 1px solid #f2b8b5;
-        background: #fff0f0;
-        color: #7f1d1d;
-        border-radius: 14px;
+    .form-errors {
+        margin: 12px 0 16px;
         padding: 12px;
-        margin-bottom: 12px;
+        border: 1px solid #f3b4b4;
+        border-radius: 8px;
+        color: #8b3434;
+        background: #fff5f5;
     }
 
-    .errbox {
-        margin-top: 16px;
+    .form-errors__title {
+        font-weight: 800;
+    }
+
+    .form-errors ul {
+        margin-top: 6px;
+        padding-left: 18px;
+        list-style: disc;
+    }
+
+    .success-message {
+        margin-bottom: 14px;
         padding: 12px;
-        border-radius: 14px;
-        border: 1px solid #f3b4b4;
-        background: #fff5f5;
+        border: 1px solid #bfe3da;
+        border-radius: 8px;
+        color: #28645a;
+        background: #f3fbf9;
     }
 
     .hint {
@@ -906,14 +915,6 @@
         margin-top: 2px;
         font-size: 20px;
         color: var(--text);
-    }
-
-    .big-number {
-        font-size: 42px;
-        font-weight: 900;
-        line-height: 1;
-        color: var(--text);
-        margin-top: 18px;
     }
 
     .bar-list {

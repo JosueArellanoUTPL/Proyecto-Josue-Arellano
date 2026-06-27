@@ -24,13 +24,7 @@ class OdsController extends Controller
     // Guardar ODS.
     public function store(Request $request)
     {
-        // Validacion de ODS.
-        $data = $request->validate([
-            'codigo' => 'required|string|max:10|unique:ods,codigo',
-            'nombre' => 'required|string|max:200',
-            'descripcion' => 'nullable|string',
-            'activo' => 'required|boolean',
-        ]);
+        $data = $this->validarOds($request);
 
         Ods::create($data);
 
@@ -47,13 +41,7 @@ class OdsController extends Controller
     // Actualizar ODS.
     public function update(Request $request, Ods $ods)
     {
-        // Validacion de ODS.
-        $data = $request->validate([
-            'codigo' => 'required|string|max:10|unique:ods,codigo,'.$ods->id,
-            'nombre' => 'required|string|max:200',
-            'descripcion' => 'nullable|string',
-            'activo' => 'required|boolean',
-        ]);
+        $data = $this->validarOds($request, $ods->id);
 
         $ods->update($data);
 
@@ -69,5 +57,16 @@ class OdsController extends Controller
 
         return redirect()->route('ods.index')
             ->with('success', 'ODS desactivado correctamente.');
+    }
+
+    // Validacion de ODS.
+    private function validarOds(Request $request, ?int $odsId = null): array
+    {
+        return $request->validate([
+            'codigo' => 'required|string|max:10|unique:ods,codigo'.($odsId ? ','.$odsId : ''),
+            'nombre' => 'required|string|max:200',
+            'descripcion' => 'nullable|string',
+            'activo' => 'required|boolean',
+        ]);
     }
 }

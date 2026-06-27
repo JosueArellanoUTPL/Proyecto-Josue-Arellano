@@ -24,13 +24,7 @@ class EntidadController extends Controller
     // Guardar entidad.
     public function store(Request $request)
     {
-        // Validacion de entidad.
-        $validated = $request->validate([
-            'codigo' => ['required', 'string', 'max:20', 'unique:entidades,codigo'],
-            'nombre' => ['required', 'string', 'max:150'],
-            'descripcion' => ['nullable', 'string'],
-            'activo' => ['nullable'],
-        ]);
+        $validated = $this->validarEntidad($request);
 
         // Estado activo.
         $validated['activo'] = $request->has('activo');
@@ -50,13 +44,7 @@ class EntidadController extends Controller
     // Actualizar entidad.
     public function update(Request $request, Entidad $entidad)
     {
-        // Validacion de entidad.
-        $validated = $request->validate([
-            'codigo' => ['required', 'string', 'max:20', 'unique:entidades,codigo,'.$entidad->id],
-            'nombre' => ['required', 'string', 'max:150'],
-            'descripcion' => ['nullable', 'string'],
-            'activo' => ['nullable'],
-        ]);
+        $validated = $this->validarEntidad($request, $entidad->id);
 
         $validated['activo'] = $request->has('activo');
 
@@ -74,5 +62,16 @@ class EntidadController extends Controller
 
         return redirect()->route('entidades.index')
             ->with('success', 'Entidad desactivada correctamente.');
+    }
+
+    // Validacion de entidad.
+    private function validarEntidad(Request $request, ?int $entidadId = null): array
+    {
+        return $request->validate([
+            'codigo' => ['required', 'string', 'max:20', 'unique:entidades,codigo'.($entidadId ? ','.$entidadId : '')],
+            'nombre' => ['required', 'string', 'max:150'],
+            'descripcion' => ['nullable', 'string'],
+            'activo' => ['nullable'],
+        ]);
     }
 }

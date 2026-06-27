@@ -6,6 +6,7 @@ use App\Models\Proyecto;
 use App\Models\ProyectoAvance;
 use App\Models\ProyectoAvanceEvidencia;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -46,15 +47,7 @@ class ProyectoAvanceController extends Controller
                     continue;
                 }
 
-                $path = $file->store('evidencias/proyectos', 'public');
-
-                ProyectoAvanceEvidencia::create([
-                    'proyecto_avance_id' => $avance->id,
-                    'path' => $path,
-                    'original_name' => $file->getClientOriginalName(),
-                    'mime_type' => $file->getMimeType(),
-                    'size' => $file->getSize(),
-                ]);
+                $this->guardarEvidencia($avance, $file);
             }
         }
 
@@ -66,10 +59,7 @@ class ProyectoAvanceController extends Controller
     // Mostrar formulario para editar avance.
     public function edit(ProyectoAvance $avance)
     {
-        // Validacion de propietario.
-        if ($avance->user_id !== Auth::id() && ! Auth::user()->isAdmin()) {
-            abort(403);
-        }
+        $this->validarPropietario($avance);
 
         $avance->load([
             'proyecto.programa.entidad',
@@ -82,10 +72,7 @@ class ProyectoAvanceController extends Controller
     // Actualizar avance de proyecto.
     public function update(Request $request, ProyectoAvance $avance)
     {
-        // Validacion de propietario.
-        if ($avance->user_id !== Auth::id() && ! Auth::user()->isAdmin()) {
-            abort(403);
-        }
+        $this->validarPropietario($avance);
 
         $data = $request->validate([
             'fecha' => ['required', 'date'],
@@ -107,26 +94,14 @@ class ProyectoAvanceController extends Controller
     // Agregar evidencia al avance.
     public function addEvidencia(Request $request, ProyectoAvance $avance)
     {
-        // Validacion de propietario.
-        if ($avance->user_id !== Auth::id() && ! Auth::user()->isAdmin()) {
-            abort(403);
-        }
+        $this->validarPropietario($avance);
 
         $request->validate([
             'evidencia' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
         ]);
 
         // Carga de evidencia.
-        $file = $request->file('evidencia');
-        $path = $file->store('evidencias/proyectos', 'public');
-
-        ProyectoAvanceEvidencia::create([
-            'proyecto_avance_id' => $avance->id,
-            'path' => $path,
-            'original_name' => $file->getClientOriginalName(),
-            'mime_type' => $file->getMimeType(),
-            'size' => $file->getSize(),
-        ]);
+        $this->guardarEvidencia($avance, $request->file('evidencia'));
 
         return redirect()
             ->route('seguimiento.proyecto.show', $avance->proyecto_id)
@@ -138,10 +113,7 @@ class ProyectoAvanceController extends Controller
     {
         $avance = $evidencia->avance;
 
-        // Validacion de propietario.
-        if ($avance->user_id !== Auth::id() && ! Auth::user()->isAdmin()) {
-            abort(403);
-        }
+        $this->validarPropietario($avance);
 
         // Eliminacion de evidencia.
         Storage::disk('public')->delete($evidencia->path);
@@ -155,10 +127,7 @@ class ProyectoAvanceController extends Controller
     // Eliminar avance de proyecto.
     public function destroy(ProyectoAvance $avance)
     {
-        // Validacion de propietario.
-        if ($avance->user_id !== Auth::id() && ! Auth::user()->isAdmin()) {
-            abort(403);
-        }
+        $this->validarPropietario($avance);
 
         $proyectoId = $avance->proyecto_id;
 
@@ -172,5 +141,27 @@ class ProyectoAvanceController extends Controller
         return redirect()
             ->route('seguimiento.proyecto.show', $proyectoId)
             ->with('success', 'Avance eliminado correctamente.');
+    }
+
+    // Validacion de propietario.
+    private function validarPropietario(ProyectoAvance $avance): void
+    {
+        if ($avance->user_id !== Auth::id() && ! Auth::user()->isAdmin()) {
+            abort(403);
+        }
+    }
+
+    // Guardar evidencia.
+    private function guardarEvidencia(ProyectoAvance $avance, UploadedFile $archivo): void
+    {
+        $ruta = $archivo->store('evidencias/proyectos', 'public');
+
+        ProyectoAvanceEvidencia::create([
+            'proyecto_avance_id' => $avance->id,
+            'path' => $ruta,
+            'original_name' => $archivo->getClientOriginalName(),
+            'mime_type' => $archivo->getMimeType(),
+            'size' => $archivo->getSize(),
+        ]);
     }
 }
