@@ -23,7 +23,7 @@
                 <table class="w-full">
                     <thead>
                         <tr class="text-left border-b">
-                            <th class="py-2">ID</th>
+                            <th class="py-2 px-2">ID</th>
                             <th class="py-2">Código</th>
                             <th class="py-2">Nombre</th>
                             <th class="py-2">Entidad</th>
