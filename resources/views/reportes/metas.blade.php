@@ -53,7 +53,7 @@
                         <table class="report-table">
                             <thead>
                                 <tr>
-                                    <th>Codigo</th>
+                                    <th>Código</th>
                                     <th>Meta</th>
                                     <th>Entidad</th>
                                     <th>Plan</th>

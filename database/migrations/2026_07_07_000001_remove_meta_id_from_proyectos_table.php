@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('proyectos', function (Blueprint $table) {
-            // Quitar relacion proyecto-meta.
+            // Quitar relación proyecto-meta.
             if (Schema::hasColumn('proyectos', 'meta_id')) {
                 $table->dropConstrainedForeignId('meta_id');
             }
@@ -18,6 +18,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        // No se restaura la relacion porque ya no forma parte del alcance del proyecto.
+        // No se restaura la relación porque ya no forma parte del alcance del proyecto.
     }
 };

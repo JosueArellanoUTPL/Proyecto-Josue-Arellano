@@ -31,7 +31,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Rutas con autenticacion y auditoria.
+// Rutas con autenticación y auditoría.
 Route::middleware(['auth', AuditMiddleware::class])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -165,5 +165,5 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
     });
 });
 
-// Rutas de autenticacion.
+// Rutas de autenticación.
 require __DIR__.'/auth.php';

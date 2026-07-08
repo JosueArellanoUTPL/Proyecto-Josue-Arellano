@@ -8,7 +8,7 @@
 {{-- Campos del proyecto. --}}
 <div data-project-fields>
     <div class="mb-4">
-        <label class="block mb-1">CÃ³digo</label>
+        <label class="block mb-1">Código</label>
         <input name="codigo" value="{{ old('codigo', $proyectoActual?->codigo) }}"
                class="w-full border rounded px-3 py-2" required>
     </div>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="mb-4">
-        <label class="block mb-1">DescripciÃ³n</label>
+        <label class="block mb-1">Descripción</label>
         <textarea name="descripcion" class="w-full border rounded px-3 py-2"
                   rows="3">{{ old('descripcion', $proyectoActual?->descripcion) }}</textarea>
     </div>
@@ -36,7 +36,7 @@
             @endforeach
         </select>
         <p class="text-sm text-gray-500 mt-1">
-            La entidad se obtiene automaticamente desde el programa seleccionado.
+            La entidad se obtiene automáticamente desde el programa seleccionado.
         </p>
     </div>
 

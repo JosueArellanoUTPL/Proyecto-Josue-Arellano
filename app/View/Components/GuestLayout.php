@@ -7,7 +7,7 @@ use Illuminate\View\View;
 
 class GuestLayout extends Component
 {
-    // Cargar plantilla de autenticacion.
+    // Cargar plantilla de autenticación.
     public function render(): View
     {
         return view('layouts.guest');

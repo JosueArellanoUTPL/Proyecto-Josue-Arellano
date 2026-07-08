@@ -140,7 +140,7 @@
                     <div class="card">
                         <div class="title">Avance por entidad</div>
                         <div class="muted" style="margin-top:6px;">
-                            Ranking de entidades segun el progreso promedio de sus metas.
+                            Ranking de entidades según el progreso promedio de sus metas.
                         </div>
 
                         <div class="bar-list">

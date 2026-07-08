@@ -1,4 +1,4 @@
-{{-- Errores de validacion. --}}
+{{-- Errores de validación. --}}
 @if ($errors->any())
     <div {{ $attributes->class(['form-errors']) }}>
         <div class="form-errors__title">Revisar campos</div>

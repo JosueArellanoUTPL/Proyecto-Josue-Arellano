@@ -45,7 +45,7 @@
                                     <th>Entidad</th>
                                     <th>Programa</th>
                                     <th>Avance</th>
-                                    <th>Ultima fecha</th>
+                                    <th>Última fecha</th>
                                     <th>Registros</th>
                                     <th>Evidencias</th>
                                 </tr>

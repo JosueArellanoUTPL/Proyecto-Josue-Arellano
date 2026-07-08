@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    // Validar acceso segun el rol.
+    // Validar acceso según el rol.
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
         $user = $request->user();
 
-        // Validacion de autenticacion.
+        // Validación de autenticación.
         if (! $user) {
             return redirect()->route('login');
         }

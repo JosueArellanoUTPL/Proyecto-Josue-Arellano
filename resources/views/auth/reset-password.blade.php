@@ -1,5 +1,5 @@
 <x-guest-layout>
-    {{-- Formulario de autenticacion. --}}
+    {{-- Formulario de autenticación. --}}
     <form method="POST" action="{{ route('password.store') }}">
         @csrf
 

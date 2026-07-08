@@ -1,4 +1,4 @@
-{{-- Mensajes de validacion. --}}
+{{-- Mensajes de validación. --}}
 @props(['messages'])
 
 @if ($messages)

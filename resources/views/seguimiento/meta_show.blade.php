@@ -25,7 +25,7 @@
                         </div>
                     </div>
 
-                    <a class="btn" href="{{ route('seguimiento.metas') }}">Volver</a>
+                    <a class="btn" href="{{ route('seguimiento.metas') }}">Seguimiento metas</a>
                 </div>
 
                 @php
@@ -41,7 +41,7 @@
                         <div>
                             <div class="title">Progreso de la Meta</div>
                             <div class="muted" style="margin-top:6px;">
-                                Calculado automaticamente con el promedio de avance de los indicadores.
+                                Calculado automáticamente con el promedio de avance de los indicadores.
                             </div>
                         </div>
                         <strong>{{ $sinIndicadores ? 'Pendiente de indicadores' : round($progresoMeta).'%' }}</strong>
@@ -58,7 +58,7 @@
                 {{-- Indicadores. --}}
                 <div class="title" style="margin-top:22px;">Indicadores</div>
                 <div class="muted" style="margin-top:6px;">
-                    Cada indicador puede registrar multiples avances con evidencias.
+                    Cada indicador puede registrar múltiples avances con evidencias.
                 </div>
 
                 <div class="grid-ind">

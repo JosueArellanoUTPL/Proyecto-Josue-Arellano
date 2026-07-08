@@ -1,4 +1,4 @@
-{{-- Plantilla de autenticacion. --}}
+{{-- Plantilla de autenticación. --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>

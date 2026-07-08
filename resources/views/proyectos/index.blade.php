@@ -24,7 +24,7 @@
                     <thead>
                         <tr class="text-left border-b">
                             <th class="py-2 px-2">ID</th>
-                            <th class="py-2">CÃ³digo</th>
+                            <th class="py-2">Código</th>
                             <th class="py-2">Nombre</th>
                             <th class="py-2">Entidad</th>
                             <th class="py-2">Programa</th>
@@ -41,8 +41,6 @@
                                 <td class="py-2">{{ $proyecto->entidad->nombre ?? '-' }}</td>
                                 <td class="py-2">{{ $proyecto->programa->nombre ?? '-' }}</td>
                                 <td class="py-2">
-
-                                <td class="py-2">
                                     <div class="flex justify-center gap-2">
                                         <a href="{{ route('proyectos.edit', $proyecto->id) }}"
                                            class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-black rounded transition">
@@ -51,7 +49,7 @@
 
                                         <form method="POST"
                                               action="{{ route('proyectos.destroy', $proyecto->id) }}"
-                                              onsubmit="return confirm('Â¿Seguro que deseas desactivar este proyecto?');">
+                                              onsubmit="return confirm('¿Seguro que deseas desactivar este proyecto?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
