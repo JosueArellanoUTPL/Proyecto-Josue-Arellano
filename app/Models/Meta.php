@@ -36,12 +36,6 @@ class Meta extends Model
         return $this->hasMany(Alineacion::class);
     }
 
-    // Relacion con los proyectos.
-    public function proyectos()
-    {
-        return $this->hasMany(Proyecto::class);
-    }
-
     // Calculo del progreso de la meta.
     public function getProgresoAttribute(): float
     {

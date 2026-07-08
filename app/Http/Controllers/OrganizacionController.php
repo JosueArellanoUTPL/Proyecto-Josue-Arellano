@@ -47,7 +47,6 @@ class OrganizacionController extends Controller
         $entidad->load([
             'programas',
             'proyectos.programa',
-            'proyectos.meta',
             'planes.pdn',
             'planes.metas.indicadores.ultimoAvance',
         ]);

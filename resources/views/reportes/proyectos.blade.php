@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Reporte de Proyectos
@@ -44,7 +44,6 @@
                                     <th>Proyecto</th>
                                     <th>Entidad</th>
                                     <th>Programa</th>
-                                    <th>Meta</th>
                                     <th>Avance</th>
                                     <th>Ultima fecha</th>
                                     <th>Registros</th>
@@ -61,15 +60,14 @@
                                         <td>{{ $proyecto->nombre }}</td>
                                         <td>{{ $proyecto->entidad->nombre ?? '-' }}</td>
                                         <td>{{ $proyecto->programa->nombre ?? '-' }}</td>
-                                        <td>{{ $proyecto->meta ? $proyecto->meta->codigo.' - '.$proyecto->meta->nombre : 'Sin asignar' }}</td>
-                                        <td>{{ round($proyecto->progreso, 2) }}%</td>
+                                        <td>{{ round($proyecto->progreso) }}%</td>
                                         <td>{{ $proyecto->ultimoAvance?->fecha?->format('d/m/Y') ?? '-' }}</td>
                                         <td>{{ $proyecto->avances->count() }}</td>
                                         <td>{{ $evidencias }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="muted">No hay proyectos para los filtros seleccionados.</td>
+                                        <td colspan="7" class="muted">No hay proyectos para los filtros seleccionados.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

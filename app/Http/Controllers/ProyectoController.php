@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Entidad;
-use App\Models\Meta;
 use App\Models\Programa;
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class ProyectoController extends Controller
@@ -15,7 +13,7 @@ class ProyectoController extends Controller
     // Listar proyectos.
     public function index()
     {
-        $proyectos = Proyecto::with(['programa.entidad', 'meta.plan'])
+        $proyectos = Proyecto::with('programa.entidad')
             ->orderBy('id', 'desc')
             ->paginate(10);
 
@@ -27,9 +25,8 @@ class ProyectoController extends Controller
     {
         $entidades = Entidad::where('activo', true)->orderBy('nombre')->get();
         $programas = Programa::with('entidad')->where('activo', true)->orderBy('nombre')->get();
-        $metas = Meta::with('plan.entidad')->where('activo', true)->orderBy('nombre')->get();
 
-        return view('proyectos.create', compact('entidades', 'programas', 'metas'));
+        return view('proyectos.create', compact('entidades', 'programas'));
     }
 
     // Guardar proyecto.
@@ -51,9 +48,8 @@ class ProyectoController extends Controller
         $proyecto->load('programa.entidad');
         $entidades = Entidad::where('activo', true)->orWhere('id', $proyecto->programa?->entidad_id)->orderBy('nombre')->get();
         $programas = Programa::with('entidad')->where('activo', true)->orWhere('id', $proyecto->programa_id)->orderBy('nombre')->get();
-        $metas = Meta::with('plan.entidad')->where('activo', true)->orWhere('id', $proyecto->meta_id)->orderBy('nombre')->get();
 
-        return view('proyectos.edit', compact('proyecto', 'entidades', 'programas', 'metas'));
+        return view('proyectos.edit', compact('proyecto', 'entidades', 'programas'));
     }
 
     // Actualizar proyecto.
@@ -81,29 +77,12 @@ class ProyectoController extends Controller
     // Validacion de proyecto.
     private function validateProject(Request $request): array
     {
-        // Validacion de proyecto.
-        $validator = Validator::make($request->all(), [
+        return $request->validate([
             'codigo' => ['required', 'string', 'max:30', Rule::unique('proyectos', 'codigo')->ignore($request->route('proyecto'))],
             'nombre' => ['required', 'string', 'max:150'],
             'descripcion' => ['nullable', 'string'],
             'programa_id' => ['required', 'exists:programas,id'],
-            'meta_id' => ['nullable', 'exists:metas,id'],
             'activo' => ['nullable'],
         ]);
-
-        $validator->after(function ($validator) use ($request) {
-            $entidadPrograma = Programa::whereKey($request->programa_id)->value('entidad_id');
-
-            // Validacion de entidad entre programa y meta.
-            $metaValida = ! $request->filled('meta_id') || Meta::whereKey($request->meta_id)
-                ->whereHas('plan', fn ($query) => $query->where('entidad_id', $entidadPrograma))
-                ->exists();
-
-            if (! $metaValida) {
-                $validator->errors()->add('meta_id', 'La meta debe pertenecer a un plan de la entidad seleccionada.');
-            }
-        });
-
-        return $validator->validate();
     }
 }

@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     {{-- Encabezado con la meta seleccionada. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -54,22 +54,6 @@
                     @endif
                 </div>
 
-                {{-- Proyectos relacionados. --}}
-                <div class="title" style="margin-top:22px;">Proyectos relacionados</div>
-                <div class="grid-ind">
-                    @forelse($meta->proyectos as $proyecto)
-                        <a class="card" href="{{ route('seguimiento.proyecto.show', $proyecto) }}">
-                            <div class="font-semibold">{{ $proyecto->nombre }}</div>
-                            <div class="muted" style="margin-top:6px;">
-                                Avance actual: {{ round($proyecto->progreso, 2) }}%
-                            </div>
-                        </a>
-                    @empty
-                        <div class="card">
-                            <div class="muted">Esta meta todavía no tiene proyectos relacionados.</div>
-                        </div>
-                    @endforelse
-                </div>
 
                 {{-- Indicadores. --}}
                 <div class="title" style="margin-top:22px;">Indicadores</div>

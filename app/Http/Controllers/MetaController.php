@@ -48,15 +48,6 @@ class MetaController extends Controller
     {
         $data = $this->validarMeta($request, $meta->id);
 
-        // Restriccion de entidad para proyectos relacionados.
-        $nuevoPlan = Plan::findOrFail($data['plan_id']);
-        $entidadActual = $meta->plan?->entidad_id;
-        if ($meta->proyectos()->exists() && (int) $entidadActual !== (int) $nuevoPlan->entidad_id) {
-            return back()
-                ->withErrors(['plan_id' => 'El nuevo plan debe pertenecer a la misma entidad porque la meta ya tiene proyectos.'])
-                ->withInput();
-        }
-
         $meta->update($data);
 
         return redirect()->route('metas.index')

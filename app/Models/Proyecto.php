@@ -15,7 +15,6 @@ class Proyecto extends Model
         'nombre',
         'descripcion',
         'programa_id',
-        'meta_id',
         'activo',
     ];
 
@@ -29,12 +28,6 @@ class Proyecto extends Model
     public function getEntidadAttribute()
     {
         return $this->programa?->entidad;
-    }
-
-    // Relacion con la meta.
-    public function meta()
-    {
-        return $this->belongsTo(Meta::class);
     }
 
     // Relacion con los avances.

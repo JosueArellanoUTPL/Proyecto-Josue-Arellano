@@ -11,7 +11,6 @@ class SeguimientoProyectoController extends Controller
     {
         $proyecto->load([
             'programa.entidad',
-            'meta.plan',
 
             // Historial de avances.
             'avances' => function ($consulta) {

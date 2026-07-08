@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Seguimiento de Proyecto
@@ -16,9 +16,6 @@
                         <div class="muted" style="margin-top:6px;">
                             Entidad: <strong>{{ $proyecto->entidad->nombre ?? '-' }}</strong> -
                             Programa: <strong>{{ $proyecto->programa->nombre ?? '-' }}</strong>
-                        </div>
-                        <div class="muted" style="margin-top:6px;">
-                            Meta: <strong>{{ $proyecto->meta ? $proyecto->meta->codigo.' - '.$proyecto->meta->nombre : 'Sin asignar' }}</strong>
                         </div>
                         <div class="muted" style="margin-top:6px;">
                             {{ $proyecto->descripcion ?? 'Sin descripcion.' }}

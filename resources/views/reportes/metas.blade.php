@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Reporte de Metas
@@ -58,7 +58,6 @@
                                     <th>Entidad</th>
                                     <th>Plan</th>
                                     <th>Indicadores</th>
-                                    <th>Proyectos</th>
                                     <th>Avance</th>
                                     <th>Estado</th>
                                 </tr>
@@ -71,13 +70,12 @@
                                         <td>{{ $meta->plan->entidad->nombre ?? '-' }}</td>
                                         <td>{{ $meta->plan->codigo ?? '-' }}</td>
                                         <td>{{ $meta->indicadores->count() }}</td>
-                                        <td>{{ $meta->proyectos_count }}</td>
-                                        <td>{{ $meta->indicadores->isEmpty() ? '-' : round($meta->progreso, 2).'%' }}</td>
+                                        <td>{{ $meta->indicadores->isEmpty() ? '-' : round($meta->progreso).'%' }}</td>
                                         <td>{{ $meta->estado_seguimiento }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="8" class="muted">No hay metas para los filtros seleccionados.</td>
+                                        <td colspan="7" class="muted">No hay metas para los filtros seleccionados.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

@@ -53,14 +53,6 @@ class PlanController extends Controller
     {
         $data = $this->validarPlan($request, $plan->id);
 
-        // Restriccion de entidad para proyectos relacionados.
-        $tieneProyectos = $plan->metas()->whereHas('proyectos')->exists();
-        if ((int) $plan->entidad_id !== (int) $data['entidad_id'] && $tieneProyectos) {
-            return back()
-                ->withErrors(['entidad_id' => 'No puedes cambiar la entidad porque este plan ya tiene proyectos relacionados.'])
-                ->withInput();
-        }
-
         $plan->update($data);
 
         return redirect()->route('planes.index')

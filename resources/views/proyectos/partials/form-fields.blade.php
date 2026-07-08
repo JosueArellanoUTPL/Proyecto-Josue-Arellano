@@ -1,15 +1,14 @@
-@php
+﻿@php
     // Valores del formulario.
     $proyectoActual = $proyecto ?? null;
     $entidadSeleccionada = old('entidad_filtro', $proyectoActual?->programa?->entidad_id);
     $programaSeleccionado = old('programa_id', $proyectoActual?->programa_id);
-    $metaSeleccionada = old('meta_id', $proyectoActual?->meta_id);
 @endphp
 
 {{-- Campos del proyecto. --}}
 <div data-project-fields>
     <div class="mb-4">
-        <label class="block mb-1">Código</label>
+        <label class="block mb-1">CÃ³digo</label>
         <input name="codigo" value="{{ old('codigo', $proyectoActual?->codigo) }}"
                class="w-full border rounded px-3 py-2" required>
     </div>
@@ -21,7 +20,7 @@
     </div>
 
     <div class="mb-4">
-        <label class="block mb-1">Descripción</label>
+        <label class="block mb-1">DescripciÃ³n</label>
         <textarea name="descripcion" class="w-full border rounded px-3 py-2"
                   rows="3">{{ old('descripcion', $proyectoActual?->descripcion) }}</textarea>
     </div>
@@ -54,21 +53,6 @@
         </select>
     </div>
 
-    <div class="mb-4">
-        <label class="block mb-1">Meta que apoya</label>
-        <select name="meta_id" class="w-full border rounded px-3 py-2" data-related-select>
-            <option value="">Sin meta asignada</option>
-            @foreach ($metas as $meta)
-                <option value="{{ $meta->id }}" data-entity="{{ $meta->plan?->entidad_id }}"
-                        @selected((string) $metaSeleccionada === (string) $meta->id)>
-                    {{ $meta->plan?->codigo }} - {{ $meta->codigo }} - {{ $meta->nombre }}
-                </option>
-            @endforeach
-        </select>
-        <p class="text-sm text-gray-500 mt-1">
-            Indica qué meta institucional ayuda a cumplir este proyecto.
-        </p>
-    </div>
 
     <div class="mb-4">
         <label class="inline-flex items-center gap-2">
@@ -78,7 +62,7 @@
     </div>
 </div>
 
-{{-- Filtro de programas y metas por entidad. --}}
+{{-- Filtro de programas por entidad. --}}
 <script>
     // Filtro por entidad.
     document.addEventListener('DOMContentLoaded', function () {

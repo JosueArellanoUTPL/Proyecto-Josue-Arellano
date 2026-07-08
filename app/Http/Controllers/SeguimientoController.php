@@ -18,7 +18,6 @@ class SeguimientoController extends Controller
         $query = Meta::where('activo', 1)->with([
             'plan.entidad',
             'indicadores' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
-            'proyectos' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
         ]);
 
         if ($request->filled('entidad_id')) {
@@ -58,7 +57,6 @@ class SeguimientoController extends Controller
             'plan',
             'indicadores.ultimoAvance',
             'indicadores.avances',
-            'proyectos' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
         ]);
 
         return view('seguimiento.meta_show', compact('meta'));

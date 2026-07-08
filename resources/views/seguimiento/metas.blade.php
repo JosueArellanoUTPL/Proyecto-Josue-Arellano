@@ -122,9 +122,6 @@
                                     <span class="muted">
                                         Indicadores: <strong>{{ $meta->indicadores->count() }}</strong>
                                     </span>
-                                    <span class="muted">
-                                        Proyectos: <strong>{{ $meta->proyectos->count() }}</strong>
-                                    </span>
                                     <span class="link">Ver detalle →</span>
                                 </div>
                             </a>

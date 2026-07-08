@@ -30,7 +30,6 @@ class ReporteController extends Controller
                 'plan.entidad',
                 'indicadores' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
             ])
-            ->withCount(['proyectos' => fn ($query) => $query->where('activo', 1)])
             ->orderBy('id', 'desc');
 
         if ($request->filled('entidad_id')) {
@@ -67,7 +66,6 @@ class ReporteController extends Controller
 
         $query = Proyecto::where('activo', 1)->with([
             'programa.entidad',
-            'meta.plan',
             'ultimoAvance',
             'avances.evidencias',
         ])
