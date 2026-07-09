@@ -1,4 +1,3 @@
-{{-- Plantilla de autenticación. --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -16,7 +15,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
+        {{-- Encabezado de la pantalla. --}}
         <div class="auth-shell">
+            {{-- Encabezado de la pantalla. --}}
             <div class="auth-brand">
                 <a href="/" class="auth-logo">
                     <x-application-logo class="w-20 h-20" />

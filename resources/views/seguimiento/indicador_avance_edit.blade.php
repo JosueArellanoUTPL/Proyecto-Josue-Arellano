@@ -1,5 +1,4 @@
 <x-app-layout>
-    {{-- Seccion de encabezado. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Editar Avance de Indicador
@@ -35,8 +34,8 @@
 
                         <div class="mb-4">
                             <label class="block mb-1 font-semibold">Valor reportado</label>
-                            <input type="number" step="0.01" name="valor_reportado"
-                                   value="{{ old('valor_reportado', $avance->valor_reportado) }}"
+                            <input type="number" step="1" name="valor_reportado"
+                                   value="{{ old('valor_reportado', (int) $avance->valor_reportado) }}"
                                    class="w-full border rounded px-3 py-2">
                         </div>
 

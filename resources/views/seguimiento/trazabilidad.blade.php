@@ -10,6 +10,7 @@
             <div class="wrap">
 
                 <div class="row">
+                    {{-- Encabezado del modulo trazabilidad. --}}
                     <div>
                         <div class="title">Trazabilidad Estratégica</div>
                         <div class="muted" style="margin-top:6px;">
@@ -98,6 +99,7 @@
                                 </select>
                             </div>
 
+                        {{-- botones de filtros --}}
                         <div class="trace-filters__actions">
                             <button class="btn trace-filters__apply" type="submit">Aplicar filtros</button>
                             <a class="btn" href="{{ route('seguimiento.trazabilidad') }}">Limpiar</a>
@@ -115,23 +117,24 @@
                         @forelse($alineaciones as $alineacion)
                             <div class="item">
                                 <div class="row">
+                                    {{-- Titulo de la meta. --}}
                                     <div>
                                         <div class="strong">
                                             {{ $alineacion->meta->codigo ?? 'META' }} — {{ $alineacion->meta->nombre ?? '-' }}
                                         </div>
+                                        {{-- Pequeño pie de titulo. --}}
                                         <div class="small" style="margin-top:4px;">
                                             Entidad: {{ $alineacion->meta->plan->entidad->nombre ?? '—' }} ·
                                             Plan: {{ $alineacion->meta->plan->codigo ?? '' }}
                                         </div>
                                     </div>
 
-                                    {{-- Estado de la alineacion. --}}
                                     <span class="trace-status {{ $alineacion->activo ? 'is-active' : 'is-inactive' }}">
                                         {{ $alineacion->activo ? 'Activa' : 'Inactiva' }}
                                     </span>
                                 </div>
 
-                                {{-- Instrumentos relacionados. --}}
+                                {{-- Relacion con intrumentos. --}}
                                 <div class="trace-instruments">
                                     <div class="trace-instrument">
                                         <span>ODS</span>

@@ -1,5 +1,4 @@
 <x-app-layout>
-    {{-- Seccion de encabezado. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Registrar Avance de Indicador
@@ -60,7 +59,7 @@
 
                         <div>
                             <label class="muted">Valor reportado ({{ $indicador->unidad }})</label>
-                            <input class="input" type="number" step="0.01" name="valor_reportado"
+                            <input class="input" type="number" step="1" name="valor_reportado"
                                    value="{{ old('valor_reportado') }}" required>
                         </div>
 

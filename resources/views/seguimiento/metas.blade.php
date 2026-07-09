@@ -18,7 +18,6 @@
                         </div>
                     </div>
 
-                    {{-- Leyenda. --}}
                     <div class="legend">
                         <div class="legend-item">
                             <span class="dot blue"></span>
@@ -35,7 +34,6 @@
                     </div>
                 </div>
 
-                {{-- Resumen. --}}
                 <div class="kpis seguimiento-kpis">
                     <div class="kpi">
                         <div class="label">Metas</div>
@@ -59,26 +57,6 @@
                     </div>
                 </div>
 
-                {{-- Filtro por entidad. --}}
-                <form method="GET" action="{{ route('seguimiento.metas') }}" class="card seguimiento-filter">
-                    <div>
-                        <label class="label" for="entidad_id">Filtrar por entidad</label>
-                        <select class="input" id="entidad_id" name="entidad_id" onchange="this.form.submit()">
-                            <option value="">Todas las entidades</option>
-                            @foreach ($entidades as $entidad)
-                                <option value="{{ $entidad->id }}" @selected((string) $entidadSeleccionada === (string) $entidad->id)>
-                                    {{ $entidad->codigo }} - {{ $entidad->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <noscript>
-                        <button type="submit" class="btn">Aplicar filtro</button>
-                    </noscript>
-                </form>
-
-                {{-- Metas filtradas. --}}
                 <div class="metas-grid seguimiento-metas-grid">
                         @forelse($metas as $meta)
                             @php
@@ -129,7 +107,7 @@
                             <div class="card">
                                 <div class="title">Sin metas</div>
                                 <div class="muted" style="margin-top:6px;">
-                                    No hay metas registradas para la entidad seleccionada.
+                                    No hay metas registradas para seguimiento.
                                 </div>
                             </div>
                         @endforelse

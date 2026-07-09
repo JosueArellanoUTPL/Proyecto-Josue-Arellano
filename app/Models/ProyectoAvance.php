@@ -21,7 +21,7 @@ class ProyectoAvance extends Model
     // Conversion de tipos.
     protected $casts = [
         'fecha' => 'date',
-        'porcentaje_avance' => 'decimal:2',
+        'porcentaje_avance' => 'integer',
     ];
 
     // Relacion con el proyecto.

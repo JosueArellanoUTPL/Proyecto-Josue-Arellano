@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('proyecto_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->date('fecha');
-            $table->decimal('porcentaje_avance', 5, 2);
+            $table->unsignedTinyInteger('porcentaje_avance');
             $table->text('comentario')->nullable();
             $table->timestamps();
         });

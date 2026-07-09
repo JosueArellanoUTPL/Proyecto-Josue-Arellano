@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('indicador_id')->constrained('indicadores')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->date('fecha');
-            $table->decimal('valor_reportado', 15, 2);
+            $table->integer('valor_reportado');
             $table->text('comentario')->nullable();
             $table->string('evidencia_path')->nullable(); // PDF/JPG/PNG
             $table->timestamps();

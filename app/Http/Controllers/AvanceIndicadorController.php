@@ -34,7 +34,7 @@ class AvanceIndicadorController extends Controller
             'indicador_id' => $indicador->id,
             'user_id' => Auth::id(),
             'fecha' => $data['fecha'],
-            'valor_reportado' => $data['valor_reportado'],
+            'valor_reportado' => (int) $data['valor_reportado'],
             'comentario' => $data['comentario'] ?? null,
             'evidencia_path' => $path,
         ]);
@@ -71,7 +71,7 @@ class AvanceIndicadorController extends Controller
 
         $avance->update([
             'fecha' => $data['fecha'],
-            'valor_reportado' => $data['valor_reportado'],
+            'valor_reportado' => (int) $data['valor_reportado'],
             'comentario' => $data['comentario'] ?? null,
         ]);
 
@@ -103,7 +103,7 @@ class AvanceIndicadorController extends Controller
     {
         return $request->validate([
             'fecha' => ['required', 'date'],
-            'valor_reportado' => ['required', 'numeric'],
+            'valor_reportado' => ['required', 'integer'],
             'comentario' => ['nullable', 'string'],
             'evidencia' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
         ]);

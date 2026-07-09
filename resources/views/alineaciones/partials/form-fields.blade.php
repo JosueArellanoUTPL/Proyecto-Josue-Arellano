@@ -1,4 +1,3 @@
-{{-- Campos de la alineacion. --}}
 @php
     $alineacionActual = $alineacion ?? null;
 @endphp

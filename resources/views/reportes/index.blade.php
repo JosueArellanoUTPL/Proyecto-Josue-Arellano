@@ -14,8 +14,10 @@
                     Reportes básicos para consulta, seguimiento y respaldo institucional.
                 </div>
 
+                {{-- Tarjetas para entrar a cada reporte. --}}
                 <div class="report-grid">
                     <a href="{{ route('reportes.metas') }}" class="card report-card">
+                        {{-- Tarjeta para abrir el reporte de metas. --}}
                         <div class="title">Reporte de metas</div>
                         <div class="muted" style="margin-top:6px;">
                             Avance de metas por entidad, plan e indicadores asociados.
@@ -23,6 +25,7 @@
                     </a>
 
                     <a href="{{ route('reportes.proyectos') }}" class="card report-card">
+                        {{-- Tarjeta para abrir el reporte de proyectos. --}}
                         <div class="title">Reporte de proyectos</div>
                         <div class="muted" style="margin-top:6px;">
                             Estado actual de proyectos, ultimos avances y evidencias.
@@ -30,6 +33,7 @@
                     </a>
 
                     <a href="{{ route('reportes.trazabilidad') }}" class="card report-card">
+                        {{-- Tarjeta para abrir el reporte de trazabilidad. --}}
                         <div class="title">Reporte de trazabilidad</div>
                         <div class="muted" style="margin-top:6px;">
                             Relación entre metas, ODS, PND y objetivos estratégicos.

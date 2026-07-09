@@ -25,7 +25,7 @@ class IndicadorAvance extends Model
     // Conversion de tipos.
     protected $casts = [
         'fecha' => 'date',
-        'valor_reportado' => 'decimal:2',
+        'valor_reportado' => 'integer',
     ];
 
     // Relacion con el indicador.

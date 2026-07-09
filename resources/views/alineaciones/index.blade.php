@@ -22,38 +22,6 @@
                     <a href="{{ route('alineaciones.create') }}" class="btn">Nueva alineacion</a>
                 </div>
 
-                {{-- Filtros. --}}
-                <form method="GET" action="{{ route('alineaciones.index') }}" class="card alignment-filter" data-alignment-filter>
-                    <div>
-                        <label class="label" for="entidad_id">Entidad</label>
-                        <select class="input" id="entidad_id" name="entidad_id" data-entity-filter>
-                            <option value="">Todas las entidades</option>
-                            @foreach ($entidades as $entidad)
-                                <option value="{{ $entidad->id }}" @selected((string) $entidadSeleccionada === (string) $entidad->id)>
-                                    {{ $entidad->codigo }} - {{ $entidad->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="label" for="meta_id">Meta</label>
-                        <select class="input" id="meta_id" name="meta_id" data-meta-filter @disabled(!$entidadSeleccionada)>
-                            <option value="">{{ $entidadSeleccionada ? 'Todas las metas' : 'Seleccione una entidad' }}</option>
-                            @foreach ($metas as $meta)
-                                <option value="{{ $meta->id }}" @selected((string) $metaSeleccionada === (string) $meta->id)>
-                                    {{ $meta->codigo }} - {{ $meta->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="alignment-filter__actions">
-                        <button class="btn" type="submit">Filtrar</button>
-                        <a class="btn" href="{{ route('alineaciones.index') }}">Limpiar</a>
-                    </div>
-                </form>
-
                 {{-- Listado. --}}
                 <div class="card alignment-panel">
                     <div class="alignment-list-header" aria-hidden="true">
@@ -62,6 +30,7 @@
                         <span>Acciones</span>
                     </div>
 
+                    {{-- Lista de alineaciones encontradas. --}}
                     <div class="alignment-list">
                         @forelse ($alineaciones as $alineacion)
                             <div class="alignment-list-row">
@@ -71,6 +40,7 @@
                                     <span>{{ $alineacion->activo ? 'Activa' : 'Inactiva' }}</span>
                                 </div>
 
+                                {{-- Muestra ODS, PND y OE a la derecha. --}}
                                 <div class="alignment-instruments">
                                     <div><span>ODS</span><strong>{{ $alineacion->ods->codigo ?? 'Sin asignar' }}</strong></div>
                                     <div><span>PND</span><strong>{{ $alineacion->pdn->codigo ?? 'Sin asignar' }}</strong></div>
@@ -91,7 +61,7 @@
                             </div>
                         @empty
                             <div class="alignment-empty">
-                                No hay alineaciones para los filtros seleccionados.
+                                No hay alineaciones registradas.
                             </div>
                         @endforelse
                     </div>
@@ -101,21 +71,4 @@
         </div>
     </div>
 
-    <script>
-        // Al cambiar de entidad, limpia la meta anterior y actualiza el listado.
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.querySelector('[data-alignment-filter]');
-            const entity = form?.querySelector('[data-entity-filter]');
-            const meta = form?.querySelector('[data-meta-filter]');
-
-            entity?.addEventListener('change', function () {
-                if (meta) meta.value = '';
-                form.submit();
-            });
-
-            meta?.addEventListener('change', function () {
-                form.submit();
-            });
-        });
-    </script>
 </x-app-layout>

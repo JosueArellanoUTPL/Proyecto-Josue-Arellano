@@ -13,46 +13,14 @@ use Illuminate\Validation\ValidationException;
 class AlineacionController extends Controller
 {
     // Listar alineaciones.
-    public function index(Request $request)
+    public function index()
     {
-        $request->validate([
-            'entidad_id' => ['nullable', 'exists:entidades,id'],
-            'meta_id' => ['nullable', 'exists:metas,id'],
-        ]);
-
-        $entidadSeleccionada = $request->query('entidad_id');
-        $metaSeleccionada = $request->query('meta_id');
-        $entidades = Entidad::where('activo', true)->orderBy('nombre')->get();
-
-        // Filtro de metas por entidad.
-        $metas = Meta::with('plan')
-            ->where('activo', true)
-            ->when($entidadSeleccionada, function ($query) use ($entidadSeleccionada) {
-                $query->whereHas('plan', fn ($plan) => $plan->where('entidad_id', $entidadSeleccionada));
-            }, fn ($query) => $query->whereRaw('1 = 0'))
-            ->orderBy('codigo')
-            ->get();
-
-        // Validacion de entidad y meta.
-        if ($metaSeleccionada && ! $metas->contains('id', (int) $metaSeleccionada)) {
-            $metaSeleccionada = null;
-        }
-
+        // Listado simple sin filtros.
         $alineaciones = Alineacion::with(['meta.plan.entidad', 'meta.plan.pdn', 'ods', 'objetivoEstrategico'])
-            ->when($entidadSeleccionada, function ($query) use ($entidadSeleccionada) {
-                $query->whereHas('meta.plan', fn ($plan) => $plan->where('entidad_id', $entidadSeleccionada));
-            })
-            ->when($metaSeleccionada, fn ($query) => $query->where('meta_id', $metaSeleccionada))
             ->orderBy('id', 'desc')
             ->get();
 
-        return view('alineaciones.index', compact(
-            'alineaciones',
-            'entidades',
-            'metas',
-            'entidadSeleccionada',
-            'metaSeleccionada'
-        ));
+        return view('alineaciones.index', compact('alineaciones'));
     }
 
     // Mostrar formulario para crear alineacion.

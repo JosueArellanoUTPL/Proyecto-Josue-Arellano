@@ -1,5 +1,4 @@
 <x-app-layout>
-    {{-- Seccion de encabezado. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">Crear Alineación</h2>
     </x-slot>
@@ -19,6 +18,7 @@
                     @csrf
                     @include('alineaciones.partials.form-fields')
 
+                    {{-- Botones para guardar o volver en alineaciones. --}}
                     <div style="margin-top:16px; display:flex; gap:10px; flex-wrap:wrap;">
                         <button type="submit" class="btn btn-green">Guardar</button>
                         <a href="{{ route('alineaciones.index') }}" class="btn">Cancelar</a>

@@ -26,7 +26,7 @@ class ProyectoAvanceController extends Controller
         // Validacion del avance.
         $data = $request->validate([
             'fecha' => ['required', 'date'],
-            'porcentaje_avance' => ['required', 'numeric', 'min:0', 'max:100'],
+            'porcentaje_avance' => ['required', 'integer', 'min:0', 'max:100'],
             'comentario' => ['nullable', 'string', 'max:1000'],
             'evidencias' => ['nullable', 'array'],
             'evidencias.*' => ['file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
@@ -36,7 +36,7 @@ class ProyectoAvanceController extends Controller
             'proyecto_id' => $proyecto->id,
             'user_id' => Auth::id(),
             'fecha' => $data['fecha'],
-            'porcentaje_avance' => $data['porcentaje_avance'],
+            'porcentaje_avance' => (int) $data['porcentaje_avance'],
             'comentario' => $data['comentario'] ?? null,
         ]);
 
@@ -76,13 +76,13 @@ class ProyectoAvanceController extends Controller
 
         $data = $request->validate([
             'fecha' => ['required', 'date'],
-            'porcentaje_avance' => ['required', 'numeric', 'min:0', 'max:100'],
+            'porcentaje_avance' => ['required', 'integer', 'min:0', 'max:100'],
             'comentario' => ['nullable', 'string', 'max:1000'],
         ]);
 
         $avance->update([
             'fecha' => $data['fecha'],
-            'porcentaje_avance' => $data['porcentaje_avance'],
+            'porcentaje_avance' => (int) $data['porcentaje_avance'],
             'comentario' => $data['comentario'] ?? null,
         ]);
 

@@ -1,5 +1,4 @@
 <x-app-layout>
-    {{-- Seccion de encabezado. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Organización (Entidades)
@@ -23,6 +22,7 @@
 
                         <a href="{{ route('seguimiento.organizacion.entidad', $entidad->id) }}" class="card" style="text-decoration:none;">
                             <div class="flex justify-between items-start gap-3">
+                                {{-- Datos de la entidad. --}}
                                 <div>
                                     <div class="title">{{ $entidad->nombre }}</div>
                                     <div class="muted" style="margin-top:6px;">
@@ -55,6 +55,7 @@
                                 </div>
                             </div>
 
+                            {{-- Avance calculado. --}}
                             <div style="margin-top:14px;">
                                 <div class="flex justify-between text-sm">
                                     <span class="muted">Avance promedio</span>

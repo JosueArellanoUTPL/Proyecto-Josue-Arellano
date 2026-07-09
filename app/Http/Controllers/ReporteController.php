@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alineacion;
-use App\Models\Entidad;
 use App\Models\Meta;
 use App\Models\Proyecto;
-use Illuminate\Http\Request;
 
 class ReporteController extends Controller
 {
@@ -17,68 +15,33 @@ class ReporteController extends Controller
     }
 
     // Generar reporte de metas.
-    public function metas(Request $request)
+    public function metas()
     {
-        // Validacion de filtros de metas.
-        $request->validate([
-            'entidad_id' => ['nullable', 'exists:entidades,id'],
-            'estado' => ['nullable', 'in:completadas,en_progreso,pendientes'],
-        ]);
-
-        $query = Meta::where('activo', 1)
+        // Listado general de metas para reporte.
+        $metas = Meta::where('activo', 1)
             ->with([
                 'plan.entidad',
                 'indicadores' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
             ])
-            ->orderBy('id', 'desc');
+            ->orderBy('id', 'desc')
+            ->get();
 
-        if ($request->filled('entidad_id')) {
-            $query->whereHas('plan', function ($planQuery) use ($request) {
-                $planQuery->where('entidad_id', $request->entidad_id);
-            });
-        }
-
-        $metas = $query->get();
-
-        // Filtro por estado calculado.
-        if ($request->filled('estado')) {
-            $metas = $metas->filter(function ($meta) use ($request) {
-                return match ($request->estado) {
-                    'completadas' => $meta->completada,
-                    'pendientes' => $meta->indicadores->isEmpty(),
-                    default => $meta->indicadores->isNotEmpty() && ! $meta->completada,
-                };
-            });
-        }
-
-        $entidades = Entidad::orderBy('nombre')->get();
-
-        return view('reportes.metas', compact('metas', 'entidades'));
+        return view('reportes.metas', compact('metas'));
     }
 
     // Generar reporte de proyectos.
-    public function proyectos(Request $request)
+    public function proyectos()
     {
-        // Validacion del filtro de proyectos.
-        $request->validate([
-            'entidad_id' => ['nullable', 'exists:entidades,id'],
-        ]);
-
-        $query = Proyecto::where('activo', 1)->with([
+        // Listado general de proyectos para reporte.
+        $proyectos = Proyecto::where('activo', 1)->with([
             'programa.entidad',
             'ultimoAvance',
             'avances.evidencias',
         ])
-            ->orderBy('id', 'desc');
+            ->orderBy('id', 'desc')
+            ->get();
 
-        if ($request->filled('entidad_id')) {
-            $query->whereHas('programa', fn ($programa) => $programa->where('entidad_id', $request->entidad_id));
-        }
-
-        $proyectos = $query->get();
-        $entidades = Entidad::orderBy('nombre')->get();
-
-        return view('reportes.proyectos', compact('proyectos', 'entidades'));
+        return view('reportes.proyectos', compact('proyectos'));
     }
 
     // Generar reporte de trazabilidad.

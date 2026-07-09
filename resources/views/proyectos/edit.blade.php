@@ -13,7 +13,6 @@
                     @csrf
                     @method('PUT')
 
-                    {{-- Campos del proyecto. --}}
                     @include('proyectos.partials.form-fields')
 
                     <div class="flex gap-3 mt-6">

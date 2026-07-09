@@ -45,7 +45,7 @@ class Proyecto extends Model
     // Calculo del progreso del proyecto.
     public function getProgresoAttribute()
     {
-        $valor = (float) ($this->ultimoAvance?->porcentaje_avance ?? 0);
+        $valor = (int) ($this->ultimoAvance?->porcentaje_avance ?? 0);
 
         return max(0, min(100, $valor));
     }

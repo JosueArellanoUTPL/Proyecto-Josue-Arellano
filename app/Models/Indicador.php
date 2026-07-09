@@ -24,6 +24,12 @@ class Indicador extends Model
         'activo',
     ];
 
+    // Conversion de tipos.
+    protected $casts = [
+        'linea_base' => 'integer',
+        'valor_meta' => 'integer',
+    ];
+
     // Relacion con la meta.
     public function meta()
     {
@@ -43,7 +49,7 @@ class Indicador extends Model
     }
 
     // Calculo del progreso del indicador.
-    public function getProgresoAttribute(): float
+    public function getProgresoAttribute(): int
     {
         $lineaBase = $this->linea_base;
         $valorMeta = $this->valor_meta;
@@ -54,12 +60,12 @@ class Indicador extends Model
         }
 
         if ((float) $valorMeta === (float) $lineaBase) {
-            return (float) $valorActual === (float) $valorMeta ? 100 : 0;
+            return (int) $valorActual === (int) $valorMeta ? 100 : 0;
         }
 
         $porcentaje = (($valorActual - $lineaBase) / ($valorMeta - $lineaBase)) * 100;
 
-        return round(max(0, min(100, $porcentaje)), 2);
+        return (int) round(max(0, min(100, $porcentaje)));
     }
 
     // Calculo del estado completado.

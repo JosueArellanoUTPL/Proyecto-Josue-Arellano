@@ -21,8 +21,8 @@ return new class extends Migration
             $table->foreignId('meta_id')->constrained('metas')->cascadeOnDelete();
 
             // Campos simples para medir el cumplimiento del indicador.
-            $table->decimal('linea_base', 15, 2)->nullable();
-            $table->decimal('valor_meta', 15, 2)->nullable();
+            $table->integer('linea_base')->nullable();
+            $table->integer('valor_meta')->nullable();
             $table->string('unidad', 50)->nullable(); // %, USD, unidades, etc.
 
             $table->boolean('activo')->default(true);

@@ -1,4 +1,3 @@
-{{-- Seccion para actualizar la clave. --}}
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">

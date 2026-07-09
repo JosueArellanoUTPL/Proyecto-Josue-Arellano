@@ -15,8 +15,8 @@ return new class extends Migration
         DB::table('indicadores')->whereNull('unidad')->update(['unidad' => '%']);
 
         Schema::table('indicadores', function (Blueprint $table) {
-            $table->decimal('linea_base', 15, 2)->nullable(false)->change();
-            $table->decimal('valor_meta', 15, 2)->nullable(false)->change();
+            $table->integer('linea_base')->nullable(false)->change();
+            $table->integer('valor_meta')->nullable(false)->change();
             $table->string('unidad', 50)->nullable(false)->change();
         });
     }
@@ -24,8 +24,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('indicadores', function (Blueprint $table) {
-            $table->decimal('linea_base', 15, 2)->nullable()->change();
-            $table->decimal('valor_meta', 15, 2)->nullable()->change();
+            $table->integer('linea_base')->nullable()->change();
+            $table->integer('valor_meta')->nullable()->change();
             $table->string('unidad', 50)->nullable()->change();
         });
     }

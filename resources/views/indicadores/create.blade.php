@@ -1,5 +1,4 @@
 <x-app-layout>
-    {{-- Seccion de encabezado. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Crear Indicador
@@ -49,7 +48,7 @@
                     <div class="grid grid-cols-3 gap-4 mb-4">
                         <div>
                             <label class="block mb-1">Línea base</label>
-                            <input type="number" step="0.01" name="linea_base"
+                            <input type="number" step="1" name="linea_base"
                                    value="{{ old('linea_base') }}"
                                    required
                                    class="w-full border rounded px-3 py-2">
@@ -57,7 +56,7 @@
 
                         <div>
                             <label class="block mb-1">Valor meta</label>
-                            <input type="number" step="0.01" name="valor_meta"
+                            <input type="number" step="1" name="valor_meta"
                                    value="{{ old('valor_meta') }}"
                                    required
                                    class="w-full border rounded px-3 py-2">

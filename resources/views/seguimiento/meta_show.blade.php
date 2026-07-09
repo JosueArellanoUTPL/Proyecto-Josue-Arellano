@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     {{-- Encabezado con la meta seleccionada. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -13,7 +13,6 @@
 
             <div class="wrap">
 
-                {{-- Datos de la meta. --}}
                 <div class="flex justify-between flex-wrap gap-4 items-start">
                     <div>
                         <div class="title">{{ $meta->codigo }} - {{ $meta->nombre }}</div>
@@ -48,6 +47,7 @@
                     </div>
 
                     @if(!$sinIndicadores)
+                        {{-- Barra de avance calculado de la meta. --}}
                         <div class="progress">
                             <div style="width:{{ $progresoMeta }}%; background:{{ $metaCompletada ? 'var(--green)' : 'var(--orange)' }}"></div>
                         </div>
@@ -61,6 +61,7 @@
                     Cada indicador puede registrar múltiples avances con evidencias.
                 </div>
 
+                {{-- Grilla de indicadores relacionados con la meta. --}}
                 <div class="grid-ind">
                     @forelse($meta->indicadores as $indicador)
                         @php
@@ -87,7 +88,6 @@
                                 <div style="width:{{ $progresoIndicador }}%; background:{{ $indicadorCompletado ? 'var(--green)' : 'var(--orange)' }}"></div>
                             </div>
 
-                            {{-- Ultimo avance. --}}
                             <div class="muted" style="margin-top:12px;">
                                 Ultimo avance:
                             </div>
@@ -102,7 +102,6 @@
                                         <span class="muted">Sin evidencia</span>
                                     @endif
 
-                                    {{-- Permisos del avance. --}}
                                     @if(auth()->id() === $ultimoAvance->user_id || auth()->user()->isAdmin())
                                         <a class="link" href="{{ route('indicadores.avance.edit', $ultimoAvance->id) }}">
                                             Editar
@@ -121,7 +120,6 @@
                                 <div class="muted">Sin avances registrados</div>
                             @endif
 
-                            {{-- Permiso de seguimiento. --}}
                             @if(auth()->user()->canRegisterSeguimiento())
                                 <div class="mt-4">
                                     <a class="btn" href="{{ route('indicadores.avance.create', $indicador->id) }}">

@@ -1,11 +1,10 @@
-﻿@php
+@php
     // Valores del formulario.
     $proyectoActual = $proyecto ?? null;
     $entidadSeleccionada = old('entidad_filtro', $proyectoActual?->programa?->entidad_id);
     $programaSeleccionado = old('programa_id', $proyectoActual?->programa_id);
 @endphp
 
-{{-- Campos del proyecto. --}}
 <div data-project-fields>
     <div class="mb-4">
         <label class="block mb-1">Código</label>

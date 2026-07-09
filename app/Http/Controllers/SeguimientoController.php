@@ -2,33 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Entidad;
 use App\Models\Meta;
-use Illuminate\Http\Request;
 
 class SeguimientoController extends Controller
 {
     // Listar metas para seguimiento.
-    public function index(Request $request)
+    public function index()
     {
-        $request->validate([
-            'entidad_id' => ['nullable', 'exists:entidades,id'],
-        ]);
-
-        $query = Meta::where('activo', 1)->with([
+        $metas = Meta::where('activo', 1)->with([
             'plan.entidad',
             'indicadores' => fn ($query) => $query->where('activo', 1)->with('ultimoAvance'),
-        ]);
-
-        if ($request->filled('entidad_id')) {
-            $query->whereHas('plan', function ($planQuery) use ($request) {
-                $planQuery->where('entidad_id', $request->entidad_id);
-            });
-        }
-
-        $metas = $query->orderBy('id', 'desc')->get();
-        $entidades = Entidad::where('activo', 1)->orderBy('nombre')->get();
-        $entidadSeleccionada = $request->query('entidad_id');
+        ])->orderBy('id', 'desc')->get();
 
         // Calculo del resumen de metas.
         $metasMedibles = $metas->filter(fn ($meta) => $meta->indicadores->isNotEmpty());
@@ -44,9 +28,7 @@ class SeguimientoController extends Controller
 
         return view('seguimiento.metas', compact(
             'metas',
-            'resumen',
-            'entidades',
-            'entidadSeleccionada'
+            'resumen'
         ));
     }
 

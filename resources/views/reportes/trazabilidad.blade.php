@@ -13,7 +13,6 @@
                     'subtitle' => 'Relacion entre metas e instrumentos estrategicos.'
                 ])
 
-                {{-- Resultados. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="title">Registros encontrados: {{ $alineaciones->count() }}</div>
 

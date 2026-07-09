@@ -51,7 +51,6 @@
                         </div>
                     </div>
 
-                    {{-- Entidad. --}}
                     <div class="mb-4">
                         <label class="block mb-1">Entidad</label>
                         <select name="entidad_id" class="w-full border rounded px-3 py-2">

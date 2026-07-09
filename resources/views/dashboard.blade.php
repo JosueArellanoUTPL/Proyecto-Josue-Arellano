@@ -9,7 +9,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
 
-                {{-- Encabezado. --}}
                 <div class="dashboard-hero">
                     <div>
                         <div class="title">Panel Ejecutivo</div>
@@ -49,6 +48,7 @@
 
                 {{-- Resumen de avance. --}}
                 <div class="dashboard-grid">
+                    {{-- Tarjeta del avance institucional de metas. --}}
                     <div class="card dashboard-score">
                         <div>
                             <div class="title">Avance institucional</div>
@@ -57,6 +57,7 @@
                             </div>
                         </div>
 
+                        {{-- Grafico circular de avance institucional. --}}
                         <div class="donut" style="--value: {{ $progresoInstitucional }};">
                             <div>
                                 <strong>{{ $progresoInstitucional }}%</strong>
@@ -80,6 +81,7 @@
                         </div>
                     </div>
 
+                    {{-- Tarjeta del avance promedio de proyectos. --}}
                     <div class="card dashboard-score">
                         <div>
                             <div class="title">Proyectos</div>
@@ -88,6 +90,7 @@
                             </div>
                         </div>
 
+                        {{-- Grafico circular del avance promedio de proyectos. --}}
                         <div class="donut donut-blue" style="--value: {{ $progresoProyectos }};">
                             <div>
                                 <strong>{{ $progresoProyectos }}%</strong>
@@ -107,6 +110,7 @@
                         </div>
                     </div>
 
+                    {{-- Tarjeta de porcentaje de alineacion estrategica. --}}
                     <div class="card dashboard-score">
                         <div>
                             <div class="title">Alineacion estrategica</div>
@@ -115,6 +119,7 @@
                             </div>
                         </div>
 
+                        {{-- Grafico circular de metas con alineacion estrategica. --}}
                         <div class="donut" style="--value: {{ $porcentajeAlineacion }};">
                             <div>
                                 <strong>{{ $porcentajeAlineacion }}%</strong>
@@ -137,12 +142,14 @@
 
                 {{-- Avance por entidad y estado de metas. --}}
                 <div class="dashboard-grid-2">
+                    {{-- Tarjeta del ranking de avance por entidad. --}}
                     <div class="card">
                         <div class="title">Avance por entidad</div>
                         <div class="muted" style="margin-top:6px;">
                             Ranking de entidades según el progreso promedio de sus metas.
                         </div>
 
+                        {{-- Lista de barras por entidad. --}}
                         <div class="bar-list">
                             @forelse($avancePorEntidad as $entidad)
                                 <div class="bar-row">
@@ -163,12 +170,14 @@
                         </div>
                     </div>
 
+                    {{-- Tarjeta de distribucion de metas por estado. --}}
                     <div class="card">
                         <div class="title">Distribucion de metas</div>
                         <div class="muted" style="margin-top:6px;">
                             Cantidad de metas según su estado actual.
                         </div>
 
+                        {{-- Lista de barras por estado de meta. --}}
                         <div class="bar-list">
                             @foreach($distribucionMetas as $estado)
                                 <div class="bar-row">

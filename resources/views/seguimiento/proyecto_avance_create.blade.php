@@ -38,7 +38,7 @@
 
                         <div>
                             <label class="label">Porcentaje de avance (0 a 100)</label>
-                            <input type="number" step="0.01" min="0" max="100"
+                            <input type="number" step="1" min="0" max="100"
                                    name="porcentaje_avance"
                                    class="input"
                                    value="{{ old('porcentaje_avance') }}">

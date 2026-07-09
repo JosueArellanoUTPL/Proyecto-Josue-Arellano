@@ -1,5 +1,4 @@
-﻿<x-app-layout>
-    {{-- Seccion de encabezado. --}}
+<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Proyectos
@@ -40,6 +39,7 @@
                                 <td class="py-2">{{ $proyecto->nombre }}</td>
                                 <td class="py-2">{{ $proyecto->entidad->nombre ?? '-' }}</td>
                                 <td class="py-2">{{ $proyecto->programa->nombre ?? '-' }}</td>
+                                <td class="py-2">{{ $proyecto->activo ? 'Sí' : 'No' }}</td>
                                 <td class="py-2">
                                     <div class="flex justify-center gap-2">
                                         <a href="{{ route('proyectos.edit', $proyecto->id) }}"
@@ -70,6 +70,7 @@
                     </tbody>
                 </table>
 
+                {{-- Encabezado y boton crear. --}}
                 <div class="mt-4">
                     {{ $proyectos->links() }}
                 </div>

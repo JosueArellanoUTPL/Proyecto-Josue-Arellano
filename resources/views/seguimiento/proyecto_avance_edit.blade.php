@@ -9,7 +9,6 @@
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
 
-                {{-- Encabezado. --}}
                 <div class="row">
                     <div>
                         <div class="title">Editar avance</div>
@@ -27,7 +26,6 @@
                     </a>
                 </div>
 
-                {{-- Progreso actual. --}}
                 @php
                     $porcentajeAvance = max(0, min(100, (int)round($avance->porcentaje_avance)));
                     $avanceCompletado = $porcentajeAvance >= 100;
@@ -35,6 +33,7 @@
 
                 <div class="card" style="margin-top:16px;">
                     <div class="row" style="align-items:center;">
+                        {{-- Avance calculado. --}}
                         <div>
                             <div class="title">Porcentaje del avance</div>
                             <div class="muted" style="margin-top:6px;">Este porcentaje impacta el progreso actual del proyecto.</div>
@@ -43,11 +42,11 @@
                     </div>
 
                     <div class="progress">
+                        {{-- Avance calculado. --}}
                         <div style="width:{{ $porcentajeAvance }}%; background:{{ $avanceCompletado ? 'var(--green)' : 'var(--orange)' }}"></div>
                     </div>
                 </div>
 
-                {{-- Edicion del avance. --}}
                 <div class="grid2">
                     <form class="card" method="POST" action="{{ route('proyectos.avance.update', $avance->id) }}">
                         @csrf
@@ -67,9 +66,9 @@
 
                             <div>
                                 <label class="label">Porcentaje (0 a 100)</label>
-                                <input class="input" type="number" step="0.01" min="0" max="100"
+                                <input class="input" type="number" step="1" min="0" max="100"
                                        name="porcentaje_avance"
-                                       value="{{ old('porcentaje_avance', $avance->porcentaje_avance) }}">
+                                       value="{{ old('porcentaje_avance', (int) $avance->porcentaje_avance) }}">
                             </div>
 
                             <div>
@@ -87,7 +86,9 @@
 
                     {{-- Evidencias. --}}
                     <div class="card">
+                        {{-- Evidencia. --}}
                         <div class="title">Evidencias</div>
+                        {{-- Formulario para agregar nueva evidencia. --}}
                         <div class="muted" style="margin-top:6px;">
                             Se permite agregar evidencias en distintos momentos sin sobrescribir las anteriores.
                         </div>
@@ -102,8 +103,8 @@
                             <button class="btn" type="submit">+ Evidencia</button>
                         </form>
 
-                        {{-- Archivos cargados. --}}
                         @if($avance->evidencias->count())
+                            {{-- Evidencia. --}}
                             <div class="evid-grid">
                                 @foreach($avance->evidencias as $evidencia)
                                     @php
@@ -112,13 +113,16 @@
                                         $nombreEvidencia = $evidencia->original_name ?? 'Archivo';
                                     @endphp
 
+                                    {{-- Evidencia. --}}
                                     <div class="thumb">
                                         <a href="{{ $urlEvidencia }}" target="_blank" style="text-decoration:none; width:100%; height:100%;">
                                             @if($esImagen)
                                                 <img src="{{ $urlEvidencia }}" alt="{{ $nombreEvidencia }}">
                                             @else
+                                                {{-- Evidencia. --}}
                                                 <div class="filebox" style="height:100%;">
                                                     <div class="fileicon">📄</div>
+                                                    {{-- Evidencia. --}}
                                                     <div class="fname">{{ \Illuminate\Support\Str::limit($nombreEvidencia, 22) }}</div>
                                                 </div>
                                             @endif
@@ -135,6 +139,7 @@
                                 @endforeach
                             </div>
                         @else
+                            {{-- Evidencia. --}}
                             <div class="muted" style="margin-top:12px;">Aún no hay evidencias cargadas para este avance.</div>
                         @endif
                     </div>

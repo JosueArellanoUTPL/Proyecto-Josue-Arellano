@@ -1,5 +1,4 @@
 <aside class="sidebar" data-sidebar>
-    {{-- Navegacion principal. --}}
     <div class="sidebar-brand">
         <a href="{{ route('dashboard') }}" class="sidebar-logo">
             <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
@@ -16,7 +15,6 @@
             Dashboard
         </a>
 
-        {{-- Modulos de planificacion. --}}
         @if(auth()->user()->canManagePlanning())
             <div class="sidebar-section">Planificación institucional</div>
 
@@ -73,7 +71,6 @@
             </a>
         @endif
 
-        {{-- Modulos de consulta. --}}
         <div class="sidebar-section">Seguimiento y consulta</div>
 
         <a href="{{ route('seguimiento.metas') }}"
@@ -96,7 +93,6 @@
             Reportes
         </a>
 
-        {{-- Modulos de administrador. --}}
         @if(auth()->user()->isAdmin())
             <div class="sidebar-section">Seguridad</div>
 
@@ -112,7 +108,6 @@
         @endif
     </nav>
 
-    {{-- Sesion del usuario. --}}
     <div class="sidebar-user">
         <a href="{{ route('profile.edit') }}" class="side-link {{ request()->routeIs('profile.edit') ? 'active' : '' }}">
             {{ Auth::user()->name }}

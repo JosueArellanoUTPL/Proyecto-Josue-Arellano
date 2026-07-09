@@ -29,6 +29,9 @@ class IndicadorController extends Controller
     {
         $data = $this->validarIndicador($request);
 
+        $data['linea_base'] = (int) $data['linea_base'];
+        $data['valor_meta'] = (int) $data['valor_meta'];
+
         Indicador::create($data);
 
         return redirect()->route('indicadores.index')
@@ -47,6 +50,9 @@ class IndicadorController extends Controller
     public function update(Request $request, Indicador $indicador)
     {
         $data = $this->validarIndicador($request, $indicador->id);
+
+        $data['linea_base'] = (int) $data['linea_base'];
+        $data['valor_meta'] = (int) $data['valor_meta'];
 
         $indicador->update($data);
 
@@ -72,8 +78,8 @@ class IndicadorController extends Controller
             'nombre' => 'required|string|max:200',
             'descripcion' => 'nullable|string',
             'meta_id' => 'required|exists:metas,id',
-            'linea_base' => 'required|numeric',
-            'valor_meta' => 'required|numeric',
+            'linea_base' => 'required|integer',
+            'valor_meta' => 'required|integer',
             'unidad' => 'required|string|max:50',
             'activo' => 'required|boolean',
         ]);

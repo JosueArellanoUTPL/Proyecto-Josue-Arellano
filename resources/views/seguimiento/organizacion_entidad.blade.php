@@ -24,25 +24,27 @@
 
                 <div class="card" style="margin-top:16px;">
                     <div class="row">
+                        {{-- Avance calculado. --}}
                         <div>
                             <div class="title">Avance promedio de metas</div>
                             <div class="muted" style="margin-top:6px;">
                                 Promedio calculado con el progreso de metas asociadas a los planes de esta entidad.
                             </div>
                         </div>
+                        {{-- Avance calculado. --}}
                         <div class="badge {{ $porcentajeEntidad >= 100 ? 'green' : 'orange' }}">
                             {{ $porcentajeEntidad }}%
                         </div>
                     </div>
 
                     <div class="progress">
+                        {{-- Avance calculado. --}}
                         <div style="width:{{ $porcentajeEntidad }}%; background:{{ $porcentajeEntidad >= 100 ? 'var(--green)' : 'var(--orange)' }}"></div>
                     </div>
                 </div>
 
                 <div class="grid2">
 
-                    {{-- Programas y proyectos. --}}
                     <div class="card">
                         <div class="title">Programas</div>
                         <div class="muted" style="margin-top:6px;">Programas asociados a esta entidad.</div>
@@ -93,11 +95,11 @@
                         </div>
                     </div>
 
-                    {{-- Planes y metas. --}}
                     <div class="card">
                         <div class="title">Planes y Metas</div>
                         <div class="muted" style="margin-top:6px;">Metas asociadas a los planes de esta entidad.</div>
 
+                        {{-- Datos de la entidad. --}}
                         <div class="list">
                             @forelse($entidad->planes as $plan)
                                 <div style="padding:12px; border-radius:14px; border:1px solid var(--border-soft); background:#fafafa;">

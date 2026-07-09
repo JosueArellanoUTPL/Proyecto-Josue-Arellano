@@ -8,10 +8,10 @@
     <div class="py-10">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="wrap">
-                {{-- Encabezado. --}}
                 <div class="row">
                     <div>
                         <div class="title">Registro de acciones</div>
+                
                         <div class="muted" style="margin-top:6px;">
                             Consulta quien realizo cambios, en que modulo y desde que ruta.
                         </div>
@@ -68,6 +68,7 @@
                             <label class="label">Hasta</label>
                             <input type="date" name="to" class="input" value="{{ request('to') }}">
                         </div>
+                        {{-- botones de filtros --}}
                         <div class="trace-filters__actions audit-filters__actions">
                             <button type="submit" class="btn">Filtrar</button>
                             <a href="{{ route('auditoria.index') }}" class="btn">Limpiar</a>
@@ -75,9 +76,10 @@
                     </div>
                 </form>
 
-                {{-- Historial. --}}
+                {{-- Historial de auditoria. --}}
                 <div class="card" style="margin-top:16px;">
                     <div class="title">Historial</div>
+
                     <div class="muted" style="margin-top:6px;">
                         Total mostrado: {{ $registrosAuditoria->count() }} de {{ $registrosAuditoria->total() }} registros.
                     </div>
@@ -97,21 +99,27 @@
                             <tbody>
                                 @forelse($registrosAuditoria as $registro)
                                     <tr class="border-b align-top">
+                                        {{-- fecha --}}
                                         <td class="py-2 whitespace-nowrap">
                                             {{ $registro->created_at->format('d/m/Y H:i') }}
                                         </td>
+                                        {{-- usuario --}}
                                         <td class="py-2">
                                             <strong>{{ $registro->user->name ?? 'Usuario eliminado' }}</strong>
                                             <div class="muted">{{ $registro->user->email ?? '' }}</div>
                                         </td>
+                                        {{-- modulo --}}
                                         <td class="py-2">{{ $registro->module ?? '-' }}</td>
+                                        {{-- accion --}}
                                         <td class="py-2">
                                             <span class="chip">{{ ucfirst($registro->action) }}</span>
                                         </td>
+                                        {{-- ruta --}}
                                         <td class="py-2">
                                             <div>{{ $registro->route_name ?? '-' }}</div>
                                             <div class="muted">{{ $registro->method }}</div>
                                         </td>
+                                        {{-- ip --}}
                                         <td class="py-2">{{ $registro->ip_address ?? '-' }}</td>
                                     </tr>
                                 @empty

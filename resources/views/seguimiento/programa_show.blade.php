@@ -1,5 +1,4 @@
 <x-app-layout>
-    {{-- Seccion de encabezado. --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Seguimiento de Programa
@@ -11,6 +10,7 @@
             <div class="wrap">
 
                 <div class="row">
+                    {{-- Datos del programa. --}}
                     <div>
                         <div class="title">{{ $programa->nombre }}</div>
                         <div class="muted" style="margin-top:6px;">
@@ -36,6 +36,7 @@
 
                 <div class="card" style="margin-top:16px;">
                     <div class="row" style="align-items:center;">
+                        {{-- Avance calculado. --}}
                         <div>
                             <div class="title">Avance del Programa</div>
                             <div class="muted" style="margin-top:6px;">
@@ -46,6 +47,7 @@
                     </div>
 
                     <div class="progress">
+                        {{-- Avance calculado. --}}
                         <div style="width:{{ $porcentajePrograma }}%; background:{{ $porcentajePrograma >= 100 ? 'var(--green)' : 'var(--orange)' }}"></div>
                     </div>
 
@@ -67,8 +69,10 @@
 
                 <div class="card" style="margin-top:14px;">
                     <div class="title">Proyectos del Programa</div>
+                    {{-- Evidencia. --}}
                     <div class="muted" style="margin-top:6px;">Cada proyecto muestra su avance actual y permite ver el historial con evidencias.</div>
 
+                    {{-- Datos del proyecto. --}}
                     <div class="list">
                         @forelse($programa->proyectos as $proyecto)
                             @php
@@ -79,6 +83,7 @@
                             <a href="{{ route('seguimiento.proyecto.show', $proyecto->id) }}" style="text-decoration:none;">
                                 <div class="click-card">
                                     <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+                                        {{-- Datos del proyecto del programa. --}}
                                         <div>
                                             <strong style="color:var(--text)">{{ $proyecto->nombre }}</strong>
                                             <div class="muted" style="margin-top:4px;">
@@ -96,6 +101,7 @@
                                         </div>
                                     </div>
 
+                                    {{-- Avance calculado. --}}
                                     <div class="mini">
                                         <div class="row2">
                                             <span class="muted">Avance actual</span>
