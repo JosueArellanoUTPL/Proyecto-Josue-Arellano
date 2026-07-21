@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Alineacion;
+use App\Models\ActividadOperativa;
 use App\Models\AuditLog;
 use App\Models\Entidad;
 use App\Models\Indicador;
@@ -36,6 +37,7 @@ class DefensaSeeder extends Seeder
         Alineacion::truncate();
         Indicador::truncate();
         Meta::truncate();
+        ActividadOperativa::truncate();
         Proyecto::truncate();
         Programa::truncate();
         Plan::truncate();
@@ -79,6 +81,14 @@ class DefensaSeeder extends Seeder
             'email' => 'autoridad@sipeip.com',
             'password' => Hash::make('Consulta123*'),
             'role' => User::ROLE_CONSULTA,
+            'activo' => true,
+        ]);
+
+        User::create([
+            'name' => 'Aprobador POA',
+            'email' => 'aprobador@sipeip.com',
+            'password' => Hash::make('Aprobador123*'),
+            'role' => User::ROLE_APROBADOR,
             'activo' => true,
         ]);
 
@@ -142,6 +152,24 @@ class DefensaSeeder extends Seeder
             'nombre' => 'Incrementar controles preventivos de salud',
             'descripcion' => 'Meta orientada al seguimiento de controles preventivos en establecimientos priorizados.',
             'plan_id' => $planSalud->id,
+            'activo' => true,
+        ]);
+
+        ActividadOperativa::create([
+            'codigo' => 'POA-MSP-01',
+            'nombre' => 'Realizar brigadas de salud comunitaria',
+            'descripcion' => 'Actividad operativa programada para ampliar los controles preventivos.',
+            'plan_id' => $planSalud->id,
+            'responsable' => 'Direccion Nacional de Salud Comunitaria',
+            'anio' => 2026,
+            'fecha_inicio' => '2026-01-15',
+            'fecha_fin' => '2026-12-15',
+            'meta_operativa' => 'Ejecutar 20 brigadas comunitarias.',
+            'meta_anual' => 100,
+            'unidad_medida' => '%',
+            'avance' => 65,
+            'presupuesto' => 15000,
+            'prioridad' => 'alta',
             'activo' => true,
         ]);
 
@@ -227,6 +255,24 @@ class DefensaSeeder extends Seeder
             'nombre' => 'Mejorar ambientes educativos priorizados',
             'descripcion' => 'Meta enfocada en mejorar condiciones de infraestructura educativa.',
             'plan_id' => $planEducacion->id,
+            'activo' => true,
+        ]);
+
+        ActividadOperativa::create([
+            'codigo' => 'POA-MINEDUC-01',
+            'nombre' => 'Ejecutar mantenimiento de unidades educativas',
+            'descripcion' => 'Actividad operativa para mejorar ambientes de aprendizaje priorizados.',
+            'plan_id' => $planEducacion->id,
+            'responsable' => 'Direccion Nacional de Infraestructura Educativa',
+            'anio' => 2026,
+            'fecha_inicio' => '2026-02-01',
+            'fecha_fin' => '2026-11-30',
+            'meta_operativa' => 'Atender 30 unidades educativas priorizadas.',
+            'meta_anual' => 100,
+            'unidad_medida' => '%',
+            'avance' => 55,
+            'presupuesto' => 25000,
+            'prioridad' => 'media',
             'activo' => true,
         ]);
 

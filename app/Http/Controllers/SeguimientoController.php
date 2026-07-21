@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Meta;
+use App\Models\ActividadOperativa;
 
 class SeguimientoController extends Controller
 {
@@ -42,5 +43,27 @@ class SeguimientoController extends Controller
         ]);
 
         return view('seguimiento.meta_show', compact('meta'));
+    }
+
+    public function poa()
+    {
+        $actividades = ActividadOperativa::where('activo', true)->with([
+            'plan.pdn',
+            'proyecto.programa',
+            'objetivoEstrategico',
+            'indicador',
+        ])->orderByDesc('updated_at')->get();
+
+        $resumen = [
+            'total' => $actividades->count(),
+            'en_ejecucion' => $actividades->whereIn('estado', ['aprobada', 'en_ejecucion', 'reprogramada'])->count(),
+            'finalizadas' => $actividades->whereIn('estado', ['finalizada', 'cerrada'])->count(),
+            'con_evidencia' => $actividades->filter(fn ($actividad) => filled($actividad->evidencia))->count(),
+            'avance_promedio' => $actividades->count()
+                ? (int) round($actividades->avg(fn ($actividad) => ($actividad->avance / max(1, $actividad->meta_anual)) * 100))
+                : 0,
+        ];
+
+        return view('seguimiento.poa', compact('actividades', 'resumen'));
     }
 }

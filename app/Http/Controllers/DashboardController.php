@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Entidad;
+use App\Models\ActividadOperativa;
 use App\Models\Indicador;
 use App\Models\Meta;
 use App\Models\Plan;
@@ -50,15 +51,23 @@ class DashboardController extends Controller
             return $estado;
         });
 
-        // Calculo de alineacion estrategica.
-        $totalMetas = $metas->count();
-        $metasAlineadas = Meta::where('activo', 1)
-            ->whereHas('alineaciones', fn ($query) => $query->where('activo', 1))
-            ->count();
-        $metasNoAlineadas = max(0, $totalMetas - $metasAlineadas);
-        $porcentajeAlineacion = $totalMetas > 0
-            ? (int) round(($metasAlineadas / $totalMetas) * 100)
+        // Resumen visual del POA.
+        $actividadesPoa = ActividadOperativa::where('activo', true)->get();
+        $poaTotal = $actividadesPoa->count();
+        $poaAvancePromedio = $poaTotal
+            ? (int) round($actividadesPoa->avg(fn ($actividad) => ($actividad->avance / max(1, $actividad->meta_anual)) * 100))
             : 0;
+        $poaPorEstado = collect([
+            ['label' => 'Borrador', 'estados' => ['borrador'], 'color' => '#94a3b8'],
+            ['label' => 'En revisión', 'estados' => ['en_revision'], 'color' => 'var(--orange)'],
+            ['label' => 'En ejecución', 'estados' => ['aprobada', 'en_ejecucion', 'reprogramada'], 'color' => 'var(--blue)'],
+            ['label' => 'Finalizadas', 'estados' => ['finalizada', 'cerrada'], 'color' => 'var(--green)'],
+        ])->map(function ($grupo) use ($actividadesPoa, $poaTotal) {
+            $grupo['total'] = $actividadesPoa->whereIn('estado', $grupo['estados'])->count();
+            $grupo['porcentaje'] = $poaTotal ? (int) round(($grupo['total'] / $poaTotal) * 100) : 0;
+
+            return $grupo;
+        });
 
         // Calculo del avance de proyectos.
         $proyectos = Proyecto::where('activo', 1)->with(['ultimoAvance'])->get();
@@ -104,9 +113,9 @@ class DashboardController extends Controller
             'metasEnProgreso',
             'metasPendientes',
             'distribucionMetas',
-            'metasAlineadas',
-            'metasNoAlineadas',
-            'porcentajeAlineacion',
+            'poaTotal',
+            'poaAvancePromedio',
+            'poaPorEstado',
             'progresoProyectos',
             'proyectosCompletados',
             'proyectosEnProgreso',

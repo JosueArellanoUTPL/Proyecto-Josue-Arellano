@@ -19,11 +19,14 @@ class User extends Authenticatable
 
     public const ROLE_CONSULTA = 'consulta';
 
+    public const ROLE_APROBADOR = 'aprobador';
+
     public const ROLE_LABELS = [
         self::ROLE_ADMIN => 'Administrador del Sistema',
         self::ROLE_PLANIFICACION => 'Responsable de Planificacion',
         self::ROLE_TECNICO => 'Tecnico de Seguimiento',
         self::ROLE_CONSULTA => 'Autoridad / Consulta',
+        self::ROLE_APROBADOR => 'Aprobador POA',
     ];
 
     // Campos permitidos.
@@ -84,5 +87,10 @@ class User extends Authenticatable
             self::ROLE_ADMIN,
             self::ROLE_TECNICO,
         ], true);
+    }
+
+    public function isAprobador(): bool
+    {
+        return $this->role === self::ROLE_APROBADOR;
     }
 }

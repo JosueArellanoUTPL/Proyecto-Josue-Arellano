@@ -110,31 +110,35 @@
                         </div>
                     </div>
 
-                    {{-- Tarjeta de porcentaje de alineacion estrategica. --}}
+                    {{-- Resumen visual del POA. --}}
                     <div class="card dashboard-score">
                         <div>
-                            <div class="title">Alineacion estrategica</div>
+                            <div class="title">Actividades POA</div>
                             <div class="muted" style="margin-top:6px;">
-                                Metas vinculadas a instrumentos estrategicos.
+                                Distribución de actividades operativas por estado.
                             </div>
                         </div>
 
-                        {{-- Grafico circular de metas con alineacion estrategica. --}}
-                        <div class="donut" style="--value: {{ $porcentajeAlineacion }};">
-                            <div>
-                                <strong>{{ $porcentajeAlineacion }}%</strong>
-                                <span>alineacion</span>
-                            </div>
+                        <div class="bar-list">
+                            @foreach($poaPorEstado as $estado)
+                                <div class="bar-row">
+                                    <div class="bar-row-head">
+                                        <span>{{ $estado['label'] }}</span>
+                                        <strong>{{ $estado['total'] }}</strong>
+                                    </div>
+                                    <div class="progress"><div style="width:{{ $estado['porcentaje'] }}%; background:{{ $estado['color'] }}"></div></div>
+                                </div>
+                            @endforeach
                         </div>
 
                         <div class="dashboard-mini-grid">
                             <div class="mini-stat">
-                                <span>Alineadas</span>
-                                <strong>{{ $metasAlineadas }}</strong>
+                                <span>Registradas</span>
+                                <strong>{{ $poaTotal }}</strong>
                             </div>
                             <div class="mini-stat">
-                                <span>No alineadas</span>
-                                <strong>{{ $metasNoAlineadas }}</strong>
+                                <span>Avance promedio</span>
+                                <strong>{{ $poaAvancePromedio }}%</strong>
                             </div>
                         </div>
                     </div>

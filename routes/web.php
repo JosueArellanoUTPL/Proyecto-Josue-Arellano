@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlineacionController;
+use App\Http\Controllers\ActividadOperativaController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\AvanceIndicadorController;
 use App\Http\Controllers\DashboardController;
@@ -52,6 +53,9 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
         Route::get('/seguimiento/metas/{meta}', [SeguimientoController::class, 'show'])
             ->name('seguimiento.meta.show');
 
+        Route::get('/seguimiento/poa', [SeguimientoController::class, 'poa'])
+            ->name('seguimiento.poa');
+
         Route::get('/seguimiento/organizacion', [OrganizacionController::class, 'index'])
             ->name('seguimiento.organizacion');
 
@@ -78,6 +82,12 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
 
         Route::get('/reportes/trazabilidad', [ReporteController::class, 'trazabilidad'])
             ->name('reportes.trazabilidad');
+
+        Route::get('/reportes/poa', [ReporteController::class, 'poa'])
+            ->name('reportes.poa');
+
+        Route::get('/reportes/poa/csv', [ReporteController::class, 'poaCsv'])
+            ->name('reportes.poa.csv');
     });
 
     // Seguimiento para administrador y tecnico.
@@ -151,6 +161,29 @@ Route::middleware(['auth', AuditMiddleware::class])->group(function () {
         Route::resource('alineaciones', AlineacionController::class)
             ->except(['show'])
             ->parameters(['alineaciones' => 'alineacion']);
+    });
+
+    // Flujo POA: consulta para planificador, aprobador y administrador.
+    Route::middleware(['role:admin,planificacion,aprobador'])->group(function () {
+        Route::get('actividades-operativas', [ActividadOperativaController::class, 'index'])
+            ->name('actividades-operativas.index');
+    });
+
+    // Registro y envío a revisión por planificación.
+    Route::middleware(['role:admin,planificacion'])->group(function () {
+        Route::get('actividades-operativas/create', [ActividadOperativaController::class, 'create'])->name('actividades-operativas.create');
+        Route::post('actividades-operativas', [ActividadOperativaController::class, 'store'])->name('actividades-operativas.store');
+        Route::get('actividades-operativas/{actividadOperativa}/edit', [ActividadOperativaController::class, 'edit'])->name('actividades-operativas.edit');
+        Route::put('actividades-operativas/{actividadOperativa}', [ActividadOperativaController::class, 'update'])->name('actividades-operativas.update');
+        Route::delete('actividades-operativas/{actividadOperativa}', [ActividadOperativaController::class, 'destroy'])->name('actividades-operativas.destroy');
+        Route::post('actividades-operativas/{actividadOperativa}/enviar-revision', [ActividadOperativaController::class, 'enviarRevision'])->name('actividades-operativas.enviar-revision');
+        Route::post('actividades-operativas/{actividadOperativa}/cambiar-estado', [ActividadOperativaController::class, 'cambiarEstado'])->name('actividades-operativas.cambiar-estado');
+    });
+
+    // Revisión y decisión de aprobación.
+    Route::middleware(['role:admin,aprobador'])->group(function () {
+        Route::get('actividades-operativas/{actividadOperativa}/revision', [ActividadOperativaController::class, 'revisar'])->name('actividades-operativas.revisar');
+        Route::post('actividades-operativas/{actividadOperativa}/decision', [ActividadOperativaController::class, 'decidir'])->name('actividades-operativas.decision');
     });
 
     // Administracion y auditoria.

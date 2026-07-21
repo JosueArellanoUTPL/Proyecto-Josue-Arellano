@@ -114,6 +114,64 @@
         background: #e3f3ef;
     }
 
+    /* Acciones compactas y uniformes del listado POA. */
+    .poa-actions,
+    .poa-transition {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .poa-action {
+        width: 132px;
+        height: 32px;
+        padding: 0 8px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .poa-state-select {
+        height: 32px;
+        max-width: 132px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 0 7px;
+        background: #fff;
+        color: var(--text);
+        font-size: 12px;
+    }
+
+    .poa-table {
+        min-width: 1260px;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .poa-table th,
+    .poa-table td {
+        padding: 12px 14px;
+        vertical-align: top;
+        border-right: 1px solid var(--border-soft);
+        border-bottom: 1px solid var(--border-soft);
+    }
+
+    .poa-table th {
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .poa-table th:last-child,
+    .poa-table td:last-child {
+        border-right: 0;
+    }
+
+    .poa-actions-cell {
+        min-width: 300px;
+    }
+
     /* Resumen y progreso. */
     .kpis {
         display: grid;

@@ -15,9 +15,15 @@
             Dashboard
         </a>
 
-        @if(auth()->user()->canManagePlanning())
+        @if(auth()->user()->canManagePlanning() || auth()->user()->isAprobador())
             <div class="sidebar-section">Planificación institucional</div>
 
+            <a href="{{ route('actividades-operativas.index') }}"
+               class="side-link {{ request()->routeIs('actividades-operativas.*') ? 'active' : '' }}">
+                Actividades operativas (POA)
+            </a>
+
+            @if(auth()->user()->canManagePlanning())
             <a href="{{ route('entidades.index') }}"
                class="side-link {{ request()->routeIs('entidades.*') ? 'active' : '' }}">
                 Entidades
@@ -69,6 +75,7 @@
                class="side-link {{ request()->routeIs('objetivos-estrategicos.*') ? 'active' : '' }}">
                 Objetivos
             </a>
+            @endif
         @endif
 
         <div class="sidebar-section">Seguimiento y consulta</div>
@@ -76,6 +83,11 @@
         <a href="{{ route('seguimiento.metas') }}"
            class="side-link {{ request()->routeIs('seguimiento.metas', 'seguimiento.meta.show') ? 'active' : '' }}">
             Seguimiento de metas
+        </a>
+
+        <a href="{{ route('seguimiento.poa') }}"
+           class="side-link {{ request()->routeIs('seguimiento.poa') ? 'active' : '' }}">
+            Seguimiento POA
         </a>
 
         <a href="{{ route('seguimiento.organizacion') }}"

@@ -65,6 +65,17 @@ class AuditMiddleware
     private function actionFromRequest(Request $request): string
     {
         $method = $request->method();
+        $routeName = $request->route()?->getName();
+
+        $poaActions = [
+            'actividades-operativas.enviar-revision' => 'enviar a revisión',
+            'actividades-operativas.decision' => 'decisión de aprobación',
+            'actividades-operativas.cambiar-estado' => 'cambio de estado',
+        ];
+
+        if (isset($poaActions[$routeName])) {
+            return $poaActions[$routeName];
+        }
 
         // Rutas que desactivan registros.
         $deactivationRoutes = [
@@ -78,10 +89,11 @@ class AuditMiddleware
             'pdn.destroy',
             'objetivos-estrategicos.destroy',
             'alineaciones.destroy',
+            'actividades-operativas.destroy',
             'usuarios.destroy',
         ];
 
-        if ($method === 'DELETE' && in_array($request->route()?->getName(), $deactivationRoutes, true)) {
+        if ($method === 'DELETE' && in_array($routeName, $deactivationRoutes, true)) {
             return 'desactivar';
         }
 

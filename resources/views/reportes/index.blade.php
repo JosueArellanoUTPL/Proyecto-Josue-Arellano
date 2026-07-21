@@ -39,6 +39,13 @@
                             Relación entre metas, ODS, PND y objetivos estratégicos.
                         </div>
                     </a>
+
+                    <a href="{{ route('reportes.poa') }}" class="card report-card">
+                        <div class="title">Reporte POA</div>
+                        <div class="muted" style="margin-top:6px;">
+                            Actividades operativas, responsables, avance, presupuesto y estado.
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
